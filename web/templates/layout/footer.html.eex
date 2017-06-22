@@ -1,0 +1,9 @@
+  <footer class="main-footer">
+    <!--
+    <div class="pull-right hidden-xs">
+      <b>Version</b> 1.0
+    </div>
+    -->
+    <strong>Copyright &copy; 2017- <%= DateTime.utc_now.year %> <a href="http://farifam.com/">Farifam</a>.</strong> All rights
+    reserved.
+  </footer>

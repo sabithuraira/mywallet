@@ -1,0 +1,112 @@
+<div class="login-box">
+  
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <form action="../../index2.html" method="post">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
+        <input type="email" class="form-control" placeholder="Email">
+      </div>
+      <br/>
+
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-key"></i></span>
+        <input type="password" class="form-control" placeholder="Password">
+      </div>
+      <br/>
+
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="checkbox icheck">
+            <label>
+              <input type="checkbox"> Remember Me
+            </label>
+          </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+
+    <div class="social-auth-links text-center">
+      <p>- OR -</p>
+
+      <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using
+        Facebook</a>
+
+      <a href="#" onclick="handleSignInClick()" data-onsuccess="onSignIn" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
+        Google+</a>
+    </div>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <!-- /.social-auth-links -->
+
+    <a href="#">I forgot my password</a><br>
+    <a href="register.html" class="text-center">Register a new membership</a>
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+
+<script>
+      function handleClientLoad() {
+        // Loads the client library and the auth2 library together for efficiency.
+        // Loading the auth2 library is optional here since `gapi.client.init` function will load
+        // it if not already loaded. Loading it upfront can save one network request.
+        gapi.load('client:auth2', initClient);
+        console.log(JSON.stringify(initClient));
+      }
+
+      function initClient() {
+        // Initialize the client with API key and People API, and initialize OAuth with an
+        // OAuth 2.0 client ID and scopes (space delimited string) to request access.
+        gapi.client.init({
+            apiKey: 'AIzaSyDqUa9aaV4nuLN51OS5JTEqTiwNOh6kRdQ',
+            discoveryDocs: ["https://people.googleapis.com/$discovery/rest?version=v1"],
+            clientId: '260053812711-cd452effnrberi1ekpr5o2olc8i13l97.apps.googleusercontent.com',
+            scope: 'profile'
+        }).then(function () {
+          // Listen for sign-in state changes.
+        console.log("masuk init client");
+          gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+          // Handle the initial sign-in state.
+          updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+        });
+      }
+
+      function updateSigninStatus(isSignedIn) {
+        // When signin status changes, this function is called.
+        // If the signin status is changed to signedIn, we make an API call.
+        if (isSignedIn) {
+          makeApiCall();
+        }
+      }
+
+      function handleSignInClick(event) {
+        // Ideally the button should only show up after gapi.client.init finishes, so that this
+        // handler won't be called before OAuth is initialized.
+        gapi.auth2.getAuthInstance().signIn();
+      }
+
+      function handleSignOutClick(event) {
+        gapi.auth2.getAuthInstance().signOut();
+      }
+
+      function makeApiCall() {
+        // Make an API call to the People API, and print the user's given name.
+        gapi.client.people.people.get({
+          resourceName: 'people/me'
+        }).then(function(response) {
+          console.log('Hello, ' + response.result.names[0].givenName);
+        }, function(reason) {
+          console.log('Error: ' + reason.result.error.message);
+        });
+      }
+</script>
+  <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>

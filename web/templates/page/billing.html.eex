@@ -1,0 +1,437 @@
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- Info boxes -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">CPU Traffic</span>
+              <span class="info-box-number">90<small>%</small></span>
+            </div>
+          </div>
+          <!-- /.info-box -->
+        </div>
+      </div>
+      <!-- /.row -->
+
+      <div class="row">
+
+
+        <div class="col-md-12">
+          <div class="box box-info">
+              <div class="mailbox-controls">
+                <!-- Check all button -->
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
+                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
+                </div>
+                <!-- /.btn-group -->
+                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+                <a class="btn btn-default btn-sm toggle-event" href="#" data-id="adddata"><i class="fa fa-plus"></i> Add Bill</a>
+                <div class="pull-right">
+                  1-50/200
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
+                  </div>
+                  <!-- /.btn-group -->
+                </div>
+                <!-- /.pull-right -->
+              </div>
+
+              <div class="table-responsive mailbox-messages">
+                <table class="table table-border table-hover table-striped">
+                  <thead>
+                    <tr>
+                      <th>
+                        <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
+                        </button>
+                      </th>
+                      <td>Title</td>
+                      <td>Category</td>
+                      <td>Billing</td>
+                      <td>Paying</td>
+                      <td>Residual Bill</td>
+                      <td>Action</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <%= for n <- 1..40 do %>
+                    <tr data-toggle="collapse" data-target="#<%= n %>" class="accordion-toggle">
+                      <td><input type="checkbox"></td>
+                      <td>Eat on Restaurant</td>
+                      <td>Food</td>
+                      <td>$ 150.00</td>
+                      <td>$ 100.00</td>
+                      <td>$ 50.00</td>
+                      <td>
+                        <a class="btn btn-default btn-sm toggle-event" href="#" data-id="addtransaction"><i class="fa fa-plus-square-o"></i> Add Paying</a>
+                        <a class="btn btn-default btn-sm toggle-event" href="#" data-id="detail"><i class="fa fa-search"></i> Detail</a>
+                      </td>
+                    </tr>
+                    <!--
+                    <tr>
+                      <td colspan="6" class="hiddentablerow">
+                         <div class="accordian-body collapse" id="<%= n %>">
+                          <div class="row">
+                            <div class="col-sm-1 col-xs-6">
+                              <div class="description-block">
+                                <i class="fa fa-chevron-down"></i>
+                              </div>
+                            </div>
+                            <div class="col-sm-2 col-xs-6">
+                              <div class="description-block border-right">
+                                <span class="description-percentage">Last Transaction</span>
+                                <h5 class="description-header">27 April 2017</h5>
+                                <span class="description-text">9.49 PM</span>
+                              </div>
+                            </div>
+                            <div class="col-sm-6 col-xs-6">
+                            
+                                <h5 class="description-header">Paying List</h5>
+
+                              <div class="no-padding list-transactions">
+                                <ul class="nav nav-pills nav-stacked">
+                                  <li>
+                                    <ul class="list-unstyled">
+                                      <li><a href="#">Coffee on Starbucks
+                                        <span class="pull-right"> $ 4.00</span></a></li>
+
+                                      <li><a href="#">Lunch on KFC
+                                        <span class="pull-right"> $ 8.00</span></a></li>
+
+                                      <li><a href="#">Groceries
+                                        <span class="pull-right"> $ 10.00</span></a></li>
+
+                                      <li><a href="#">Ice Cream
+                                        <span class="pull-right"> $ 2.00</span></a></li>
+
+                                      <li><a href="#">Nutella
+                                        <span class="pull-right"> $ 5.00</span></a></li>
+                                    </ul>
+                                  </li>
+                                  <li>Total<span class="pull-right"> $ 29.00</span></li>
+                                </ul>
+                              </div>
+                            </div>
+                            <div class="col-sm-3 col-xs-6">
+                              <div class="description-block">
+                                <div class="btn-group-vertical">
+                                    <a class="btn bg-navy btn-flat btn-sm">
+                                        <i class="fa fa-plus"></i> Add Paying
+                                    </a>
+                                    
+                                    <a class="btn bg-navy btn-flat btn-sm">
+                                        <i class="fa fa-search"></i> Detail Transactions
+                                    </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    -->
+                    <%= end %>
+                  </tbody>
+                </table>
+              </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+
+
+  <aside class="control-sidebar control-sidebar-light">
+    <div class="box-header with-border">
+      <b id="toggle-title"></b>
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool toggle-hide"><i class="fa fa-remove"></i></button>
+      </div>
+    </div>
+    <div class="box box-widget widget-user-2">
+      <!-- Add the bg color to the header using any of the bg-* classes -->
+      <div class="widget-user-header bg-aqua-active">
+        <!-- /.widget-user-image -->
+        <b>Food - May 2017</b>
+        <p>Last Transactions : 27 April 2017 9.49 PM</p>
+      </div>
+    </div>
+    <div class="tab-content" id="right-sidebar"></div>
+  </aside>
+
+    
+
+<script>
+$(document).ready(function() {
+    var tab_pane = $("#right-sidebar");
+    var toggle_title=$("#toggle-title");
+    var o = $($.AdminLTE.options.controlSidebarOptions);
+    var sidebar = $(o.selector);
+
+    $('#data-date, #recurring-date').datepicker()
+    
+    var add_data = $("<div />");
+    add_data.append(
+      "<form role='form'>"
+          + "<div>"
+            + "<div class='form-group'>"
+              + "<p>Note</p>"
+              + "<input type='text' class='form-control input-sm' placeholder='Enter note'>"
+            + "</div>"
+
+            + "<div class='form-group'>"
+              + "<p>Amount</p>"
+              + "<input type='text' class='form-control input-sm' id='exampleInputPassword1' placeholder='Enter budget'>"
+            + "</div>"
+
+            + "<div class='form-group'>"
+              + "<p>Currency</p>"
+              + "<select class='form-control  input-sm select2' style='width: 100%;'>"
+                + "<option selected='selected'>USD</option>"
+                + "<option>EUR</option>"
+                + "<option>JPY</option>"
+                + "<option>SGD</option>"
+                + "<option>IDR</option>"
+                + "<option>AUD</option>"
+              + "</select>"
+            + "</div>"
+
+            + "<div class='form-group'>"
+              + "<p>Date</p>"
+              + "<div class='input-group'>"
+                + "<div class='input-group-addon'>"
+                  + "<i class='fa fa-calendar'></i>"
+                + "</div>"
+                + "<input type='text' class='form-control input-sm pull-right' id='data-date'>"
+              + "</div>"
+            + "</div>"
+
+            + "<div class='form-group'>"
+              + "<label class='control-sidebar-subheading'>"
+                + "Recurring"
+                + "<input type='checkbox' class='pull-right' checked>"
+              + "</label>"
+            + "</div>"
+
+            + "<div class='form-group'>"
+              + "<p>Cycle</p>"
+              + "<select class='form-control  input-sm select2' style='width: 100%;'>"
+                + "<option selected='selected'>Daily</option>"
+                + "<option>Weekly</option>"
+                + "<option>Every 2 Weeks</option>"
+                + "<option>Monthly</option>"
+                + "<option>Every 2 Months</option>"
+                + "<option>Every 3 Months</option>"
+                + "<option>Every 6 Months</option>"
+                + "<option>Yearly</option>"
+              + "</select>"
+            + "</div>"
+
+            + "<div class='form-group'>"
+              + "<p>End Date</p>"
+              + "<div class='input-group'>"
+                + "<div class='input-group-addon'>"
+                  + "<i class='fa fa-calendar'></i>"
+                + "</div>"
+                + "<input type='text' class='form-control input-sm pull-right' id='recurring-date'>"
+              + "</div>"
+            + "</div>"
+          + "</div>"
+
+          + "<div class='box-footer'>"
+            + "<button type='submit' class='btn btn-primary'>Submit</button>"
+          + "</div>"
+        + "</form>"
+    );
+
+    var add_transaction = $("<div />");
+
+    add_transaction.append(
+        "<form role='form'>"
+          + "<div>"
+            + "<div class='form-group'>"
+              + "<p>Currency</p>"
+              + "<select class='form-control  input-sm select2' style='width: 100%;'>"
+                + "<option selected='selected'>USD</option>"
+                + "<option>EUR</option>"
+                + "<option>JPY</option>"
+                + "<option>SGD</option>"
+                + "<option>IDR</option>"
+                + "<option>AUD</option>"
+              + "</select>"
+            + "</div>"
+
+            + "<div class='form-group'>"
+              + "<p>Amount</p>"
+              + "<input type='text' class='form-control input-sm' id='exampleInputPassword1' placeholder='Enter budget'>"
+            + "</div>"
+
+            + "<div class='form-group'>"
+              + "<p>Date</p>"
+              + "<div class='input-group'>"
+                + "<div class='input-group-addon'>"
+                  + "<i class='fa fa-calendar'></i>"
+                + "</div>"
+                + "<input type='text' class='form-control input-sm pull-right' id='data-date'>"
+              + "</div>"
+            + "</div>"
+
+            + "<div class='form-group'>"
+              + "<p>Account</p>"
+
+              + "<select class='form-control input-sm select2' style='width: 100%;'>"
+                + "<option selected='selected'>Account A</option>"
+                + "<option>Account B</option>"
+              + "</select>"
+            + "</div>"
+
+            + "<div class='form-group'>"
+              + "<p>Note</p>"
+              + "<input type='text' class='form-control input-sm' placeholder='Enter note'>"
+            + "</div>"
+
+
+            + "<div class='form-group'>"
+              + "<label class='control-sidebar-subheading'>"
+                + "Recurring"
+                + "<input type='checkbox' class='pull-right' checked>"
+              + "</label>"
+            + "</div>"
+
+            + "<div class='form-group'>"
+              + "<p>Cycle</p>"
+              + "<select class='form-control  input-sm select2' style='width: 100%;'>"
+                + "<option selected='selected'>Daily</option>"
+                + "<option>Weekly</option>"
+                + "<option>Every 2 Weeks</option>"
+                + "<option>Monthly</option>"
+                + "<option>Every 2 Months</option>"
+                + "<option>Every 3 Months</option>"
+                + "<option>Every 6 Months</option>"
+                + "<option>Yearly</option>"
+              + "</select>"
+            + "</div>"
+
+            + "<div class='form-group'>"
+              + "<p>End Date</p>"
+              + "<div class='input-group'>"
+                + "<div class='input-group-addon'>"
+                  + "<i class='fa fa-calendar'></i>"
+                + "</div>"
+                + "<input type='text' class='form-control input-sm pull-right' id='recurring-date'>"
+              + "</div>"
+            + "</div>"
+          + "</div>"
+
+          + "<div class='box-footer'>"
+            + "<button type='submit' class='btn btn-primary'>Submit</button>"
+          + "</div>"
+        + "</form>"
+    );
+
+    var detail = $("<div />");
+
+    detail.append(
+        "<ul class='products-list product-list-in-box'>"
+          + "<li class='item'>"
+            + "<div>"
+              + "<a href='#' class='product-title'>Buy Some Food"
+                + "<span class='label label-warning pull-right'>$ 10.00</span>"
+              + "</a>"
+              + "<span class='product-description'>"
+                + "12-25-2017"
+                + "<span class='label label-info pull-right'>Account A</span>"
+              + "</span>"
+            + "</div>"
+          + "</li>"
+          
+          + "<li class='item'>"
+            + "<div>"
+              + "<a href='#' class='product-title'>Buy Some Food"
+                + "<span class='label label-warning pull-right'>$ 10.00</span>"
+              + "</a>"
+              + "<span class='product-description'>"
+                + "12-25-2017"
+                + "<span class='label label-info pull-right'>Account A</span>"
+              + "</span>"
+            + "</div>"
+          + "</li>"
+          
+          + "<li class='item'>"
+            + "<div>"
+              + "<a href='#' class='product-title'>Buy Some Food"
+                + "<span class='label label-warning pull-right'>$ 10.00</span>"
+              + "</a>"
+              + "<span class='product-description'>"
+                + "12-25-2017"
+                + "<span class='label label-info pull-right'>Account A</span>"
+              + "</span>"
+            + "</div>"
+          + "</li>"
+          
+          + "<li class='item'>"
+            + "<div>"
+              + "<a href='#' class='product-title'>Buy Some Food"
+                + "<span class='label label-warning pull-right'>$ 10.00</span>"
+              + "</a>"
+              + "<span class='product-description'>"
+                + "12-25-2017"
+                + "<span class='label label-info pull-right'>Account A</span>"
+              + "</span>"
+            + "</div>"
+          + "</li>"
+          
+          + "<li class='item'>"
+            + "<div>"
+              + "<a href='#' class='product-title'>Buy Some Food"
+                + "<span class='label label-warning pull-right'>$ 10.00</span>"
+              + "</a>"
+              + "<span class='product-description'>"
+                + "12-25-2017"
+                + "<span class='label label-info pull-right'>Account A</span>"
+              + "</span>"
+            + "</div>"
+          + "</li>"
+          
+        + "</ul>"
+    );
+
+    $('.toggle-event').on("click", function () {
+        if (o.slide) {
+          sidebar.addClass('control-sidebar-open');
+        } else {
+          $('body').addClass('control-sidebar-open');
+        }
+
+        tab_pane.html('');
+        toggle_title.html('');
+        var dataid = $(this).data('id');
+        if(dataid=='adddata'){
+          tab_pane.append(add_data);
+          toggle_title.append("Add Bill");
+        }
+        else if(dataid=='addtransaction'){
+          tab_pane.append(add_transaction);
+          toggle_title.append("Add Paying");
+        }
+        else{ 
+          tab_pane.append(detail);
+          toggle_title.append("Detail");
+        }
+    });
+
+    $('.toggle-hide').on("click", function () {
+      if (o.slide) {
+        sidebar.removeClass('control-sidebar-open');
+      } else {
+        $('body').removeClass('control-sidebar-open');
+      }
+    });
+});
+</script>
