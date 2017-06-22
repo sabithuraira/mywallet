@@ -22,6 +22,7 @@ defmodule Mywallet.Router do
     get "/billing", PageController, :billing
     get "/login", PageController, :login
     get "/register", PageController, :register
+    resources "/users", UserController
   end
 
   # Other scopes may use custom stacks.
