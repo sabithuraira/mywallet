@@ -52,6 +52,7 @@ defmodule Mywallet.Web do
       import Mywallet.Router.Helpers
       import Mywallet.ErrorHelpers
       import Mywallet.Gettext
+      import Mywallet.Auth, only: [current_user: 1, logged_in?: 1]
     end
   end
 

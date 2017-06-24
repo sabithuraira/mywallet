@@ -19,8 +19,8 @@
 <body class="hold-transition skin-blue fixed sidebar-mini">
 <div class="wrapper">
 
-  <%= render "header.html" %>
-  <%= render "navigation.html" %>
+  <%= render "header.html", conn: @conn %>
+  <%= render "navigation.html", conn: @conn %>
 
   <div class="content-wrapper">
       <main role="main">

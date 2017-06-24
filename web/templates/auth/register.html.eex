@@ -1,0 +1,48 @@
+<div class="login-box">
+  
+  <div class="login-box-body">
+    <%= form_for @changeset, auth_path(@conn, :save), fn f -> %>
+      <%= if @changeset.action do %>
+        <div class="alert alert-danger">
+          <p>Oops, something went wrong! Please check the errors below.</p>
+        </div>
+      <% end %>
+      <br/>
+
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
+        <%= email_input f, :email, class: "form-control", placeholder: "Email" %>
+      </div>
+      <br/>
+
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-key"></i></span>
+        <%= password_input f, :encrypt_password, class: "form-control", placeholder: "Password" %>
+      </div>
+      <br/>
+
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-legal"></i></span>
+        <%= password_input f, :encrypt_password_confirmation, class: "form-control", placeholder: "Password Confirmation" %>
+      </div>
+
+      <br/>
+      <%= submit "Register", class: "btn btn-primary btn-block btn-flat" %>
+    <% end %>
+
+    <div class="social-auth-links text-center">
+      <p>- OR -</p>
+
+      <a href="/facebook/callback" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using
+        Facebook</a>
+
+      <a href="/google/callback" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
+        Google+</a>
+    </div>
+    <!-- /.social-auth-links -->
+
+    <a href="/login" class="text-center">I already have a membership</a>
+
+  </div>
+  <!-- /.login-box-body -->
+</div>

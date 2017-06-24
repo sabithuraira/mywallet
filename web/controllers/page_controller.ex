@@ -16,15 +16,4 @@ defmodule Mywallet.PageController do
   def budget(conn, _params) do
     render conn, "budget.html"
   end
-
-  def login(conn, _params) do
-    render conn, "login.html",
-      layout: {Mywallet.LayoutView, "login.html"}
-  end
-
-
-  def register(conn, _params) do
-    render conn, "register.html",
-      layout: {Mywallet.LayoutView, "login.html"}
-  end
 end

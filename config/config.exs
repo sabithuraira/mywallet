@@ -17,6 +17,30 @@ config :mywallet, Mywallet.Endpoint,
   pubsub: [name: Mywallet.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+config :guardian, Guardian,
+    #allowed_algos: ["HS512"], # optional
+    #verify_module: Guardian.JWT,  # optional
+    issuer: "FotoKerja",
+    ttl: { 30, :days },
+    #allowed_drift: 2000,
+    verify_issuer: true, # optional
+    secret_key: to_string(Mix.env)<>"h1IMpr*gr4mm3r",
+    serializer: Mywallet.GuardianSerializer
+
+config :ueberauth, Ueberauth,
+  providers: [
+    google: {Ueberauth.Strategy.Google, []},
+    facebook: { Ueberauth.Strategy.Facebook, [default_scope: "email,public_profile,user_friends"]}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Facebook.OAuth,
+  client_id: System.get_env("FACEBOOK_CLIENT_ID"),
+  client_secret: System.get_env("FACEBOOK_CLIENT_SECRET")
+
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+  client_id: System.get_env("GOOGLE_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
