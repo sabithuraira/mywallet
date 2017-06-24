@@ -2,6 +2,7 @@ defmodule Mywallet.UserController do
   use Mywallet.Web, :controller
 
   alias Mywallet.User
+  plug Guardian.Plug.EnsureAuthenticated, [handler: __MODULE__]
 
   def index(conn, _params) do
     users = Repo.all(User)
@@ -61,5 +62,11 @@ defmodule Mywallet.UserController do
     conn
     |> put_flash(:info, "User deleted successfully.")
     |> redirect(to: user_path(conn, :index))
+  end
+  
+  def unauthenticated(conn, params) do
+    conn
+      |> put_flash(:error, "You need to SignIn before enter the apps")
+      |> redirect(to: auth_path(conn, :login))
   end
 end

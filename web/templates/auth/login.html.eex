@@ -2,34 +2,21 @@
   
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <form action="../../index2.html" method="post">
+    <%= form_for @conn, auth_path(@conn, :authenticate), [name: :user], fn f -> %> 
       <div class="input-group">
         <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
-        <input type="email" class="form-control" placeholder="Email">
+        <%= email_input f, :email, placeholder: "Email", class: "form-control" %>
       </div>
       <br/>
 
       <div class="input-group">
         <span class="input-group-addon"><i class="fa fa-key"></i></span>
-        <input type="password" class="form-control" placeholder="Password">
+        <%= password_input f, :password, placeholder: "Password", class: "form-control" %>
       </div>
       <br/>
 
-      <div class="row">
-        <div class="col-xs-8">
-          <div class="checkbox icheck">
-            <label>
-              <input type="checkbox"> Remember Me
-            </label>
-          </div>
-        </div>
-        <!-- /.col -->
-        <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
-        </div>
-        <!-- /.col -->
-      </div>
-    </form>
+      <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button> 
+    <% end %>
 
     <div class="social-auth-links text-center">
       <p>- OR -</p>

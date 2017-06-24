@@ -5,7 +5,7 @@ defmodule Mywallet.Auth do
 
   def login(params, repo) do
     user = repo.get_by(User, email: String.downcase(params["email"]))
-    case authenticate(user, params["encrypt_password"]) do
+    case authenticate(user, params["password"]) do
       true -> {:ok, user}
       _    -> :error
     end
