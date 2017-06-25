@@ -32,10 +32,10 @@ defmodule Mywallet.Router do
     post "/register", AuthController, :save
     get "/login", AuthController, :login
     post "/login", AuthController, :authenticate
-    delete "/logout", AuthController, :logout
+    get "/logout", AuthController, :logout
   end
 
-  scope "/auth", FotoKerja do
+  scope "/auth", Mywallet do
     pipe_through :browser
 
     get "/:provider", AuthController, :request
@@ -43,7 +43,10 @@ defmodule Mywallet.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", Mywallet do
-  #   pipe_through :api
-  # end
+  scope "/api", Mywallet do
+    pipe_through :api
+
+    resources "/budgets", BudgetController, except: [:new, :edit]
+    resources "/accounts", AccountController, except: [:new, :edit]
+  end
 end

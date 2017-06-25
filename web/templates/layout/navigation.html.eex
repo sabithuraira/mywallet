@@ -78,8 +78,11 @@
           </ul>
         </li>
 
+
         <li>
-            <%= link raw("<i class='fa fa-credit-card'></i> <span>Sign Out</span>"), to: auth_path(@conn, :logout), method: :delete %>
+          <a href="<%= auth_path(@conn, :logout) %>">
+            <i class='fa fa-credit-card'></i> <span>Sign Out</span>
+          </a>
         </li>
       </ul>
     </section>

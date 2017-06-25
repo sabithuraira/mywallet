@@ -46,7 +46,7 @@ defmodule Mywallet.AuthController do
         :error ->
             conn
             |> put_flash(:info, "Wrong email or password")
-            |> render("login.html")
+            |> render "login.html", layout: {Mywallet.LayoutView, "login.html"}
         end
     end
 
