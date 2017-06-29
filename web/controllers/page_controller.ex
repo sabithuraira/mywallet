@@ -6,6 +6,10 @@ defmodule Mywallet.PageController do
     render conn, "index.html"
   end
 
+  def account(conn, _params) do
+    render conn, "account.html"
+  end
+
   def wallet(conn, _params) do
     render conn, "wallet.html"
   end

@@ -25,6 +25,7 @@ defmodule Mywallet.Router do
     get "/budget", PageController, :budget
     get "/wallet", PageController, :wallet
     get "/billing", PageController, :billing
+    get "/account", PageController, :account
     # get "/login", PageController, :login
     resources "/users", UserController
     
