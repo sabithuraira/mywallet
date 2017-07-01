@@ -24,7 +24,7 @@
 
   <div class="content-wrapper">
       <main role="main">
-        <%= render @view_module, @view_template, assigns %>
+        <%= render @view_module, @view_template,  assigns %>
       </main>
   </div>
 

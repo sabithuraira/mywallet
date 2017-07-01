@@ -1,8 +1,8 @@
 /* This file is for your main application css. */
 @import "node_modules/admin-lte/plugins/jvectormap/jquery-jvectormap-1.2.2.css";
 @import "node_modules/admin-lte/plugins/datepicker/datepicker3.css";
-@import "../vendor/AdminLTE.min.css";
-@import "../vendor/skins/_all-skins.min.css";
+@import "AdminLTE.min.css";
+@import "./skins/_all-skins.min.css";
 
 /*
 

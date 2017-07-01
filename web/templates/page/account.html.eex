@@ -1,5 +1,3 @@
-
-    <!-- Main content -->
     <section class="content">
       <!-- Info boxes -->
       <div class="row">
@@ -15,73 +13,52 @@
           <!-- /.info-box -->
         </div>
       </div>
-      <!-- /.row -->
 
       <div class="row">
         <div class="col-md-12">
-            <div class="box box-info">
-                <div class="mailbox-controls">
-                    <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
-                    </div>
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
-                    <a class="btn btn-default btn-sm toggle-event" href="#" data-id="adddata"><i class="fa fa-plus"></i> Add Budget</a>
-                    <div class="pull-right">
-                    1-50/200
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
-                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
-                    </div>
-                    </div>
+          <div class="box box-info">
+              <div class="mailbox-controls">
+                <!-- Check all button -->
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
+                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
                 </div>
+                <!-- /.btn-group -->
+                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+                <a class="btn btn-default btn-sm toggle-event" href="#" data-id="adddata"><i class="fa fa-plus"></i> Add Account</a>
+                <div class="pull-right">
+                  1-50/200
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
+                  </div>
+                  <!-- /.btn-group -->
+                </div>
+                <!-- /.pull-right -->
+              </div>
 
               <div class="table-responsive mailbox-messages">
                 <table class="table table-border table-hover table-striped">
-                    <thead>
-                      <tr>
-                          <th>
-                          <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
-                          </button>
-                          </th>
-                          <th></th>
-                          <th>Category</th>
-                          <th>Budget</th>
-                          <th>Expense</th>
-                          <th>Available</th>
-                          <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-
-                      <%= for n <- 1..40 do %>
-                        <tr data-toggle="collapse" data-target="#<%= n %>" class="accordion-toggle">
-                            <td><input type="checkbox" /></td>
-                            <td>February 2017</td>
-                            <td>Food</td>
-                            <td>$ 10</td>
-                            <td>$ 10</td>
-                            <td>
-                            <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> $ 10</span>
-                            <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> $ 10</span>
-                            </td>
-                            <td>
-                            <a class="btn btn-default btn-sm toggle-event" href="#" data-id="addtransaction"><i class="fa fa-plus-square-o"></i> Add Transaction</a>
-                            <a class="btn btn-default btn-sm toggle-event" href="#" data-id="detail"><i class="fa fa-search"></i> Detail</a>
-                            </td>
-                        </tr>
-
-                      <%= end %>
-                    </tbody>
-                  </table>
-                </div>
-            </div>
+                  <thead>
+                    <tr>
+                      <th>
+                        <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
+                        </button>
+                      </th>
+                      <td>Name</td>
+                      <td>Action</td>
+                    </tr>
+                  </thead>
+                  <tbody id="account_list">
+                  </tbody>
+                </table>
+              </div>
+          </div>
         </div>
       </div>
     </section>
 
-<!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-light">
     <div class="box-header with-border">
       <b id="toggle-title"></b>
@@ -93,18 +70,45 @@
       <!-- Add the bg color to the header using any of the bg-* classes -->
       <div class="widget-user-header bg-aqua-active">
         <!-- /.widget-user-image -->
-        <b>Food - May 2017</b>
-        <p>Last Transactions : 27 April 2017 9.49 PM</p>
+        <b>Account</b>
       </div>
     </div>
     <div class="tab-content" id="right-sidebar"></div>
   </aside>
 
-<script>
+    
 
+<script>
 $(document).ready(function() {
     var tab_pane = $("#right-sidebar");
     var toggle_title=$("#toggle-title");
+    var account_list = $("#account_list");
+
+    var datas=[];
+    $.getJSON("api/accounts/", (response) => { 
+        //this.props.actions.listComment(response.data);
+        //console.log(response);
+        data = response.data;
+    });
+
+    /*
+    var datas = [
+        {id:1, name: "Sabit", note:""},
+        {id:2, name: "Huraira", note:""},
+        {id:3, name: "Zea Shakira", note:""},
+    ];
+    */
+
+    var str_data = "";
+
+    for(var i=0;i<datas.length;++i){
+        str_data+="<tr><td><input type='checkbox'></td><td>"+datas[i].name+"</td><td></td></tr>";
+    }
+
+    //console.log(str_data);
+    account_list.append(str_data);
+
+
     var o = $($.AdminLTE.options.controlSidebarOptions);
     var sidebar = $(o.selector);
 
@@ -112,22 +116,18 @@ $(document).ready(function() {
     
     var add_data = $("<div />");
     add_data.append(
-        "<form role='form'>"
+      "<form role='form' id='btn-sbmt'>"
           + "<div>"
             + "<div class='form-group'>"
-              + "<p>Category</p>"
-              + "<input type='text' class='form-control input-sm' placeholder='Enter category'>"
+              + "<p>Name</p>"
+              + "<input type='text' id='form-name' class='form-control input-sm' placeholder='Enter name'>"
             + "</div>"
 
             + "<div class='form-group'>"
-              + "<p>Budget Currency</p>"
-              + "<input type='text' class='form-control input-sm' placeholder='Enter budget'>"
+              + "<p>Note</p>"
+              + "<input type='text' id='form-note' class='form-control input-sm' placeholder='Enter note'>"
             + "</div>"
 
-            + "<div class='form-group'>"
-              + "<p>Budget</p>"
-              + "<input type='text' class='form-control input-sm' placeholder='Enter budget'>"
-            + "</div>"
           + "</div>"
 
           + "<div class='box-footer'>"
@@ -300,11 +300,11 @@ $(document).ready(function() {
         var dataid = $(this).data('id');
         if(dataid=='adddata'){
           tab_pane.append(add_data);
-          toggle_title.append("Add Budget");
+          toggle_title.append("Add Account");
         }
         else if(dataid=='addtransaction'){
           tab_pane.append(add_transaction);
-          toggle_title.append("Add Transaction");
+          toggle_title.append("Add Paying");
         }
         else{ 
           tab_pane.append(detail);
@@ -318,6 +318,45 @@ $(document).ready(function() {
       } else {
         $('body').removeClass('control-sidebar-open');
       }
+    });
+
+    $('#btn-sbmt').on("submit", function () {
+      console.log('enter submit');
+        var name=$('#form-name').val();
+        var note=$('#form-note').val();
+
+        var csrf = document.querySelector("meta[name=csrf]").content;
+         $.ajax({
+            url: "api/accounts/create",
+            dataType: 'json',
+            type: 'POST',
+            headers: {
+                "X-CSRF-TOKEN": csrf 
+            },
+            data: {
+              /*
+              account[
+                name: name,
+                note: note,
+                created_by: 2,
+                updated_by: 2
+              ]
+              */
+              account_name: name,
+              account_note: note,
+              account_created_by: 2,
+              account_updated_by: 2
+            },
+            success: function(data) {
+                console.log('sukses');
+                //this.props.actions.setSuka(this.props.data.id, data);
+            }.bind(this),
+            error: function(xhr, status, err) {
+                //alert('Ooops, terjadi kesalahan.. silahkan ulangi lagi!');
+                console.log(xhr.responseText)
+            }.bind(this)
+        });
+
     });
 });
 </script>

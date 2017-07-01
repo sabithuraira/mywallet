@@ -3,13 +3,13 @@ exports.config = {
   files: {
     javascripts: {
       joinTo: "js/app.js"
-
       // To use a separate vendor.js bundle, specify two files path
       // http://brunch.io/docs/config#-files-
       // joinTo: {
       //  "js/app.js": /^(web\/static\/js)/,
-      //  "js/vendor.js": /^(web\/static\/vendor)|(deps)/
-      // }
+      //  //"js/vendor.js":  /^(web\/static\/vendor)/
+      // },
+       //"
       //
       // To change the order of concatenation of files, explicitly mention here
       // order: {
@@ -27,6 +27,7 @@ exports.config = {
     },
     templates: {
       joinTo: "js/app.js"
+      // joinTo: p"js/app.js"
     }
   },
 
@@ -53,13 +54,23 @@ exports.config = {
   plugins: {
     babel: {
       // Do not use ES6 compiler in vendor code
-      ignore: [/web\/static\/vendor/]
+      ignore: [/web\/static\/vendor/],
+    },
+    copycat: {
+      "fonts": ["node_modules/bootstrap-sass/assets/fonts/bootstrap"] // copy node_modules/bootstrap-sass/assets/fonts/bootstrap/* to priv/static/fonts/
+    },
+    sass: {
+      options: {
+        includePaths: ["node_modules/bootstrap-sass/assets/stylesheets"], // tell sass-brunch where to look for files to @import
+        precision: 8 // minimum precision required by bootstrap-sass 
+      }
     }
   },
 
   modules: {
     autoRequire: {
-      "js/app.js": ["web/static/js/app"]
+      "js/app.js": ["web/static/js/app"],
+      //"js/budget_list.js": ["web/static/js/budget_list"]
     }
   },
 
@@ -69,6 +80,7 @@ exports.config = {
     globals: { 
         $: 'jquery',
         jQuery: 'jquery',
+        bootstrap: 'bootstrap-sass' // require bootstrap-sass' JavaScript globally
       }
   }
 };
