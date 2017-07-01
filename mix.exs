@@ -20,7 +20,7 @@ defmodule Mywallet.Mixfile do
     [mod: {Mywallet, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, 
                     :oauth2, :ueberauth, :ueberauth_google, :ueberauth_facebook, :gettext,
-                    :phoenix_ecto, :postgrex]]
+                    :phoenix_ecto, :postgrex, :timex]]
   end
 
   # Specifies which paths to compile per environment.

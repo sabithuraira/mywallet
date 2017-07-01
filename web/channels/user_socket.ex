@@ -2,7 +2,7 @@ defmodule Mywallet.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", Mywallet.RoomChannel
+  channel "time:*", Mywallet.TimeChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

@@ -10,6 +10,9 @@
             <div class="info-box-content">
               <span class="info-box-text">CPU Traffic</span>
               <span class="info-box-number">90<small>%</small></span>
+              <div id="clock" class="jumbotron">
+                <h2><%= @time_now %></h2>
+              </div>
             </div>
           </div>
           <!-- /.info-box -->
@@ -100,8 +103,8 @@
     <div class="tab-content" id="right-sidebar"></div>
   </aside>
 
-<script>
-
+<script>require("web/static/js/app").App.c_time()</script>
+<script type="text/javascript">
 $(document).ready(function() {
     var tab_pane = $("#right-sidebar");
     var toggle_title=$("#toggle-title");

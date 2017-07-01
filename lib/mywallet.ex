@@ -12,6 +12,7 @@ defmodule Mywallet do
       supervisor(Mywallet.Repo, []),
       # Start the endpoint when the application starts
       supervisor(Mywallet.Endpoint, []),
+      worker(Mywallet.TimeManager, []),
       # Start your own worker by calling: Mywallet.Worker.start_link(arg1, arg2, arg3)
       # worker(Mywallet.Worker, [arg1, arg2, arg3]),
     ]

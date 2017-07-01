@@ -30,3 +30,32 @@ import "admin-lte/plugins/datepicker/bootstrap-datepicker.js";
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+import {Socket} from "phoenix"
+
+var App = {
+  c_time: function ctime() {
+        // We set an explicit id on the div in our HTML to allow
+        // us to easily access it and replace its content.
+        let container = document.getElementById("clock")
+        // The code on GitHub connects to "/time/socket", this is due
+        // to how TonicTime is deployed. The socket endpoint just needs
+        // to match the socket created in the TonicTime.Endpoint module.
+        let socket = new Socket("/socket")
+        socket.connect()
+
+        let timeChannel = socket.channel("time:now")
+
+        // When an `update` message is received we replace the contents
+        // of the "clock" element with server-side rendered HTML.
+        timeChannel.on("update", ({html}) => container.innerHTML = html)
+
+        // Attempt to connect to the WebSocket (Channel).
+        timeChannel.join()
+        .receive("ok", resp => console.log("joined time channel", resp))
+        .receive("error", reason => console.log("failed to join ha", reason))
+  }
+};
+
+module.exports = {
+  App: App
+};
