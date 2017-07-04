@@ -20,7 +20,7 @@ defmodule Mywallet.Mixfile do
     [mod: {Mywallet, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, 
                     :oauth2, :ueberauth, :ueberauth_google, :ueberauth_facebook, :gettext,
-                    :phoenix_ecto, :postgrex, :timex]]
+                    :phoenix_ecto, :postgrex, :httpoison, :timex]]
   end
 
   # Specifies which paths to compile per environment.
@@ -45,6 +45,7 @@ defmodule Mywallet.Mixfile do
      {:ueberauth_google, "~> 0.5"},
      {:ueberauth_facebook, github: "ueberauth/ueberauth_facebook"},
      {:timex, "~> 3.0"},
+     {:httpoison, "~> 0.12"},
      {:comeonin, "~> 0.10"}
     ]
   end

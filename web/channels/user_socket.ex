@@ -3,6 +3,7 @@ defmodule Mywallet.UserSocket do
 
   ## Channels
   channel "time:*", Mywallet.TimeChannel
+  channel "account:*", Mywallet.AccountChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

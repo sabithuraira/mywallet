@@ -77,37 +77,10 @@
   </aside>
 
     
-
 <script>
 $(document).ready(function() {
     var tab_pane = $("#right-sidebar");
     var toggle_title=$("#toggle-title");
-    var account_list = $("#account_list");
-
-    var datas=[];
-    $.getJSON("api/accounts/", (response) => { 
-        //this.props.actions.listComment(response.data);
-        //console.log(response);
-        data = response.data;
-    });
-
-    /*
-    var datas = [
-        {id:1, name: "Sabit", note:""},
-        {id:2, name: "Huraira", note:""},
-        {id:3, name: "Zea Shakira", note:""},
-    ];
-    */
-
-    var str_data = "";
-
-    for(var i=0;i<datas.length;++i){
-        str_data+="<tr><td><input type='checkbox'></td><td>"+datas[i].name+"</td><td></td></tr>";
-    }
-
-    //console.log(str_data);
-    account_list.append(str_data);
-
 
     var o = $($.AdminLTE.options.controlSidebarOptions);
     var sidebar = $(o.selector);
@@ -116,7 +89,7 @@ $(document).ready(function() {
     
     var add_data = $("<div />");
     add_data.append(
-      "<form role='form' id='btn-sbmt'>"
+      "<form role='form' id='data-form'>"
           + "<div>"
             + "<div class='form-group'>"
               + "<p>Name</p>"
@@ -134,7 +107,7 @@ $(document).ready(function() {
             + "<button type='submit' class='btn btn-primary'>Submit</button>"
           + "</div>"
         + "</form>"
-    );
+    ).clone();
 
     var add_transaction = $("<div />");
 
@@ -320,43 +293,44 @@ $(document).ready(function() {
       }
     });
 
-    $('#btn-sbmt').on("submit", function () {
+
+    //click button submit
+    $('#data-form').on('submit', function (e) {
       console.log('enter submit');
-        var name=$('#form-name').val();
-        var note=$('#form-note').val();
+      var name=$('#form-name').val();
+      var note=$('#form-note').val();
 
-        var csrf = document.querySelector("meta[name=csrf]").content;
-         $.ajax({
-            url: "api/accounts/create",
-            dataType: 'json',
-            type: 'POST',
-            headers: {
-                "X-CSRF-TOKEN": csrf 
-            },
-            data: {
-              /*
-              account[
-                name: name,
-                note: note,
-                created_by: 2,
-                updated_by: 2
-              ]
-              */
-              account_name: name,
-              account_note: note,
-              account_created_by: 2,
-              account_updated_by: 2
-            },
-            success: function(data) {
-                console.log('sukses');
-                //this.props.actions.setSuka(this.props.data.id, data);
-            }.bind(this),
-            error: function(xhr, status, err) {
-                //alert('Ooops, terjadi kesalahan.. silahkan ulangi lagi!');
-                console.log(xhr.responseText)
-            }.bind(this)
-        });
-
+      var csrf = document.querySelector("meta[name=csrf]").content;
+        $.ajax({
+          url: "api/accounts/create",
+          dataType: 'json',
+          type: 'POST',
+          headers: {
+              "X-CSRF-TOKEN": csrf 
+          },
+          data: {
+            /*
+            account[
+              name: name,
+              note: note,
+              created_by: 2,
+              updated_by: 2
+            ]
+            */
+            account_name: name,
+            account_note: note,
+            account_created_by: 2,
+            account_updated_by: 2
+          },
+          success: function(data) {
+              console.log('sukses');
+          }.bind(this),
+          error: function(xhr, status, err) {
+              console.log(xhr.responseText)
+          }.bind(this)
+      });
     });
 });
 </script>
+
+<script>require("web/static/js/app").App.c_account()</script>

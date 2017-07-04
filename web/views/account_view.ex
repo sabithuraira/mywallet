@@ -10,6 +10,11 @@ defmodule Mywallet.AccountView do
   end
 
   def render("account.json", %{account: account}) do
-    %{id: account.id}
+    %{
+        id: account.id,
+        name: account.name,
+        note: account.note,
+        user_id: account.created_by
+    }
   end
 end
