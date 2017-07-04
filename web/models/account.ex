@@ -14,7 +14,7 @@ defmodule Mywallet.Account do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [])
+    |> cast(params, [:name, :note, :created_by, :updated_by])
     |> validate_required([])
   end
 end

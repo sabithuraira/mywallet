@@ -7,8 +7,9 @@ defmodule Mywallet.AccountController do
     accounts = Repo.all(Account)
     render(conn, "index.json", accounts: accounts)
   end
+  
 
-  def create(conn, %{"account" => account_params}) do
+  def create(conn, %{} = account_params) do #%{"account" => account_params}) do
     changeset = Account.changeset(%Account{}, account_params)
 
     case Repo.insert(changeset) do

@@ -104,10 +104,10 @@ $(document).ready(function() {
           + "</div>"
 
           + "<div class='box-footer'>"
-            + "<button type='submit' class='btn btn-primary'>Submit</button>"
+            + "<button type='submit' id='btn-submit' class='btn btn-primary'>Submit</button>"
           + "</div>"
         + "</form>"
-    ).clone();
+    );
 
     var add_transaction = $("<div />");
 
@@ -273,6 +273,7 @@ $(document).ready(function() {
         var dataid = $(this).data('id');
         if(dataid=='adddata'){
           tab_pane.append(add_data);
+          tab_pane.clone();
           toggle_title.append("Add Account");
         }
         else if(dataid=='addtransaction'){
@@ -295,14 +296,14 @@ $(document).ready(function() {
 
 
     //click button submit
-    $('#data-form').on('submit', function (e) {
+    $('body').on('submit',"#data-form", function () {
       console.log('enter submit');
       var name=$('#form-name').val();
       var note=$('#form-note').val();
 
       var csrf = document.querySelector("meta[name=csrf]").content;
         $.ajax({
-          url: "api/accounts/create",
+          url: "http://localhost:4000/api/accounts",
           dataType: 'json',
           type: 'POST',
           headers: {
@@ -317,10 +318,10 @@ $(document).ready(function() {
               updated_by: 2
             ]
             */
-            account_name: name,
-            account_note: note,
-            account_created_by: 2,
-            account_updated_by: 2
+            name: name,
+            note: note,
+            created_by: 2,
+            updated_by: 2
           },
           success: function(data) {
               console.log('sukses');
