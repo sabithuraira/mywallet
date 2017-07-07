@@ -3,26 +3,33 @@ import {Socket} from "phoenix"
 export var Account = {
   run: function(){
 
-    new Vue({  
-      el: "#hello-world",
+    var vm = new Vue({  
+      el: "#account_list",
       data: {
-        message: "Hello World"
+        data: [],
+        selectedId: 0,
+      },
+      methods: {
+        updateArray: function (name, note) {
+          var data_index = this.data.findIndex(x => x.id == this.selectedId)
+          this.data[data_index].name = name; 
+          this.data[data_index].note =  note;
+        }
       }
     });
 
-    var list_data=[]
     let container = document.getElementById("account_list")
     let socket = new Socket("/socket")
     socket.connect()
 
-    let accountChannel = socket.channel("account:2")
-    accountChannel.on("update", data => {
+    let channel = socket.channel("account:2")
+    channel.on("update", data => {
       console.log('enter udpate data');
       refresh_data();
     })
 
     //account channel join
-    accountChannel.join()
+    channel.join()
       .receive("ok", resp => {
         refresh_data();
       })
@@ -31,20 +38,7 @@ export var Account = {
 
     function refresh_data(){
       $.getJSON("http://localhost:4000/api/accounts", (response) => { 
-          list_data=response.data;
-          container.innerHTML='';
-          var rowElement = '';
-          list_data.forEach(function(row) {
-
-            rowElement +='<tr data-toggle="collapse" data-target="'+row.id+'" class="accordion-toggle">'
-              + '<td><input type="checkbox" /></td>'
-              + '<td>'+row.name+'</td>'
-              + '<td>'+(row.note==null ? "" : row.note)+'</td>'
-              + '<td><a id="'+row.id+'" class="btn btn-default btn-sm toggle-event" href="#" data-id="adddata"><i class="fa fa-plus-square-o"></i> Update</a>'
-              + '<a class="btn btn-default btn-sm toggle-event" href="#" data-id="addtransaction"><i class="fa fa-plus-square-o"></i> Add Paying</a>'
-              + '<a class="btn btn-default btn-sm toggle-event" href="#" data-id="detail"><i class="fa fa-search"></i> Detail</a></td>';
-          });
-          container.innerHTML = (rowElement)
+          vm.data = response.data;
       });
     }
 
@@ -78,8 +72,15 @@ export var Account = {
             updated_by: 2
           }
         },
-        success: function(data) {
-            console.log('success');
+        success: function(data) { 
+            if(form_id!=0)
+              vm.updateArray(form_name, form_note);
+            else
+              refresh_data();
+
+            $('#form-id').val(0);
+            $('#form-name').val('');
+            $('#form-note').val('');
         }.bind(this),
         error: function(xhr, status, err) {
             console.log(xhr.responseText)
@@ -301,10 +302,14 @@ export var Account = {
         //set value if update, no when add new data
         if($(this).attr('id')=='add'){
           $('#form-id').val(0);
+          $('#form-name').val('');
+          $('#form-note').val('');
+          vm.selectedId=0;
         }
         else{
           var row_id = $(this).attr('id');
-          var data = list_data.find(x => x.id == row_id)
+          var data = vm.data.find(x => x.id == row_id)
+          vm.selectedId=row_id;
 
           $('#form-id').val(data.id);
           $('#form-name').val(data.name);

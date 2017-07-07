@@ -1,4 +1,4 @@
-    <section class="content">
+    <section class="content" id="account_list">
       <!-- Info boxes -->
       <div class="row">
         <div class="col-md-12">
@@ -51,7 +51,16 @@
                       <td>Action</td>
                     </tr>
                   </thead>
-                  <tbody id="account_list">
+                    <tbody v-for="row in data">
+                      <tr data-toggle="collapse" :data-target="row.id" class="accordion-toggle">
+                        <td><input type="checkbox" /></td>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.note }}</td>
+                        <td>
+                          <a :id="row.id" class="btn btn-default btn-sm toggle-event" href="#" data-id="adddata"><i class="fa fa-plus-square-o"></i> Update</a>
+                          <a class="btn btn-default btn-sm toggle-event" href="#" data-id="addtransaction"><i class="fa fa-plus-square-o"></i> Add Paying</a>
+                          <a class="btn btn-default btn-sm toggle-event" href="#" data-id="detail"><i class="fa fa-search"></i> Detail</a>
+                        </td>
                   </tbody>
                 </table>
               </div>
