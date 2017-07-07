@@ -2,6 +2,7 @@ defmodule Mywallet.AccountController do
   use Mywallet.Web, :controller
 
   alias Mywallet.Account
+  alias Mywallet.Auth
 
   def index(conn, _params) do
     accounts = Repo.all(Account)
@@ -9,15 +10,17 @@ defmodule Mywallet.AccountController do
   end
   
 
-  def create(conn, %{} = account_params) do #%{"account" => account_params}) do
+  # def create(conn, %{} = account_params) do
+  def create(conn, %{"account" => account_params}) do
     changeset = Account.changeset(%Account{}, account_params)
 
     case Repo.insert(changeset) do
       {:ok, account} ->
         conn
-        |> put_status(:created)
-        |> put_resp_header("location", account_path(conn, :show, account))
-        |> render("show.json", account: account)
+        Mywallet.AccountChannel.broadcast_update(Auth.current_user(conn).id)
+        # |> put_status(:created)
+        # |> put_resp_header("location", account_path(conn, :show, account))
+        # |> render("show.json", account: account)
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)

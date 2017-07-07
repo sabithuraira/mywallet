@@ -80,7 +80,8 @@ exports.config = {
     globals: { 
         $: 'jquery',
         jQuery: 'jquery',
-        bootstrap: 'bootstrap-sass' // require bootstrap-sass' JavaScript globally
+        bootstrap: 'bootstrap-sass', // require bootstrap-sass' JavaScript globally
+        Vue: "vue/dist/vue.common.js"
       }
   }
 };
