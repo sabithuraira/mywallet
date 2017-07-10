@@ -7,6 +7,11 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <meta name="csrf" content="<%= Plug.CSRFProtection.get_csrf_token() %>">
+
+  <%= if logged_in?(@conn) do %>
+    <%= tag :meta, name: "channel_token",content: Phoenix.Token.sign(@conn, "user", current_user(@conn).id) %>
+    <%= tag :meta, name: "channel_id",content: current_user(@conn).id %>
+  <% end %>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 

@@ -2,6 +2,8 @@ import {Socket} from "phoenix"
 
 export var Account = {
   run: function(){
+    var user_token = document.querySelector("meta[name=channel_token]").content;
+    var user_id = document.querySelector("meta[name=channel_id]").content;
 
     var vm = new Vue({  
       el: "#account_list",
@@ -17,27 +19,27 @@ export var Account = {
         }
       }
     });
+    
 
     let container = document.getElementById("account_list")
-    let socket = new Socket("/socket")
+    let socket = new Socket("/socket", {
+      params: { token: user_token }
+    })
     socket.connect()
 
     let channel = socket.channel("account:2")
-    channel.on("update", data => {
-      console.log('enter udpate data');
-      refresh_data();
-    })
+    // channel.on("update", data => {
+    //   refresh_data();
+    // })
 
     //account channel join
     channel.join()
-      .receive("ok", resp => {
-        refresh_data();
-      })
+      .receive("ok", resp => { refresh_data(); })
       .receive("error", reason => console.log("failed to join ha", reason))
 
 
     function refresh_data(){
-      $.getJSON("http://localhost:4000/api/accounts", (response) => { 
+      $.getJSON("http://localhost:4000/api/accounts/"+user_id, (response) => { 
           vm.data = response.data;
       });
     }
@@ -121,158 +123,6 @@ export var Account = {
         + "</form>"
     );
 
-    var add_transaction = $("<div />");
-
-    add_transaction.append(
-        "<form role='form'>"
-          + "<div>"
-            + "<div class='form-group'>"
-              + "<p>Currency</p>"
-              + "<select class='form-control  input-sm select2' style='width: 100%;'>"
-                + "<option selected='selected'>USD</option>"
-                + "<option>EUR</option>"
-                + "<option>JPY</option>"
-                + "<option>SGD</option>"
-                + "<option>IDR</option>"
-                + "<option>AUD</option>"
-              + "</select>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Amount</p>"
-              + "<input type='text' class='form-control input-sm' id='exampleInputPassword1' placeholder='Enter budget'>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Date</p>"
-              + "<div class='input-group'>"
-                + "<div class='input-group-addon'>"
-                  + "<i class='fa fa-calendar'></i>"
-                + "</div>"
-                + "<input type='text' class='form-control input-sm pull-right' id='data-date'>"
-              + "</div>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Account</p>"
-
-              + "<select class='form-control input-sm select2' style='width: 100%;'>"
-                + "<option selected='selected'>Account A</option>"
-                + "<option>Account B</option>"
-              + "</select>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Note</p>"
-              + "<input type='text' class='form-control input-sm' placeholder='Enter note'>"
-            + "</div>"
-
-
-            + "<div class='form-group'>"
-              + "<label class='control-sidebar-subheading'>"
-                + "Recurring"
-                + "<input type='checkbox' class='pull-right' checked>"
-              + "</label>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Cycle</p>"
-              + "<select class='form-control  input-sm select2' style='width: 100%;'>"
-                + "<option selected='selected'>Daily</option>"
-                + "<option>Weekly</option>"
-                + "<option>Every 2 Weeks</option>"
-                + "<option>Monthly</option>"
-                + "<option>Every 2 Months</option>"
-                + "<option>Every 3 Months</option>"
-                + "<option>Every 6 Months</option>"
-                + "<option>Yearly</option>"
-              + "</select>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>End Date</p>"
-              + "<div class='input-group'>"
-                + "<div class='input-group-addon'>"
-                  + "<i class='fa fa-calendar'></i>"
-                + "</div>"
-                + "<input type='text' class='form-control input-sm pull-right' id='recurring-date'>"
-              + "</div>"
-            + "</div>"
-          + "</div>"
-
-          + "<div class='box-footer'>"
-            + "<button type='submit' class='btn btn-primary'>Submit</button>"
-          + "</div>"
-        + "</form>"
-    );
-
-    var detail = $("<div />");
-
-    detail.append(
-        "<ul class='products-list product-list-in-box'>"
-          + "<li class='item'>"
-            + "<div>"
-              + "<a href='#' class='product-title'>Buy Some Food"
-                + "<span class='label label-warning pull-right'>$ 10.00</span>"
-              + "</a>"
-              + "<span class='product-description'>"
-                + "12-25-2017"
-                + "<span class='label label-info pull-right'>Account A</span>"
-              + "</span>"
-            + "</div>"
-          + "</li>"
-          
-          + "<li class='item'>"
-            + "<div>"
-              + "<a href='#' class='product-title'>Buy Some Food"
-                + "<span class='label label-warning pull-right'>$ 10.00</span>"
-              + "</a>"
-              + "<span class='product-description'>"
-                + "12-25-2017"
-                + "<span class='label label-info pull-right'>Account A</span>"
-              + "</span>"
-            + "</div>"
-          + "</li>"
-          
-          + "<li class='item'>"
-            + "<div>"
-              + "<a href='#' class='product-title'>Buy Some Food"
-                + "<span class='label label-warning pull-right'>$ 10.00</span>"
-              + "</a>"
-              + "<span class='product-description'>"
-                + "12-25-2017"
-                + "<span class='label label-info pull-right'>Account A</span>"
-              + "</span>"
-            + "</div>"
-          + "</li>"
-          
-          + "<li class='item'>"
-            + "<div>"
-              + "<a href='#' class='product-title'>Buy Some Food"
-                + "<span class='label label-warning pull-right'>$ 10.00</span>"
-              + "</a>"
-              + "<span class='product-description'>"
-                + "12-25-2017"
-                + "<span class='label label-info pull-right'>Account A</span>"
-              + "</span>"
-            + "</div>"
-          + "</li>"
-          
-          + "<li class='item'>"
-            + "<div>"
-              + "<a href='#' class='product-title'>Buy Some Food"
-                + "<span class='label label-warning pull-right'>$ 10.00</span>"
-              + "</a>"
-              + "<span class='product-description'>"
-                + "12-25-2017"
-                + "<span class='label label-info pull-right'>Account A</span>"
-              + "</span>"
-            + "</div>"
-          + "</li>"
-          
-        + "</ul>"
-    );
-
     //when open sidebar form
     $('body').on("click",'.toggle-event', function () {
         console.log('enter toggle')
@@ -289,14 +139,6 @@ export var Account = {
           tab_pane.append(add_data);
           tab_pane.clone();
           toggle_title.append("Add Account");
-        }
-        else if(dataid=='addtransaction'){
-          tab_pane.append(add_transaction);
-          toggle_title.append("Add Paying");
-        }
-        else{ 
-          tab_pane.append(detail);
-          toggle_title.append("Detail");
         }
 
         //set value if update, no when add new data
@@ -324,5 +166,39 @@ export var Account = {
         $('body').removeClass('control-sidebar-open');
       }
     });
+
+    $('body').on('click','.delete-data', function(e) {
+        e.preventDefault();
+        vm.selectedId = $(this).attr('data-id');
+        $('#myModal').modal('show');
+    });
+
+    $('body').on('click','#btn-yes', function(e) {
+        e.preventDefault();
+        delete_data(e)
+        $('#myModal').modal('hide');
+    });
+
+    
+    function delete_data(event){
+      var submit_url="http://localhost:4000/api/accounts/"+vm.selectedId;
+      var submit_type='DELETE';
+      $.ajax({
+        url: submit_url,
+        dataType: 'json',
+        type: submit_type,
+        headers: {
+            "X-CSRF-TOKEN": document.querySelector("meta[name=csrf]").content
+        },
+        success: function(data) { 
+          vm.selectedId=0;
+          refresh_data();
+        }.bind(this),
+        error: function(xhr, status, err) {
+            console.log(xhr.responseText)
+        }.bind(this)
+      });
+    }
+
   }
 }

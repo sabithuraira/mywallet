@@ -3,14 +3,14 @@ defmodule Mywallet.AccountController do
 
   alias Mywallet.Account
   alias Mywallet.Auth
-
-  def index(conn, _params) do
-    query = from u in Account,
-               order_by: [desc: :id],
-               select: u
-    accounts = Repo.all(query)
-    render(conn, "index.json", accounts: accounts)
-  end
+  
+  # def index(conn, _params) do
+  #   query = from u in Account,
+  #              order_by: [desc: :id],
+  #              select: u
+  #   accounts = Repo.all(query)
+  #   render(conn, "index.json", accounts: accounts)
+  # end
 
   def create(conn, %{"account" => account_params}) do
     changeset = Account.changeset(%Account{}, account_params)
@@ -30,8 +30,14 @@ defmodule Mywallet.AccountController do
   end
 
   def show(conn, %{"id" => id}) do
-    account = Repo.get!(Account, id)
-    render(conn, "show.json", account: account)
+    # account = Repo.get!(Account, id)
+    query = from u in Account,
+               where: u.created_by == ^id,
+               order_by: [desc: :id],
+               select: u
+    accounts = Repo.all(query)
+
+    render(conn, "index.json", accounts: accounts)
   end
 
   def update(conn, %{"id" => id, "account" => account_params}) do

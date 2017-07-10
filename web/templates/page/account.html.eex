@@ -58,8 +58,7 @@
                         <td>{{ row.note }}</td>
                         <td>
                           <a :id="row.id" class="btn btn-default btn-sm toggle-event" href="#" data-id="adddata"><i class="fa fa-plus-square-o"></i> Update</a>
-                          <a class="btn btn-default btn-sm toggle-event" href="#" data-id="addtransaction"><i class="fa fa-plus-square-o"></i> Add Paying</a>
-                          <a class="btn btn-default btn-sm toggle-event" href="#" data-id="detail"><i class="fa fa-search"></i> Detail</a>
+                          <a :data-id="row.id" class="btn btn-danger btn-sm delete-data" href="#"><i class="fa fa-remove"></i> Delete</a>
                         </td>
                   </tbody>
                 </table>
@@ -67,6 +66,23 @@
           </div>
         </div>
       </div>
+
+
+
+      <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <p>Are you sure want to delete this item?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+              <button id="btn-yes" type="button" class="btn btn-primary">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </section>
 
   <aside class="control-sidebar control-sidebar-light">
@@ -85,4 +101,5 @@
     </div>
     <div class="tab-content" id="right-sidebar"></div>
   </aside>
+
 <script>require("web/static/js/app").App.c_account()</script>
