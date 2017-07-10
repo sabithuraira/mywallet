@@ -66,8 +66,8 @@ defmodule Mywallet.AuthController do
         case Mywallet.Auth.find_or_create(auth) do
         {:ok, user} ->
             conn
-            |> put_flash(:info, "Successfully authenticated.")
             |> Guardian.Plug.sign_in(user)
+            |> put_flash(:info, "Successfully authenticated.")
             |> redirect(to: "/")
         {:error, reason} ->
             conn
