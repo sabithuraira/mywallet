@@ -1,12 +1,12 @@
 import {Socket} from "phoenix"
 
-export var Account = {
+export var Currency = {
   run: function(){
     var user_token = document.querySelector("meta[name=channel_token]").content;
     var user_id = document.querySelector("meta[name=channel_id]").content;
 
     var vm = new Vue({  
-      el: "#account_list",
+      el: "#currency_list",
       data: {
         data: [],
         selectedId: 0,
@@ -21,7 +21,7 @@ export var Account = {
     });
     
 
-    let container = document.getElementById("account_list")
+    let container = document.getElementById("currency_list")
     let socket = new Socket("/socket", {
       params: { token: user_token }
     })
@@ -39,7 +39,7 @@ export var Account = {
 
 
     function refresh_data(){
-      $.getJSON("http://localhost:4000/api/accounts/"+user_id, (response) => { 
+      $.getJSON("http://localhost:4000/api/currencies/", (response) => { 
           vm.data = response.data;
       });
     }
@@ -52,10 +52,10 @@ export var Account = {
 
       var csrf = document.querySelector("meta[name=csrf]").content;
 
-      var submit_url="http://localhost:4000/api/accounts";
+      var submit_url="http://localhost:4000/api/currencies";
       var submit_type='POST';
       if(form_id!=0){
-        submit_url="http://localhost:4000/api/accounts/"+form_id;
+        submit_url="http://localhost:4000/api/currencies/"+form_id;
         submit_type='PUT';
       }
 
@@ -67,10 +67,10 @@ export var Account = {
             "X-CSRF-TOKEN": csrf 
         },
         data: {
-          account: {
+          currency: {
             name: form_name,
             note: form_note,
-            created_by: user_id,
+            inserted_by: user_id,
             updated_by: user_id
           }
         },
@@ -107,7 +107,7 @@ export var Account = {
             + "<div class='form-group'>"
               + "<p>Name</p>"
               + "<input type='hidden' id='form-id'>"
-              + "<input type='text' id='form-name' class='form-control input-sm' placeholder='Enter name'>"
+              + "<input type='text' id='form-name' class='form-control input-sm' placeholder='Enter currency'>"
             + "</div>"
 
             + "<div class='form-group'>"
@@ -138,7 +138,7 @@ export var Account = {
         if(dataid=='adddata'){
           tab_pane.append(add_data);
           tab_pane.clone();
-          toggle_title.append("Add Account");
+          toggle_title.append("Add Currency");
         }
 
         //set value if update, no when add new data
@@ -181,7 +181,7 @@ export var Account = {
 
     
     function delete_data(event){
-      var submit_url="http://localhost:4000/api/accounts/"+vm.selectedId;
+      var submit_url="http://localhost:4000/api/currencies/"+vm.selectedId;
       var submit_type='DELETE';
       $.ajax({
         url: submit_url,

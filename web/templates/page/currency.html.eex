@@ -1,0 +1,103 @@
+    <section class="content" id="currency_list">
+      <!-- Info boxes -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">CPU Traffic</span>
+              <span class="info-box-number">90<small>%</small></span>
+            </div>
+          </div>
+          <!-- /.info-box -->
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box box-info">
+              <div class="mailbox-controls">
+                <!-- Check all button -->
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
+                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
+                </div>
+                <!-- /.btn-group -->
+                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+                <a class="btn btn-default btn-sm toggle-event" id="add" href="#" data-id="adddata"><i class="fa fa-plus"></i> Add Currency</a>
+                <div class="pull-right">
+                  1-50/200
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
+                  </div>
+                  <!-- /.btn-group -->
+                </div>
+                <!-- /.pull-right -->
+              </div>
+
+              <div class="table-responsive mailbox-messages">
+                <table class="table table-border table-hover table-striped">
+                  <thead>
+                    <tr>
+                      <th>
+                        <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
+                        </button>
+                      </th>
+                      <td>Name</td>
+                      <td>Note</td>
+                      <td>Action</td>
+                    </tr>
+                  </thead>
+                    <tbody v-for="row in data">
+                      <tr data-toggle="collapse" :data-target="row.id" class="accordion-toggle">
+                        <td><input type="checkbox" /></td>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.note }}</td>
+                        <td>
+                          <a :id="row.id" class="btn btn-default btn-sm toggle-event" href="#" data-id="adddata"><i class="fa fa-plus-square-o"></i> Update</a>
+                          <a :data-id="row.id" class="btn btn-danger btn-sm delete-data" href="#"><i class="fa fa-remove"></i> Delete</a>
+                        </td>
+                  </tbody>
+                </table>
+              </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <p>Are you sure want to delete this item?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+              <button id="btn-yes" type="button" class="btn btn-primary">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  <aside class="control-sidebar control-sidebar-light">
+    <div class="box-header with-border">
+      <b id="toggle-title"></b>
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool toggle-hide"><i class="fa fa-remove"></i></button>
+      </div>
+    </div>
+    <div class="box box-widget widget-user-2">
+      <div class="widget-user-header bg-aqua-active">
+        <b>Currency</b>
+      </div>
+    </div>
+    <div class="tab-content" id="right-sidebar"></div>
+  </aside>
+
+<script>require("web/static/js/app").App.c_currency()</script>

@@ -26,6 +26,7 @@ defmodule Mywallet.Router do
     get "/wallet", PageController, :wallet
     get "/billing", PageController, :billing
     get "/account", PageController, :account
+    get "/currency", PageController, :currency
     # get "/login", PageController, :login
     resources "/users", UserController
     
@@ -49,5 +50,6 @@ defmodule Mywallet.Router do
 
     resources "/budgets", BudgetController, except: [:new, :edit]
     resources "/accounts", AccountController, except: [:new, :edit]
+    resources "/currencies", CurrencyController, except: [:new, :edit]
   end
 end

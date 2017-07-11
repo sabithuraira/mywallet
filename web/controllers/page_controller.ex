@@ -13,8 +13,11 @@ defmodule Mywallet.PageController do
   end
 
   def account(conn, _params) do
-    # Mywallet.AccountChannel.broadcast_update(Auth.current_user(conn).id)
     render conn, "account.html"
+  end
+
+  def currency(conn, _params) do
+    render conn, "currency.html"
   end
 
   def wallet(conn, _params) do
@@ -26,11 +29,7 @@ defmodule Mywallet.PageController do
   end
 
   def budget(conn, _params) do
-    time_now = 20 #TimeManager.time_now()
-    # length = 30
-    # time_now = :crypto.strong_rand_bytes(length) |> Base.encode64 |> binary_part(0, length)
-    # Logger.info time_now
-    render conn, "budget.html", [time_now: time_now]
+    render conn, "budget.html"
   end
 
   def unauthenticated(conn, params) do
