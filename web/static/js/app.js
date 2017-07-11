@@ -35,12 +35,14 @@ import "admin-lte/plugins/datepicker/bootstrap-datepicker.js";
 import { Budget } from "./budget";
 import { Account } from "./account";
 import { Currency } from "./currency";
+import { Category } from "./category";
 
 var App = {
   c_time: function() { Time.run();},
   c_budget: function(){ Budget.run();},
   c_account: function(){ Account.run();},
   c_currency: function(){ Currency.run();},
+  c_category: function(){ Category.run();},
 };
 
 module.exports = {

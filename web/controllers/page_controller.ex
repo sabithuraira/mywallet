@@ -16,6 +16,10 @@ defmodule Mywallet.PageController do
     render conn, "account.html"
   end
 
+  def category(conn, _params) do
+    render conn, "category.html"
+  end
+
   def currency(conn, _params) do
     render conn, "currency.html"
   end
