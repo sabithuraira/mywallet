@@ -53,13 +53,6 @@ module.exports = {
 };
 
 
-Vue.component('list-two-paramz', {
-  template: `<select id='{{ list-id }}' class='form-control  input-sm select2' v-for="row in data">
-      <option value={{ row.id }}>{{ row.name }}}</option>
-    </select>`,
-  props: ['data','list-id']
-})
-
 Vue.component('delete-form', {
   template: `<div class="modal fade" id="myModal">
         <div class="modal-dialog">

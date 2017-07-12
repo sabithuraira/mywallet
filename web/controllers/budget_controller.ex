@@ -3,10 +3,10 @@ defmodule Mywallet.BudgetController do
 
   alias Mywallet.Budget
 
-  def index(conn, _params) do
-    budgets = Repo.all(Budget)
-    render(conn, "index.json", budgets: budgets)
-  end
+  # def index(conn, _params) do
+  #   budgets = Repo.all(Budget)
+  #   render(conn, "index.json", budgets: budgets)
+  # end
 
   def create(conn, %{"budget" => budget_params}) do
     changeset = Budget.changeset(%Budget{}, budget_params)
@@ -25,8 +25,15 @@ defmodule Mywallet.BudgetController do
   end
 
   def show(conn, %{"id" => id}) do
-    budget = Repo.get!(Budget, id)
-    render(conn, "show.json", budget: budget)
+    # budget = Repo.get!(Budget, id)
+    # render(conn, "show.json", budget: budget)
+    query = from u in Budget,
+               where: u.created_by == ^id,
+               order_by: [desc: :id],
+               select: u
+    budgets = Repo.all(query)
+
+    render(conn, "index.json", budgets: budgets)
   end
 
   def update(conn, %{"id" => id, "budget" => budget_params}) do

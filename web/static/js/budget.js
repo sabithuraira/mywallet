@@ -12,6 +12,12 @@ export var Budget = {
         categories: [],
         currencies: [],
         selectedId: 0,
+        isAdd: false,
+        isAddTransaction: false,
+        isDetail: false,
+        month: ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "Desember"],
+        year: [],
       },
       methods: {
         updateArray: function (name, note) {
@@ -19,23 +25,6 @@ export var Budget = {
           this.data[data_index].name = name; 
           this.data[data_index].note =  note;
         },
-        // toogleEvent: function(dataid){
-        //   if(dataid=='adddata'){
-        //     tab_pane.append(add_data);
-        //     toggle_title.append("Add Budget");
-        //   }
-        //   else if(dataid=='addtransaction'){
-        //     tab_pane.append(add_transaction);
-        //     toggle_title.append("Add Transaction");
-        //   }
-        //   else{ 
-        //     tab_pane.append(detail);
-        //     toggle_title.append("Detail");
-        //   }
-
-        //   this.$compile(tab_pane.get(0));
-        //   this.$compile(toggle_title.get(0));
-        // },
       }
     });
     
@@ -56,36 +45,44 @@ export var Budget = {
       .receive("ok", resp => { 
         refresh_data(); 
 
-        $.getJSON("http://localhost:4000/api/categories/"+user_id, (response) => { 
+        $.getJSON("http://localhost:4000/api/budgets/"+user_id, (response) => { 
             vm.categories = response.data;
         });
 
-        $.getJSON("http://localhost:4000/api/currencies/", (response) => { 
+        $.getJSON("http://localhost:4000/api/budgets/", (response) => { 
             vm.currencies = response.data;
         });
+
+        for(var i=115;i<=new Date().getYear();++i){
+          vm.year.push(i+1900);
+        }
         
       })
       .receive("error", reason => console.log("failed to join ha", reason))
 
 
     function refresh_data(){
-      $.getJSON("http://localhost:4000/api/accounts/"+user_id, (response) => { 
+      $.getJSON("http://localhost:4000/api/budgets/"+user_id, (response) => { 
           vm.data = response.data;
       });
     }
 
     //click button submit
     $('body').on('submit',"#data-form", function () {
-      var form_id=$('#form-id').val();
-      var form_name=$('#form-name').val();
-      var form_note=$('#form-note').val();
+      var form_id       =$('#form-id').val();
+      var form_note     =$('#form-note').val();
+      var form_month    =$('#form-month').val();
+      var form_year     =$('#form-year').val();
+      var form_amount   =$('#form-amount').val();
+      var form_category =$('#form-category').val();
+      var form_currency =$('#form-currency').val();
 
       var csrf = document.querySelector("meta[name=csrf]").content;
 
-      var submit_url="http://localhost:4000/api/accounts";
+      var submit_url="http://localhost:4000/api/budgets";
       var submit_type='POST';
       if(form_id!=0){
-        submit_url="http://localhost:4000/api/accounts/"+form_id;
+        submit_url="http://localhost:4000/api/budgets/"+form_id;
         submit_type='PUT';
       }
 
@@ -100,8 +97,8 @@ export var Budget = {
           account: {
             name: form_name,
             note: form_note,
-            created_by: 2,
-            updated_by: 2
+            created_by: user_id,
+            updated_by: user_id
           }
         },
         success: function(data) { 
@@ -121,7 +118,6 @@ export var Budget = {
       return false;
     });
 
-    var tab_pane = $("#right-sidebar");
     var toggle_title=$("#toggle-title");
     var o = $($.AdminLTE.options.controlSidebarOptions);
     var sidebar = $(o.selector);
@@ -136,38 +132,30 @@ export var Budget = {
           $('body').addClass('control-sidebar-open');
         }
 
-        tab_pane.html('');
         toggle_title.html('');
         var dataid = $(this).data('id');
-        // vm.toogleEvent(dataid);
-
-
-        var res;//= Vue.compile(resultHTML)
 
         if(dataid=='adddata'){
-          tab_pane.append(add_data);
           toggle_title.append("Add Budget");
 
-          res = Vue.compile(add_data);
+          vm.isAdd=true;
+          vm.isAddTransaction=false;
+          vm.isDetail=false;
         }
         else if(dataid=='addtransaction'){
-          tab_pane.append(add_transaction);
           toggle_title.append("Add Transaction");
 
-          res = Vue.compile(add_transaction);
+          vm.isAdd=false;
+          vm.isAddTransaction=true;
+          vm.isDetail=false;
         }
         else{ 
-          tab_pane.append(detail);
           toggle_title.append("Detail");
 
-          res = Vue.compile(detail);
+          vm.isAdd=false;
+          vm.isAddTransaction=false;
+          vm.isDetail=true;
         }
-
-        var vm = new Vue({
-          render: res.render,
-          staticRenderFns: res.staticRenderFns
-        })
-        vm.$mount('#budget_list')
     });
 
     $('.toggle-hide').on("click", function () {
@@ -189,7 +177,6 @@ export var Budget = {
         delete_data(e)
         $('#myModal').modal('hide');
     });
-
     
     function delete_data(event){
       var submit_url="http://localhost:4000/api/accounts/"+vm.selectedId;
@@ -210,212 +197,6 @@ export var Budget = {
         }.bind(this)
       });
     }
-
-
-    var add_data = $("<div />");
-    var month=["January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "Desember"];
-
-    var str_month="";
-    for(var i=1;i<=month.length;++i){
-      str_month+="<option value="+i+">"+month[i-1]+"</option>";
-    }
-
-    var str_year="";
-    for(var i=115;i<=new Date().getYear();++i){
-      str_year+="<option>"+(i+1900)+"</option>";
-    }
-
-    add_data.append(
-        "<form role='form'>"
-          + "<div>"
-
-            + "<div class='form-group'>"
-              + "<input type='hidden' id='form-id'>"
-              + "<select id='form-month' class='form-control  input-sm select2'>"
-                + str_month
-              + "</select>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<select id='form-year' class='form-control  input-sm select2'>"
-                + str_year
-              + "</select>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Category</p>"
-              + "<list-two-params data="+ vm.categories +" list-id='form-category'></list-two-params>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Currency</p>"
-              + "<input type='text' class='form-control input-sm' placeholder='Enter budget'>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Budget</p>"
-              + "<input type='text' class='form-control input-sm' placeholder='Enter budget'>"
-            + "</div>"
-          + "</div>"
-
-          + "<div class='box-footer'>"
-            + "<button type='submit' class='btn btn-primary'>Submit</button>"
-          + "</div>"
-        + "</form>"
-    );
-
-    var add_transaction = $("<div />");
-
-    add_transaction.append(
-        "<form role='form'>"
-          + "<div>"
-            + "<div class='form-group'>"
-              + "<p>Currency</p>"
-              + "<select class='form-control  input-sm select2' style='width: 100%;'>"
-                + "<option selected='selected'>USD</option>"
-                + "<option>EUR</option>"
-                + "<option>JPY</option>"
-                + "<option>SGD</option>"
-                + "<option>IDR</option>"
-                + "<option>AUD</option>"
-              + "</select>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Amount</p>"
-              + "<input type='text' class='form-control input-sm' id='exampleInputPassword1' placeholder='Enter budget'>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Date</p>"
-              + "<div class='input-group'>"
-                + "<div class='input-group-addon'>"
-                  + "<i class='fa fa-calendar'></i>"
-                + "</div>"
-                + "<input type='text' class='form-control input-sm pull-right' id='data-date'>"
-              + "</div>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Account</p>"
-
-              + "<select class='form-control input-sm select2' style='width: 100%;'>"
-                + "<option selected='selected'>Account A</option>"
-                + "<option>Account B</option>"
-              + "</select>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Note</p>"
-              + "<input type='text' class='form-control input-sm' placeholder='Enter note'>"
-            + "</div>"
-
-
-            + "<div class='form-group'>"
-              + "<label class='control-sidebar-subheading'>"
-                + "Recurring"
-                + "<input type='checkbox' class='pull-right' checked>"
-              + "</label>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Cycle</p>"
-              + "<select class='form-control  input-sm select2' style='width: 100%;'>"
-                + "<option selected='selected'>Daily</option>"
-                + "<option>Weekly</option>"
-                + "<option>Every 2 Weeks</option>"
-                + "<option>Monthly</option>"
-                + "<option>Every 2 Months</option>"
-                + "<option>Every 3 Months</option>"
-                + "<option>Every 6 Months</option>"
-                + "<option>Yearly</option>"
-              + "</select>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>End Date</p>"
-              + "<div class='input-group'>"
-                + "<div class='input-group-addon'>"
-                  + "<i class='fa fa-calendar'></i>"
-                + "</div>"
-                + "<input type='text' class='form-control input-sm pull-right' id='recurring-date'>"
-              + "</div>"
-            + "</div>"
-          + "</div>"
-
-          + "<div class='box-footer'>"
-            + "<button type='submit' class='btn btn-primary'>Submit</button>"
-          + "</div>"
-        + "</form>"
-    );
-
-    var detail = $("<div />");
-
-    detail.append(
-        "<ul class='products-list product-list-in-box'>"
-          + "<li class='item'>"
-            + "<div>"
-              + "<a href='#' class='product-title'>Buy Some Food"
-                + "<span class='label label-warning pull-right'>$ 10.00</span>"
-              + "</a>"
-              + "<span class='product-description'>"
-                + "12-25-2017"
-                + "<span class='label label-info pull-right'>Account A</span>"
-              + "</span>"
-            + "</div>"
-          + "</li>"
-          
-          + "<li class='item'>"
-            + "<div>"
-              + "<a href='#' class='product-title'>Buy Some Food"
-                + "<span class='label label-warning pull-right'>$ 10.00</span>"
-              + "</a>"
-              + "<span class='product-description'>"
-                + "12-25-2017"
-                + "<span class='label label-info pull-right'>Account A</span>"
-              + "</span>"
-            + "</div>"
-          + "</li>"
-          
-          + "<li class='item'>"
-            + "<div>"
-              + "<a href='#' class='product-title'>Buy Some Food"
-                + "<span class='label label-warning pull-right'>$ 10.00</span>"
-              + "</a>"
-              + "<span class='product-description'>"
-                + "12-25-2017"
-                + "<span class='label label-info pull-right'>Account A</span>"
-              + "</span>"
-            + "</div>"
-          + "</li>"
-          
-          + "<li class='item'>"
-            + "<div>"
-              + "<a href='#' class='product-title'>Buy Some Food"
-                + "<span class='label label-warning pull-right'>$ 10.00</span>"
-              + "</a>"
-              + "<span class='product-description'>"
-                + "12-25-2017"
-                + "<span class='label label-info pull-right'>Account A</span>"
-              + "</span>"
-            + "</div>"
-          + "</li>"
-          
-          + "<li class='item'>"
-            + "<div>"
-              + "<a href='#' class='product-title'>Buy Some Food"
-                + "<span class='label label-warning pull-right'>$ 10.00</span>"
-              + "</a>"
-              + "<span class='product-description'>"
-                + "12-25-2017"
-                + "<span class='label label-info pull-right'>Account A</span>"
-              + "</span>"
-            + "</div>"
-          + "</li>"
-          
-        + "</ul>"
-    );
 
   }
 }
