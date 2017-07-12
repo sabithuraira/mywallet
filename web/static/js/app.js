@@ -31,20 +31,68 @@ import "admin-lte/plugins/datepicker/bootstrap-datepicker.js";
 
 // import socket from "./socket"
 
-// import { Time } from "./time";
 import { Budget } from "./budget";
 import { Account } from "./account";
 import { Currency } from "./currency";
 import { Category } from "./category";
 
+Vue.component('my-component', {
+  template: '<div>A custom component!</div>'
+})
+
+
 var App = {
-  c_time: function() { Time.run();},
   c_budget: function(){ Budget.run();},
   c_account: function(){ Account.run();},
   c_currency: function(){ Currency.run();},
-  c_category: function(){ Category.run();},
+  c_category: function(){ Category.run();}
 };
 
 module.exports = {
   App: App
 };
+
+
+Vue.component('list-two-paramz', {
+  template: `<select id='{{ list-id }}' class='form-control  input-sm select2' v-for="row in data">
+      <option value={{ row.id }}>{{ row.name }}}</option>
+    </select>`,
+  props: ['data','list-id']
+})
+
+Vue.component('delete-form', {
+  template: `<div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <p>Are you sure want to delete this item?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+              <button id="btn-yes" type="button" class="btn btn-primary">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>`,
+})
+
+Vue.component('simple-form', {
+  template: `<form role='form' id='data-form'>
+      <div>
+        <div class='form-group'>
+          <p>Name</p>
+          <input type='hidden' id='form-id'>
+          <input type='text' id='form-name' class='form-control input-sm' placeholder='Enter name'>
+        </div>
+
+        <div class='form-group'>
+          <p>Note</p>
+          <input type='text' id='form-note' class='form-control input-sm' placeholder='Enter note'>
+        </div>
+      </div>
+
+      <div class='box-footer'>
+        <button type='submit' id='btn-submit' class='btn btn-primary'>Submit</button>
+      </div>
+    </form>`,
+})

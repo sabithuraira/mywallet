@@ -9,6 +9,8 @@ export var Budget = {
       el: "#budget_list",
       data: {
         data: [],
+        categories: [],
+        currencies: [],
         selectedId: 0,
       },
       methods: {
@@ -16,12 +18,29 @@ export var Budget = {
           var data_index = this.data.findIndex(x => x.id == this.selectedId)
           this.data[data_index].name = name; 
           this.data[data_index].note =  note;
-        }
+        },
+        // toogleEvent: function(dataid){
+        //   if(dataid=='adddata'){
+        //     tab_pane.append(add_data);
+        //     toggle_title.append("Add Budget");
+        //   }
+        //   else if(dataid=='addtransaction'){
+        //     tab_pane.append(add_transaction);
+        //     toggle_title.append("Add Transaction");
+        //   }
+        //   else{ 
+        //     tab_pane.append(detail);
+        //     toggle_title.append("Detail");
+        //   }
+
+        //   this.$compile(tab_pane.get(0));
+        //   this.$compile(toggle_title.get(0));
+        // },
       }
     });
     
 
-    let container = document.getElementById("account_list")
+    let container = document.getElementById("budget_list")
     let socket = new Socket("/socket", {
       params: { token: user_token }
     })
@@ -34,7 +53,18 @@ export var Budget = {
 
     //account channel join
     channel.join()
-      .receive("ok", resp => { refresh_data(); })
+      .receive("ok", resp => { 
+        refresh_data(); 
+
+        $.getJSON("http://localhost:4000/api/categories/"+user_id, (response) => { 
+            vm.categories = response.data;
+        });
+
+        $.getJSON("http://localhost:4000/api/currencies/", (response) => { 
+            vm.currencies = response.data;
+        });
+        
+      })
       .receive("error", reason => console.log("failed to join ha", reason))
 
 
@@ -109,18 +139,35 @@ export var Budget = {
         tab_pane.html('');
         toggle_title.html('');
         var dataid = $(this).data('id');
+        // vm.toogleEvent(dataid);
+
+
+        var res;//= Vue.compile(resultHTML)
+
         if(dataid=='adddata'){
           tab_pane.append(add_data);
           toggle_title.append("Add Budget");
+
+          res = Vue.compile(add_data);
         }
         else if(dataid=='addtransaction'){
           tab_pane.append(add_transaction);
           toggle_title.append("Add Transaction");
+
+          res = Vue.compile(add_transaction);
         }
         else{ 
           tab_pane.append(detail);
           toggle_title.append("Detail");
+
+          res = Vue.compile(detail);
         }
+
+        var vm = new Vue({
+          render: res.render,
+          staticRenderFns: res.staticRenderFns
+        })
+        vm.$mount('#budget_list')
     });
 
     $('.toggle-hide').on("click", function () {
@@ -184,20 +231,21 @@ export var Budget = {
           + "<div>"
 
             + "<div class='form-group'>"
-              + "<select class='form-control  input-sm select2'>"
+              + "<input type='hidden' id='form-id'>"
+              + "<select id='form-month' class='form-control  input-sm select2'>"
                 + str_month
               + "</select>"
             + "</div>"
 
             + "<div class='form-group'>"
-              + "<select class='form-control  input-sm select2'>"
+              + "<select id='form-year' class='form-control  input-sm select2'>"
                 + str_year
               + "</select>"
             + "</div>"
 
             + "<div class='form-group'>"
               + "<p>Category</p>"
-              + "<input type='text' class='form-control input-sm' placeholder='Enter category'>"
+              + "<list-two-params data="+ vm.categories +" list-id='form-category'></list-two-params>"
             + "</div>"
 
             + "<div class='form-group'>"

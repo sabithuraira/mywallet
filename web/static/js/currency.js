@@ -91,37 +91,10 @@ export var Currency = {
       return false;
     });
 
-    //for right tab pane
-    var tab_pane = $("#right-sidebar");
     var toggle_title=$("#toggle-title");
 
     var o = $($.AdminLTE.options.controlSidebarOptions);
     var sidebar = $(o.selector);
-
-    $('#data-date, #recurring-date').datepicker()
-    
-    var add_data = $("<div />");
-    add_data.append(
-      "<form role='form' id='data-form'>"
-          + "<div>"
-            + "<div class='form-group'>"
-              + "<p>Name</p>"
-              + "<input type='hidden' id='form-id'>"
-              + "<input type='text' id='form-name' class='form-control input-sm' placeholder='Enter currency'>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Note</p>"
-              + "<input type='text' id='form-note' class='form-control input-sm' placeholder='Enter note'>"
-            + "</div>"
-
-          + "</div>"
-
-          + "<div class='box-footer'>"
-            + "<button type='submit' id='btn-submit' class='btn btn-primary'>Submit</button>"
-          + "</div>"
-        + "</form>"
-    );
 
     //when open sidebar form
     $('body').on("click",'.toggle-event', function () {
@@ -132,23 +105,18 @@ export var Currency = {
           $('body').addClass('control-sidebar-open');
         }
 
-        tab_pane.html('');
         toggle_title.html('');
-        var dataid = $(this).data('id');
-        if(dataid=='adddata'){
-          tab_pane.append(add_data);
-          tab_pane.clone();
-          toggle_title.append("Add Currency");
-        }
 
         //set value if update, no when add new data
         if($(this).attr('id')=='add'){
+          toggle_title.append("Add Currency");
           $('#form-id').val(0);
           $('#form-name').val('');
           $('#form-note').val('');
           vm.selectedId=0;
         }
         else{
+          toggle_title.append("Update Currency");
           var row_id = $(this).attr('id');
           var data = vm.data.find(x => x.id == row_id)
           vm.selectedId=row_id;

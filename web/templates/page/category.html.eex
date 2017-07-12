@@ -1,4 +1,5 @@
-    <section class="content" id="category_list">
+<div id="category_list">
+    <section class="content">
       <!-- Info boxes -->
       <div class="row">
         <div class="col-md-12">
@@ -8,6 +9,7 @@
             <div class="info-box-content">
               <span class="info-box-text">CPU Traffic</span>
               <span class="info-box-number">90<small>%</small></span>
+              <my-component></my-component>
             </div>
           </div>
           <!-- /.info-box -->
@@ -69,21 +71,7 @@
           </div>
         </div>
       </div>
-
-      <div class="modal fade" id="myModal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-body">
-              <p>Are you sure want to delete this item?</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-              <button id="btn-yes" type="button" class="btn btn-primary">Yes</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <delete-form></delete-form>
     </section>
 
   <aside class="control-sidebar control-sidebar-light">
@@ -100,7 +88,10 @@
         <b>Category</b>
       </div>
     </div>
-    <div class="tab-content" id="right-sidebar"></div>
+    <div class="tab-content" id="right-sidebar">
+      <simple-form></simple-form>
+    </div>
   </aside>
+</div>
 
 <script>require("web/static/js/app").App.c_category()</script>
