@@ -14,7 +14,7 @@ defmodule Mywallet.BudgetView do
         id:         budget.id,
         currency:   budget.currency,
         category:   budget.category,
-        month:      budget.month,
+        month:      Timex.format!({budget.year,budget.month,18}, "%B", :strftime),
         year:       budget.year,
         amount:     budget.amount,
         note:       budget.note,

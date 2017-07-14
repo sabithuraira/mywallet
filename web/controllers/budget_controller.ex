@@ -14,10 +14,11 @@ defmodule Mywallet.BudgetController do
 
     case Repo.insert(changeset) do
       {:ok, budget} ->
+        preload_data = Repo.preload(budget, :category_rel)
         conn
         |> put_status(:created)
-        |> put_resp_header("location", budget_path(conn, :show, budget))
-        |> render("show.json", budget: budget)
+        |> put_resp_header("location", budget_path(conn, :show, preload_data))
+        |> render("show.json", budget: preload_data )
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
