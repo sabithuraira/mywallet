@@ -1,6 +1,7 @@
 defmodule Mywallet.Category do
   use Mywallet.Web, :model
 
+  @derive {Poison.Encoder, only: [:id, :name]}
   schema "categories" do
     field :name, :string
     field :note, :string

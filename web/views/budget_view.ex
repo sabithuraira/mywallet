@@ -10,6 +10,17 @@ defmodule Mywallet.BudgetView do
   end
 
   def render("budget.json", %{budget: budget}) do
-    %{id: budget.id}
+    %{
+        id:         budget.id,
+        currency:   budget.currency,
+        category:   budget.category,
+        month:      budget.month,
+        year:       budget.year,
+        amount:     budget.amount,
+        note:       budget.note,
+        created_by: budget.created_by,
+        updated_by: budget.updated_by,
+        category_label: budget.category_rel.name
+    }
   end
 end

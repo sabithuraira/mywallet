@@ -45,11 +45,11 @@ export var Budget = {
       .receive("ok", resp => { 
         refresh_data(); 
 
-        $.getJSON("http://localhost:4000/api/budgets/"+user_id, (response) => { 
+        $.getJSON("http://localhost:4000/api/categories/"+user_id, (response) => { 
             vm.categories = response.data;
         });
 
-        $.getJSON("http://localhost:4000/api/budgets/", (response) => { 
+        $.getJSON("http://localhost:4000/api/currencies/", (response) => { 
             vm.currencies = response.data;
         });
 
@@ -94,8 +94,12 @@ export var Budget = {
             "X-CSRF-TOKEN": csrf 
         },
         data: {
-          account: {
-            name: form_name,
+          budget: {
+            currency: form_currency,
+            month: form_month,
+            year: form_year,
+            category: form_category,
+            amount: form_amount,
             note: form_note,
             created_by: user_id,
             updated_by: user_id
@@ -108,8 +112,8 @@ export var Budget = {
               refresh_data();
 
             $('#form-id').val(0);
-            $('#form-name').val('');
             $('#form-note').val('');
+            $('#form-amount').val('');
         }.bind(this),
         error: function(xhr, status, err) {
             console.log(xhr.responseText)
@@ -136,7 +140,28 @@ export var Budget = {
         var dataid = $(this).data('id');
 
         if(dataid=='adddata'){
-          toggle_title.append("Add Budget");
+          if($(this).attr('id')=='add'){
+            toggle_title.append("Add Budget");
+
+            $('#form-id').val(0);
+            $('#form-note').val('');
+            $('#form-amount').val('');
+            vm.selectedId=0;
+          }
+          else{
+            toggle_title.append("Update Budget");
+            var row_id = $(this).attr('id');
+            var data = vm.data.find(x => x.id == row_id)
+            vm.selectedId=row_id;
+
+            $('#form-id').val(data.id);
+            $('#form-note').val(data.note);
+            $('#form-month').val(data.month);
+            $('#form-year').val(data.year);
+            $('#form-amount').val(data.amount);
+            $('#form-category').val(data.category);
+            $('#form-currency').val(data.currency);
+          }
 
           vm.isAdd=true;
           vm.isAddTransaction=false;

@@ -7,11 +7,13 @@ defmodule Mywallet.Budget do
     field :year, :integer
     field :amount, :decimal
     field :account, :integer
-    field :category, :integer
+    # field :category, :integer
     field :note, :string
     field :created_by, :integer
     field :updated_by, :integer
     timestamps()
+
+    belongs_to :category_rel, Mywallet.Category, foreign_key: :category
   end
 
   @doc """

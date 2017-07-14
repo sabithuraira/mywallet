@@ -2,6 +2,7 @@ defmodule Mywallet.BudgetController do
   use Mywallet.Web, :controller
 
   alias Mywallet.Budget
+  alias Mywallet.Category
 
   # def index(conn, _params) do
   #   budgets = Repo.all(Budget)
@@ -25,13 +26,12 @@ defmodule Mywallet.BudgetController do
   end
 
   def show(conn, %{"id" => id}) do
-    # budget = Repo.get!(Budget, id)
-    # render(conn, "show.json", budget: budget)
     query = from u in Budget,
                where: u.created_by == ^id,
                order_by: [desc: :id],
                select: u
     budgets = Repo.all(query)
+              |> Repo.preload(:category_rel)
 
     render(conn, "index.json", budgets: budgets)
   end

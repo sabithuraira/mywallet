@@ -26,7 +26,7 @@
                     <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
                     </div>
                     <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
-                    <a class="btn btn-default btn-sm toggle-event" href="#" data-id="adddata"><i class="fa fa-plus"></i> Add Budget</a>
+                    <a class="btn btn-default btn-sm toggle-event" href="#" id="add" data-id="adddata"><i class="fa fa-plus"></i> Add Budget</a>
                     <div class="pull-right">
                     1-50/200
                     <div class="btn-group">
@@ -52,26 +52,22 @@
                           <th>Action</th>
                       </tr>
                     </thead>
-                    <tbody>
-
-                      <%= for n <- 1..40 do %>
-                        <tr data-toggle="collapse" data-target="#<%= n %>" class="accordion-toggle">
-                            <td><input type="checkbox" /></td>
-                            <td>February 2017</td>
-                            <td>Food</td>
-                            <td>$ 10</td>
-                            <td>$ 10</td>
-                            <td>
-                            <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> $ 10</span>
-                            <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> $ 10</span>
-                            </td>
-                            <td>
-                            <a class="btn btn-default btn-sm toggle-event" href="#" data-id="addtransaction"><i class="fa fa-plus-square-o"></i> Add Transaction</a>
-                            <a class="btn btn-default btn-sm toggle-event" href="#" data-id="detail"><i class="fa fa-search"></i> Detail</a>
-                            </td>
-                        </tr>
-
-                      <%= end %>
+                    <tbody v-for="row in data">
+                      <tr data-toggle="collapse" :data-target="row.id" class="accordion-toggle">
+                          <td><input type="checkbox" /></td>
+                          <td>{{ row.month }} {{ row.year }}</td>
+                          <td>{{ row.category_label }}</td>
+                          <td>{{ row.currency }} {{ row.amount }}</td>
+                          <td>$ 10</td>
+                          <td>
+                          <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> $ 10</span>
+                          <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> $ 10</span>
+                          </td>
+                          <td>
+                            <a :id="row.id" class="btn btn-default btn-sm toggle-event" href="#" data-id="addtransaction"><i class="fa fa-plus-square-o"></i> Add Transaction</a>
+                            <a :id="row.id" class="btn btn-default btn-sm toggle-event" href="#" data-id="detail"><i class="fa fa-search"></i> Detail</a>
+                          </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -96,7 +92,7 @@
     <div class="tab-content" id="right-sidebar">
       <div v-if="isAdd">
         
-        <form role='form'>
+        <form role='form' id='data-form'>
           <div>
 
             <div class='form-group'>
@@ -122,7 +118,7 @@
             <div class='form-group'>
               <p>Currency</p>
               <select id='form-currency' class='form-control  input-sm select2'>
-                <option v-for="row in currencies"  :value="row.id">{{ row.name }}</option>
+                <option v-for="row in currencies">{{ row.name }}</option>
               </select>
             </div>
 
