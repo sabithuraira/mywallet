@@ -1,20 +1,19 @@
 import {Socket} from "phoenix"
 
-export var Budget = {
+export var Wallet = {
   run: function(){
     var user_token = document.querySelector("meta[name=channel_token]").content;
     var user_id = document.querySelector("meta[name=channel_id]").content;
 
     var vm = new Vue({  
-      el: "#budget_list",
+      el: "#wallet_list",
       data: {
         data: [],
         categories: [],
         currencies: [],
+        accounts: [],
+        isRecurring: false,
         selectedId: 0,
-        isAdd: false,
-        isAddTransaction: false,
-        isDetail: false,
         month: ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "Desember"],
         year: [],
@@ -29,7 +28,7 @@ export var Budget = {
     });
     
 
-    let container = document.getElementById("budget_list")
+    let container = document.getElementById("wallet_list")
     let socket = new Socket("/socket", {
       params: { token: user_token }
     })
@@ -53,6 +52,10 @@ export var Budget = {
             vm.currencies = response.data;
         });
 
+        $.getJSON("http://localhost:4000/api/accounts/"+user_id, (response) => { 
+            vm.accounts = response.data;
+        });
+
         for(var i=115;i<=new Date().getYear();++i){
           vm.year.push(i+1900);
         }
@@ -60,9 +63,8 @@ export var Budget = {
       })
       .receive("error", reason => console.log("failed to join ha", reason))
 
-
     function refresh_data(){
-      $.getJSON("http://localhost:4000/api/budgets/"+user_id, (response) => { 
+      $.getJSON("http://localhost:4000/api/wallets/"+user_id, (response) => { 
           vm.data = response.data;
       });
     }
@@ -71,18 +73,19 @@ export var Budget = {
     $('body').on('submit',"#data-form", function () {
       var form_id       =$('#form-id').val();
       var form_note     =$('#form-note').val();
-      var form_month    =$('#form-month').val();
-      var form_year     =$('#form-year').val();
+      var form_date     =$('#form-date').val();
       var form_amount   =$('#form-amount').val();
       var form_category =$('#form-category').val();
       var form_currency =$('#form-currency').val();
+      var form_account  =$('#form-account').val();
+      var form_type     =$('#form-type').val();
 
       var csrf = document.querySelector("meta[name=csrf]").content;
 
-      var submit_url="http://localhost:4000/api/budgets";
+      var submit_url="http://localhost:4000/api/wallets";
       var submit_type='POST';
       if(form_id!=0){
-        submit_url="http://localhost:4000/api/budgets/"+form_id;
+        submit_url="http://localhost:4000/api/wallets/"+form_id;
         submit_type='PUT';
       }
 
@@ -94,14 +97,15 @@ export var Budget = {
             "X-CSRF-TOKEN": csrf 
         },
         data: {
-          budget: {
-            currency: form_currency,
-            month: form_month,
-            year: form_year,
-            category: form_category,
-            amount: form_amount,
+          wallet: {
             note: form_note,
-            created_by: user_id,
+            date: form_date,
+            amount: form_amount,
+            category: form_category,
+            currency: form_currency,
+            account: form_account,
+            type: form_type,
+            inserted_by: user_id,
             updated_by: user_id
           }
         },
@@ -114,6 +118,7 @@ export var Budget = {
             $('#form-id').val(0);
             $('#form-note').val('');
             $('#form-amount').val('');
+            $('#form-date').val('');
         }.bind(this),
         error: function(xhr, status, err) {
             console.log(xhr.responseText)
@@ -127,8 +132,11 @@ export var Budget = {
     var sidebar = $(o.selector);
 
     $('#data-date, #recurring-date').datepicker()
-    
 
+    $('#form-date').datepicker({
+      autoclose: true
+    });
+    
     $('.toggle-event').on("click", function () {
         if (o.slide) {
           sidebar.addClass('control-sidebar-open');
@@ -136,51 +144,35 @@ export var Budget = {
           $('body').addClass('control-sidebar-open');
         }
 
-        toggle_title.html('');
         var dataid = $(this).data('id');
-        
-        if(dataid=='adddata'){
-          if($(this).attr('id')=='add'){
-            toggle_title.append("Add Budget");
+        // console.log("masuk");
+        // console.log(dataid);
 
-            $('#form-id').val(0);
-            $('#form-note').val('');
-            $('#form-amount').val('');
-            vm.selectedId=0;
-          }
-          else{
-            toggle_title.append("Update Budget");
-            var row_id = $(this).attr('id');
-            var data = vm.data.find(x => x.id == row_id)
-            vm.selectedId=row_id;
-
-            $('#form-id').val(data.id);
-            $('#form-note').val(data.note);
-            $('#form-month').val(data.month);
-            $('#form-year').val(data.year);
-            $('#form-amount').val(data.amount);
-            $('#form-category').val(data.category);
-            $('#form-currency').val(data.currency);
-          }
-
-          vm.isAdd=true;
-          vm.isAddTransaction=false;
-          vm.isDetail=false;
-        }
-        else if(dataid=='addtransaction'){
+        if(dataid=='add'){
           toggle_title.append("Add Transaction");
 
-          vm.isAdd=false;
-          vm.isAddTransaction=true;
-          vm.isDetail=false;
+          $('#form-id').val(0);
+          $('#form-note').val('');
+          $('#form-amount').val('');
+          $('#form-date').val('');
+          vm.selectedId=0;
         }
-        else{ 
-          toggle_title.append("Detail");
-
-          vm.isAdd=false;
-          vm.isAddTransaction=false;
-          vm.isDetail=true;
+        else{
+          toggle_title.append("Update Transaction");
+          var row_id = $(this).attr('id');
+          var data = vm.data.find(x => x.id == row_id)
+          vm.selectedId=row_id;
+          
+          $('#form-id').val(data.id);
+          $('#form-note').val(data.note);
+          $('#form-date').val(data.date);
+          $('#form-amount').val(data.amount);
+          $('#form-category').val(data.category);
+          $('#form-currency').val(data.currency);
+          $('#form-account').val(data.account);
+          $('#form-type').val(data.type);
         }
+      
     });
 
     $('.toggle-hide').on("click", function () {

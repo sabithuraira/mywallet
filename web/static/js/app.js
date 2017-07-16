@@ -35,17 +35,18 @@ import { Budget } from "./budget";
 import { Account } from "./account";
 import { Currency } from "./currency";
 import { Category } from "./category";
+import { Wallet } from "./wallet";
 
 Vue.component('my-component', {
   template: '<div>A custom component!</div>'
 })
 
-
 var App = {
   c_budget: function(){ Budget.run();},
   c_account: function(){ Account.run();},
   c_currency: function(){ Currency.run();},
-  c_category: function(){ Category.run();}
+  c_category: function(){ Category.run();},
+  c_wallet: function(){ Wallet.run();}
 };
 
 module.exports = {

@@ -54,5 +54,6 @@ defmodule Mywallet.Router do
     resources "/currencies", CurrencyController, except: [:new, :edit]
     resources "/categories", CategoryController, except: [:new, :edit]
     resources "/budgets", CategoryController, except: [:new, :edit]
+    resources "/wallets", WalletController, except: [:new, :edit]
   end
 end

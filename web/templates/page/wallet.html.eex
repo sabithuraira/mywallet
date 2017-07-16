@@ -1,4 +1,4 @@
-
+<div id="wallet_list">
     <!-- Main content -->
     <section class="content">
       <!-- Info boxes -->
@@ -31,7 +31,7 @@
                 </div>
                 <!-- /.btn-group -->
                 <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
-                <a class="btn btn-default btn-sm toggle-event" href="#" data-id="addtransaction"><i class="fa fa-plus"></i> Add Transaction</a>
+                <a class="btn btn-default btn-sm toggle-event" href="#" data-id="add"><i class="fa fa-plus"></i> Add Transaction</a>
                
                 <div class="pull-right">
                   1-50/200
@@ -146,132 +146,95 @@
         <button type="button" class="btn btn-box-tool toggle-hide"><i class="fa fa-remove"></i></button>
       </div>
     </div>
-    <div class="tab-content" id="right-sidebar"></div>
+    <div class="tab-content" id="right-sidebar">
+
+      <form role='form' id='data-form'>
+        <div>
+          <div class='form-group'>
+            <p>Currency</p>
+            <select id='form-currency' class='form-control  input-sm select2'>
+              <option v-for="row in currencies">{{ row.name }}</option>
+            </select>
+          </div>
+
+          <div class='form-group'>
+            <p>Amount</p>
+            <input id='form-amount' type='text' class='form-control input-sm' placeholder='Enter amount'>
+          </div>
+
+          <div class='form-group'>
+            <p>Date</p>
+            <div class='input-group date'>
+              <div class='input-group-addon'>
+                <i class='fa fa-calendar'></i>
+              </div>
+              <input type='text' class='form-control input-sm pull-right' id='form-date'>
+            </div>
+          </div>
+
+          <div class='form-group'>
+            <p>Account</p>
+            <select id='form-account' class='form-control  input-sm select2'>
+              <option v-for="row in accounts">{{ row.name }}</option>
+            </select>
+          </div>
+
+
+          <div class='form-group'>
+            <p>Category</p>
+            <select id='form-category' class='form-control  input-sm select2'>
+              <option v-for="row in categories"  :value="row.id">{{ row.name }}</option>
+            </select>
+          </div>
+
+          <div class='form-group'>
+            <p>Note</p>
+            <input id="form-note" type='text' class='form-control input-sm' placeholder='Enter note'>
+          </div>
+
+
+          <div class='form-group'>
+            <label class='control-sidebar-subheading'>
+                Is Recurring
+                <input id="form-recurring" type='checkbox' class='pull-right' />
+            </label>
+          </div>
+
+          <div v-if="isRecurring">
+            <div class='form-group'>
+              <p>Cycle</p>
+              <select class='form-control  input-sm select2' style='width: 100%;'>
+                <option selected='selected'>Daily</option>
+                <option>Weekly</option>
+                <option>Every 2 Weeks</option>
+                <option>Monthly</option>
+                <option>Every 2 Months</option>
+                <option>Every 3 Months</option>
+                <option>Every 6 Months</option>
+                <option>Yearly</option>
+              </select>
+            </div>
+
+            <div class='form-group'>
+              <p>End Date</p>
+              <div class='input-group'>
+                <div class='input-group-addon'>
+                  <i class='fa fa-calendar'></i>
+                  </div>
+                    <input type='text' class='form-control input-sm pull-right' id='recurring-date'>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class='box-footer'>
+            <button type='submit' class='btn btn-primary'>Submit</button>
+          </div>
+        </form>
+
+    </div>
   </aside>
+</div>
 
-<script>
-$(document).ready(function() {
-    var tab_pane = $("#right-sidebar");
-    var toggle_title=$("#toggle-title");
-    var o = $($.AdminLTE.options.controlSidebarOptions);
-    var sidebar = $(o.selector);
-
-    var add_transaction = $("<div />");
-    add_transaction.append(
-        "<form role='form'>"
-          + "<div>"
-            + "<div class='form-group'>"
-              + "<p>Currency</p>"
-              + "<select class='form-control  input-sm select2' style='width: 100%;'>"
-                + "<option selected='selected'>USD</option>"
-                + "<option>EUR</option>"
-                + "<option>JPY</option>"
-                + "<option>SGD</option>"
-                + "<option>IDR</option>"
-                + "<option>AUD</option>"
-              + "</select>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Amount</p>"
-              + "<input type='text' class='form-control input-sm' id='exampleInputPassword1' placeholder='Enter budget'>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Date</p>"
-              + "<div class='input-group'>"
-                + "<div class='input-group-addon'>"
-                  + "<i class='fa fa-calendar'></i>"
-                + "</div>"
-                + "<input type='text' class='form-control input-sm pull-right' id='data-date'>"
-              + "</div>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Account</p>"
-
-              + "<select class='form-control input-sm select2' style='width: 100%;'>"
-                + "<option selected='selected'>Account A</option>"
-                + "<option>Account B</option>"
-              + "</select>"
-            + "</div>"
-
-
-            + "<div class='form-group'>"
-              + "<p>Category</p>"
-
-              + "<select class='form-control input-sm select2' style='width: 100%;'>"
-                + "<option selected='selected'>Food</option>"
-                + "<option>Utilities</option>"
-              + "</select>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Note</p>"
-              + "<input type='text' class='form-control input-sm' placeholder='Enter note'>"
-            + "</div>"
-
-
-            + "<div class='form-group'>"
-              + "<label class='control-sidebar-subheading'>"
-                + "Recurring"
-                + "<input type='checkbox' class='pull-right' checked>"
-              + "</label>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>Cycle</p>"
-              + "<select class='form-control  input-sm select2' style='width: 100%;'>"
-                + "<option selected='selected'>Daily</option>"
-                + "<option>Weekly</option>"
-                + "<option>Every 2 Weeks</option>"
-                + "<option>Monthly</option>"
-                + "<option>Every 2 Months</option>"
-                + "<option>Every 3 Months</option>"
-                + "<option>Every 6 Months</option>"
-                + "<option>Yearly</option>"
-              + "</select>"
-            + "</div>"
-
-            + "<div class='form-group'>"
-              + "<p>End Date</p>"
-              + "<div class='input-group'>"
-                + "<div class='input-group-addon'>"
-                  + "<i class='fa fa-calendar'></i>"
-                + "</div>"
-                + "<input type='text' class='form-control input-sm pull-right' id='recurring-date'>"
-              + "</div>"
-            + "</div>"
-          + "</div>"
-
-          + "<div class='box-footer'>"
-            + "<button type='submit' class='btn btn-primary'>Submit</button>"
-          + "</div>"
-        + "</form>"
-    );
-
-    $('.toggle-event').on("click", function () {
-        if (o.slide) {
-          sidebar.addClass('control-sidebar-open');
-        } else {
-          $('body').addClass('control-sidebar-open');
-        }
-
-        tab_pane.html('');
-        toggle_title.html('');
-        var dataid = $(this).data('id');
-        if(dataid=='addtransaction'){
-          tab_pane.append(add_transaction);
-          toggle_title.append("Add Transaction");
-        }
-    });
-
-    $('.toggle-hide').on("click", function () {
-      if (o.slide) {
-        sidebar.removeClass('control-sidebar-open');
-      } else {
-        $('body').removeClass('control-sidebar-open');
-      }
-    });
-});
-</script>
+<script>require("web/static/js/app").App.c_wallet()</script>
