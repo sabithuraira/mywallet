@@ -12,6 +12,11 @@ export var Wallet = {
         categories: [],
         currencies: [],
         accounts: [],
+        types: [
+          {id:1, name: "Income" },
+          {id:2, name: "Expense" },
+          {id:3, name: "Transfer" },
+        ],
         isRecurring: false,
         selectedId: 0,
         month: ["January", "February", "March", "April", "May", "June",
@@ -89,6 +94,9 @@ export var Wallet = {
         submit_type='PUT';
       }
 
+      var d=new Date(form_date);
+      var date_convert=d.getFullYear()+"-"+(d.getMonth()>9 ? '' : '0') + d.getMonth()+"-"+(d.getDate()>9 ? '' : '0') + d.getDate();
+
       $.ajax({
         url: submit_url,
         dataType: 'json',
@@ -99,7 +107,7 @@ export var Wallet = {
         data: {
           wallet: {
             note: form_note,
-            date: form_date,
+            date: date_convert,
             amount: form_amount,
             category: form_category,
             currency: form_currency,
@@ -131,11 +139,16 @@ export var Wallet = {
     var o = $($.AdminLTE.options.controlSidebarOptions);
     var sidebar = $(o.selector);
 
-    $('#data-date, #recurring-date').datepicker()
-
-    $('#form-date').datepicker({
-      autoclose: true
+    $('#form-recurring').on("click", function () {
+      vm.isRecurring= !vm.isRecurring;
     });
+
+    $('.datepicker').datepicker({
+        // dateFormat: 'YYYY-mm-dd', 
+        autoclose: true,
+        dateFormat: 'dd-mm-y'
+    });
+    // $('#form-enddate').datepicker({autoclose: true});
     
     $('.toggle-event').on("click", function () {
         if (o.slide) {

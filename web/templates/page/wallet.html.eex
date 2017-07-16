@@ -59,23 +59,22 @@
                       <td>Date</td>
                     </tr>
                   </thead>
-                  <tbody>
-                    <%= for n <- 1..40 do %>
-                    <tr data-toggle="collapse" data-target="#<%= n %>" class="accordion-toggle">
+                  <tbody v-for="row in data">
+                    <tr data-toggle="collapse" :data-target="'#'+row.id" class="accordion-toggle">
                       <td><input type="checkbox"></td>
-                      <td>Eat on Restaurant</td>
-                      <td>Food</td>
+                      <td>{{ row.note }}</td>
+                      <td>{{ row.category_label }}</td>
                       <td>
-                        <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> Income</span>
-                        <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> Expense</span>
-                        <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> Transfer</span>
+                        <span v-if="row.type==1" class="description-percentage text-green"><i class="fa fa-caret-up"></i> Income</span>
+                        <span v-if="row.type==2" class="description-percentage text-red"><i class="fa fa-caret-down"></i> Expense</span>
+                        <span v-if="row.type==3" class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> Transfer</span>
                       </td>
-                      <td class="mailbox-attachment">$ 10.00</td>
+                      <td class="mailbox-attachment">{{ row.currency }} {{ row.amount }}</td>
                       <td class="mailbox-date">5 mins ago</td>
                     </tr>
                     <tr>
                       <td colspan="6" class="hiddentablerow">
-                        <div class="accordian-body collapse" id="<%= n %>">
+                        <div class="accordian-body collapse" :id="row.id">
                           <div class="row">
                             <div class="col-sm-1 col-xs-6">
                               <div class="description-block">
@@ -128,7 +127,6 @@
 
                       </td>
                     </tr>
-                    <%= end %>
                   </tbody>
                 </table>
               </div>
@@ -150,6 +148,15 @@
 
       <form role='form' id='data-form'>
         <div>
+
+        <div class='form-group'>
+            <input type='hidden' id='form-id'>
+            <p>Transaction Type</p>
+            <select id='form-type' class='form-control  input-sm select2'>
+              <option v-for="row in types" :value="row.id">{{ row.name }}</option>
+            </select>
+          </div>
+
           <div class='form-group'>
             <p>Currency</p>
             <select id='form-currency' class='form-control  input-sm select2'>
@@ -168,14 +175,14 @@
               <div class='input-group-addon'>
                 <i class='fa fa-calendar'></i>
               </div>
-              <input type='text' class='form-control input-sm pull-right' id='form-date'>
+              <input type='text' class='form-control input-sm pull-right datepicker' id='form-date'>
             </div>
           </div>
 
           <div class='form-group'>
             <p>Account</p>
             <select id='form-account' class='form-control  input-sm select2'>
-              <option v-for="row in accounts">{{ row.name }}</option>
+              <option v-for="row in accounts" :value="row.id">{{ row.name }}</option>
             </select>
           </div>
 
@@ -217,15 +224,14 @@
 
             <div class='form-group'>
               <p>End Date</p>
-              <div class='input-group'>
+              <div class='input-group date'>
                 <div class='input-group-addon'>
                   <i class='fa fa-calendar'></i>
-                  </div>
-                    <input type='text' class='form-control input-sm pull-right' id='recurring-date'>
-                  </div>
                 </div>
+                <input type='text' class='form-control input-sm pull-right datepicker' id='form-enddate'>
               </div>
             </div>
+
           </div>
 
           <div class='box-footer'>

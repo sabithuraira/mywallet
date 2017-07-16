@@ -10,13 +10,16 @@ defmodule Mywallet.WalletView do
   end
 
   def render("wallet.json", %{wallet: wallet}) do
-    %{id: wallet.id,
+    %{
+      id: wallet.id,
       note: wallet.note,
-      currrrency: wallet.currrrency,
+      currency: wallet.currency,
       amount: wallet.amount,
       date: wallet.date,
       account: wallet.account,
       category: wallet.category,
-      type: wallet.type}
+      type: wallet.type,
+      category_label: wallet.category_rel.name
+    }
   end
 end

@@ -2,6 +2,7 @@ defmodule Mywallet.WalletController do
   use Mywallet.Web, :controller
 
   alias Mywallet.Wallet
+  alias Mywallet.Category
 
   # def index(conn, _params) do
   #   wallets = Repo.all(Wallet)
@@ -13,10 +14,11 @@ defmodule Mywallet.WalletController do
 
     case Repo.insert(changeset) do
       {:ok, wallet} ->
+        preload_data = Repo.preload(wallet, :category_rel)
         conn
         |> put_status(:created)
-        |> put_resp_header("location", wallet_path(conn, :show, wallet))
-        |> render("show.json", wallet: wallet)
+        |> put_resp_header("location", wallet_path(conn, :show, preload_data))
+        |> render("show.json", wallet: preload_data)
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -30,7 +32,7 @@ defmodule Mywallet.WalletController do
                order_by: [desc: :date],
                select: u
     wallets = Repo.all(query)
-              # |> Repo.preload(:category_rel)
+              |> Repo.preload(:category_rel)
 
     render(conn, "index.json", wallets: wallets)
   end

@@ -126,9 +126,6 @@ export var Budget = {
     var o = $($.AdminLTE.options.controlSidebarOptions);
     var sidebar = $(o.selector);
 
-    $('#data-date, #recurring-date').datepicker()
-    
-
     $('.toggle-event').on("click", function () {
         if (o.slide) {
           sidebar.addClass('control-sidebar-open');
