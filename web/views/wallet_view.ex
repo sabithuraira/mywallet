@@ -1,6 +1,9 @@
 defmodule Mywallet.WalletView do
   use Mywallet.Web, :view
 
+  use Timex
+  require Logger
+
   def render("index.json", %{wallets: wallets}) do
     %{data: render_many(wallets, Mywallet.WalletView, "wallet.json")}
   end
@@ -15,11 +18,12 @@ defmodule Mywallet.WalletView do
       note: wallet.note,
       currency: wallet.currency,
       amount: wallet.amount,
-      date: wallet.date,
+      date: Timex.format!(wallet.date, "{D} {Mfull} {YYYY}"),
       account: wallet.account,
       category: wallet.category,
       type: wallet.type,
-      category_label: wallet.category_rel.name
+      category_label: wallet.category_rel.name,
+      account_label: wallet.account_rel.name
     }
   end
 end

@@ -14,7 +14,7 @@ defmodule Mywallet.WalletController do
 
     case Repo.insert(changeset) do
       {:ok, wallet} ->
-        preload_data = Repo.preload(wallet, :category_rel)
+        preload_data = Repo.preload(wallet, [:category_rel, :account_rel])
         conn
         |> put_status(:created)
         |> put_resp_header("location", wallet_path(conn, :show, preload_data))
@@ -32,7 +32,7 @@ defmodule Mywallet.WalletController do
                order_by: [desc: :date],
                select: u
     wallets = Repo.all(query)
-              |> Repo.preload(:category_rel)
+              |> Repo.preload([:category_rel, :account_rel])
 
     render(conn, "index.json", wallets: wallets)
   end

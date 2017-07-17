@@ -6,7 +6,7 @@ defmodule Mywallet.Wallet do
     field :currency, :string
     field :amount, :decimal
     field :date, Ecto.Date
-    field :account, :integer
+    # field :account, :integer
     field :type, :integer
     field :inserted_by, :integer
     field :updated_by, :integer
@@ -14,6 +14,7 @@ defmodule Mywallet.Wallet do
     timestamps()
 
     belongs_to :category_rel, Mywallet.Category, foreign_key: :category
+    belongs_to :account_rel, Mywallet.Account, foreign_key: :account
   end
 
   @doc """

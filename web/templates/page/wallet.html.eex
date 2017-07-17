@@ -56,7 +56,6 @@
                       <td>Category</td>
                       <td>Type</td>
                       <td>Amount</td>
-                      <td>Date</td>
                     </tr>
                   </thead>
                   <tbody v-for="row in data">
@@ -70,10 +69,10 @@
                         <span v-if="row.type==3" class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> Transfer</span>
                       </td>
                       <td class="mailbox-attachment">{{ row.currency }} {{ row.amount }}</td>
-                      <td class="mailbox-date">5 mins ago</td>
+                      
                     </tr>
                     <tr>
-                      <td colspan="6" class="hiddentablerow">
+                      <td colspan="5" class="hiddentablerow">
                         <div class="accordian-body collapse" :id="row.id">
                           <div class="row">
                             <div class="col-sm-1 col-xs-6">
@@ -85,8 +84,8 @@
                             <div class="col-sm-2 col-xs-6">
                               <div class="description-block border-right">
                                 <span class="description-percentage"><i class="fa fa-calendar"></i></span>
-                                <h5 class="description-header">27 April 2017</h5>
-                                <span class="description-text">9.49 PM</span>
+                                <h5 class="description-header">{{ row.date }}</h5>
+                                <!--<span class="description-text">9.49 PM</span>-->
                               </div>
                               <!-- /.description-block -->
                             </div>
@@ -95,9 +94,9 @@
                             
 
                               <div class="description-block border-right">
-                                <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
-                                <h5 class="description-header">$24,813.53</h5>
-                                <span class="description-text">All Account</span>
+                                <span class="description-percentage"><i class="fa fa-user"></i></span>
+                                <h5 class="description-header">Account</h5>
+                                <span class="description-text">{{ row.account_label }}</span>
                               </div>
 
 
