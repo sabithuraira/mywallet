@@ -43,7 +43,8 @@ defmodule Mywallet.WalletController do
 
     case Repo.update(changeset) do
       {:ok, wallet} ->
-        render(conn, "show.json", wallet: wallet)
+        preload_data = Repo.preload(wallet, [:category_rel, :account_rel])
+        render(conn, "show.json", wallet: preload_data)
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)

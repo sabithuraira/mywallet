@@ -24,14 +24,24 @@ export var Wallet = {
         year: [],
       },
       methods: {
-        updateArray: function (name, note) {
-          var data_index = this.data.findIndex(x => x.id == this.selectedId)
-          this.data[data_index].name = name; 
-          this.data[data_index].note =  note;
+        updateArray: function (result) {
+
+          var obj_data = result.data;
+          var data_index = this.data.findIndex(x => x.id == this.selectedId);
+
+          this.data[data_index].account = obj_data.account;
+          this.data[data_index].account_label = obj_data.account_label;
+          this.data[data_index].amount = obj_data.amount;
+          this.data[data_index].category = obj_data.category;
+          this.data[data_index].category_label = obj_data.category_label;
+          this.data[data_index].currency = obj_data.currency;
+          this.data[data_index].date = obj_data.date;
+          this.data[data_index].note = obj_data.note;
+          this.data[data_index].source_date = obj_data.source_date;
+          this.data[data_index].type = obj_data.type; 
         },
       }
     });
-    
 
     let container = document.getElementById("wallet_list")
     let socket = new Socket("/socket", {
@@ -95,8 +105,9 @@ export var Wallet = {
       }
 
       var d=new Date(form_date);
-      var date_convert=d.getFullYear()+"-"+(d.getMonth()>9 ? '' : '0') + d.getMonth()+"-"+(d.getDate()>9 ? '' : '0') + d.getDate();
-
+      var month=d.getMonth()+1;
+      var date_convert=d.getFullYear()+"-"+(month>9 ? '' : '0') + month+"-"+(d.getDate()>9 ? '' : '0') + d.getDate();
+      
       $.ajax({
         url: submit_url,
         dataType: 'json',
@@ -119,7 +130,7 @@ export var Wallet = {
         },
         success: function(data) { 
             if(form_id!=0)
-              vm.updateArray(form_name, form_note);
+              vm.updateArray(data);
             else
               refresh_data();
 
@@ -143,14 +154,18 @@ export var Wallet = {
       vm.isRecurring= !vm.isRecurring;
     });
 
-    $('.datepicker').datepicker({
-        // dateFormat: 'YYYY-mm-dd', 
-        autoclose: true,
-        dateFormat: 'dd-mm-y'
-    });
-    // $('#form-enddate').datepicker({autoclose: true});
+    $('.datepicker').datepicker({autoclose: true});
     
-    $('.toggle-event').on("click", function () {
+    //colapse detail transaction
+    $('body').on("click",'.toggle-detail', function (e) {
+      var target = $(this).data('target');
+      $(target).collapse('toggle')
+    });
+    
+    $('body').on("click",'.toggle-event', function (e) {
+      //prevent run this code by parent-DOM (collapse detail function)
+      e.stopPropagation();
+
         if (o.slide) {
           sidebar.addClass('control-sidebar-open');
         } else {
@@ -158,9 +173,8 @@ export var Wallet = {
         }
 
         var dataid = $(this).data('id');
-        // console.log("masuk");
-        // console.log(dataid);
 
+        toggle_title.html("");
         if(dataid=='add'){
           toggle_title.append("Add Transaction");
 
@@ -172,13 +186,13 @@ export var Wallet = {
         }
         else{
           toggle_title.append("Update Transaction");
-          var row_id = $(this).attr('id');
+          var row_id = $(this).attr('id').substring(4);
           var data = vm.data.find(x => x.id == row_id)
           vm.selectedId=row_id;
           
           $('#form-id').val(data.id);
           $('#form-note').val(data.note);
-          $('#form-date').val(data.date);
+          $('#form-date').val(data.source_date);
           $('#form-amount').val(data.amount);
           $('#form-category').val(data.category);
           $('#form-currency').val(data.currency);
@@ -228,5 +242,5 @@ export var Wallet = {
       });
     }
 
-  }
+  } // end of run
 }

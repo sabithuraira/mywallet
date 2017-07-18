@@ -56,10 +56,11 @@
                       <td>Category</td>
                       <td>Type</td>
                       <td>Amount</td>
+                      <td>Action</td>
                     </tr>
                   </thead>
                   <tbody v-for="row in data">
-                    <tr data-toggle="collapse" :data-target="'#'+row.id" class="accordion-toggle">
+                    <tr :data-target="'#'+row.id" class="toggle-detail">
                       <td><input type="checkbox"></td>
                       <td>{{ row.note }}</td>
                       <td>{{ row.category_label }}</td>
@@ -69,10 +70,13 @@
                         <span v-if="row.type==3" class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> Transfer</span>
                       </td>
                       <td class="mailbox-attachment">{{ row.currency }} {{ row.amount }}</td>
+                      <td>
+                        <a :id="'data'+row.id" class="btn btn-default btn-sm toggle-event" href="#" data-id="update"><i class="fa fa-plus-square-o"></i> Update</a>
+                      </td>
                       
                     </tr>
                     <tr>
-                      <td colspan="5" class="hiddentablerow">
+                      <td colspan="6" class="hiddentablerow">
                         <div class="accordian-body collapse" :id="row.id">
                           <div class="row">
                             <div class="col-sm-1 col-xs-6">

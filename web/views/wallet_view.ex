@@ -18,6 +18,7 @@ defmodule Mywallet.WalletView do
       note: wallet.note,
       currency: wallet.currency,
       amount: wallet.amount,
+      source_date: Timex.format!(wallet.date, "{0M}/{0D}/{YYYY}"),
       date: Timex.format!(wallet.date, "{D} {Mfull} {YYYY}"),
       account: wallet.account,
       category: wallet.category,
