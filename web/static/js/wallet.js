@@ -154,7 +154,11 @@ export var Wallet = {
       vm.isRecurring= !vm.isRecurring;
     });
 
-    $('.datepicker').datepicker({autoclose: true});
+    // $('.datepicker').datepicker({autoclose: true});
+    //it will work on append element
+    $('body').on('focus','.datepicker',function(){
+        $(this).datepicker({autoclose:true});
+    });
     
     //colapse detail transaction
     $('body').on("click",'.toggle-detail', function (e) {

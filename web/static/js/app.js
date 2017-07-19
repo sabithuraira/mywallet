@@ -36,6 +36,7 @@ import { Account } from "./account";
 import { Currency } from "./currency";
 import { Category } from "./category";
 import { Wallet } from "./wallet";
+import { Billing } from "./billing";
 
 Vue.component('my-component', {
   template: '<div>A custom component!</div>'
@@ -46,7 +47,8 @@ var App = {
   c_account: function(){ Account.run();},
   c_currency: function(){ Currency.run();},
   c_category: function(){ Category.run();},
-  c_wallet: function(){ Wallet.run();}
+  c_wallet: function(){ Wallet.run();},
+  c_billing: function(){ Billing.run();}
 };
 
 module.exports = {
