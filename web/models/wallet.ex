@@ -10,6 +10,7 @@ defmodule Mywallet.Wallet do
     field :type, :integer
     field :inserted_by, :integer
     field :updated_by, :integer
+    field :billing_id, :integer
 
     timestamps()
 
@@ -22,7 +23,7 @@ defmodule Mywallet.Wallet do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:note, :currency, :amount, :date, :account, :category, :type, :inserted_by, :updated_by])
+    |> cast(params, [:note, :currency, :amount, :date, :account, :category, :type, :inserted_by, :updated_by, :billing_id])
     |> validate_required([:note, :currency, :amount, :date, :account, :category, :type, :inserted_by, :updated_by])
   end
 end

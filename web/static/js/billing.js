@@ -11,6 +11,8 @@ export var Billing = {
         data: [],
         categories: [],
         currencies: [],
+        accounts: [],
+        details: [],
         selectedId: 0,
         isAdd: false,
         isAddTransaction: false,
@@ -22,7 +24,12 @@ export var Billing = {
         form_category:'',
         form_currency:'',
         form_date:'',
-      },
+        
+        trans_date:'',
+        trans_amount:'',
+        trans_currency: null,
+        trans_account:'',
+    },
       methods: {
         updateArray: function (result) {
 
@@ -62,6 +69,10 @@ export var Billing = {
         $.getJSON("http://localhost:4000/api/currencies/", (response) => { 
             vm.currencies = response.data;
         });
+
+        $.getJSON("http://localhost:4000/api/accounts/"+user_id, (response) => { 
+            vm.accounts = response.data;
+        });
       })
       .receive("error", reason => console.log("failed to join ha", reason))
 
@@ -72,7 +83,7 @@ export var Billing = {
       });
     }
 
-    //click button submit
+    //click button submit on billing data
     $('body').on('submit',"#data-form", function () {
       vm.form_date     =$('#form-date').val();
 
@@ -123,6 +134,53 @@ export var Billing = {
         }.bind(this)
       });
       return false;
+    });
+
+    //submit add paying form
+    $('body').on('submit',"#transaction-form", function () {
+        var csrf = document.querySelector("meta[name=csrf]").content;
+
+        vm.trans_date =$('#trans-date').val();
+        var d=new Date(vm.trans_date);
+        var month=d.getMonth()+1;
+        var date_convert=d.getFullYear()+"-"+(month>9 ? '' : '0') + month+"-"+(d.getDate()>9 ? '' : '0') + d.getDate();
+        
+        var billing_data = vm.data.find(x => x.id == vm.selectedId)
+
+        $.ajax({
+            url: "http://localhost:4000/api/wallets",
+            dataType: 'json',
+            type: "POST",
+            headers: {
+                "X-CSRF-TOKEN": csrf 
+            },
+            data: {
+                wallet: {
+                    note: "[Pay Billing] "+billing_data.note,
+                    date: date_convert,
+                    amount: vm.trans_amount,
+                    category: billing_data.category,
+                    currency: vm.trans_currency,
+                    account: vm.trans_account,
+                    type: 2,
+                    inserted_by: user_id,
+                    updated_by: user_id,
+                    billing_id: billing_data.id
+                }
+            },
+            success: function(data) {
+                vm.trans_note='';
+                vm.trans_date='';
+                vm.trans_amount='';
+                vm.trans_category='';
+                vm.trans_currency='';
+                vm.trans_account='';
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.log(xhr.responseText)
+            }.bind(this)
+        });
+        return false;
     });
 
     var toggle_title=$("#toggle-title");
@@ -177,18 +235,31 @@ export var Billing = {
           }
         }
         else if(dataid=='addtransaction'){
-          toggle_title.append("Add Transaction");
+            var row_id = $(this).attr('id').substr(6);
+            vm.selectedId=row_id;
+            var data = vm.data.find(x => x.id == row_id)
 
-          vm.isAdd=false;
-          vm.isAddTransaction=true;
-          vm.isDetail=false;
+            toggle_title.append("Add Transaction for '"+data.note+"'");
+
+
+            vm.isAdd=false;
+            vm.isAddTransaction=true;
+            vm.isDetail=false;
         }
         else{ 
-          toggle_title.append("Detail");
+            var row_id = $(this).attr('id').substr(6);
+            vm.selectedId=row_id;
+            var data = vm.data.find(x => x.id == row_id)
 
-          vm.isAdd=false;
-          vm.isAddTransaction=false;
-          vm.isDetail=true;
+            toggle_title.append("Detail Transaction for '"+data.note+"'");
+
+            $.getJSON("http://localhost:4000/api/wallets/billing/"+data.id, (response) => { 
+                vm.details = response.data;
+            });
+
+            vm.isAdd=false;
+            vm.isAddTransaction=false;
+            vm.isDetail=true;
         }
     });
 

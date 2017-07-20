@@ -23,6 +23,7 @@ defmodule Mywallet.WalletView do
       account: wallet.account,
       category: wallet.category,
       type: wallet.type,
+      billing_id: wallet.billing_id,
       category_label: wallet.category_rel.name,
       account_label: wallet.account_rel.name
     }

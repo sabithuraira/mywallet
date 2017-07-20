@@ -37,6 +37,17 @@ defmodule Mywallet.WalletController do
     render(conn, "index.json", wallets: wallets)
   end
 
+  def show_billing(conn, %{"id" => id}) do
+    query = from u in Wallet,
+               where: u.billing_id == ^id,
+               order_by: [desc: :date],
+               select: u
+    wallets = Repo.all(query)
+              |> Repo.preload([:category_rel, :account_rel])
+
+    render(conn, "index.json", wallets: wallets)
+  end
+
   def update(conn, %{"id" => id, "wallet" => wallet_params}) do
     wallet = Repo.get!(Wallet, id)
     changeset = Wallet.changeset(wallet, wallet_params)
