@@ -6,6 +6,7 @@ defmodule Mywallet.Account do
     field :note, :string
     field :created_by, :integer
     field :updated_by, :integer
+
     timestamps()
   end
 
@@ -15,6 +16,6 @@ defmodule Mywallet.Account do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:name, :note, :created_by, :updated_by])
-    |> validate_required([])
+    |> validate_required([:name, :note, :created_by, :updated_by])
   end
 end

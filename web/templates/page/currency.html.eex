@@ -78,11 +78,6 @@
         <button type="button" class="btn btn-box-tool toggle-hide"><i class="fa fa-remove"></i></button>
       </div>
     </div>
-    <div class="box box-widget widget-user-2">
-      <div class="widget-user-header bg-aqua-active">
-        <b>Currency</b>
-      </div>
-    </div>
     <div class="tab-content" id="right-sidebar">
       <simple-form></simple-form>
     </div>

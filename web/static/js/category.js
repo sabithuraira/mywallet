@@ -31,8 +31,6 @@ export var Category = {
     channel.join()
       .receive("ok", resp => { refresh_data(); })
       .receive("error", reason => console.log("failed to join ha", reason))
-
-
     function refresh_data(){
       $.getJSON("http://localhost:4000/api/categories/"+user_id, (response) => { 
           vm.data = response.data;
@@ -77,6 +75,7 @@ export var Category = {
               refresh_data();
             
             set_form_empty();
+            $('#form-message').html("<div class='alert alert-success'>Success updated data</div>");
         }.bind(this),
         error: function(xhr, status, err) {
             var message="<div class='alert alert-danger'>";
