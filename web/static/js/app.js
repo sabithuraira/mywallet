@@ -74,7 +74,8 @@ Vue.component('delete-form', {
 
 Vue.component('simple-form', {
   template: `<form role='form' id='data-form'>
-      <div>
+        <div id="form-message"></div>
+
         <div class='form-group'>
           <p>Name</p>
           <input type='hidden' id='form-id'>
@@ -85,7 +86,6 @@ Vue.component('simple-form', {
           <p>Note</p>
           <input type='text' id='form-note' class='form-control input-sm' placeholder='Enter note'>
         </div>
-      </div>
 
       <div class='box-footer'>
         <button type='submit' id='btn-submit' class='btn btn-primary'>Submit</button>

@@ -75,13 +75,19 @@ export var Category = {
               vm.updateArray(form_name, form_note);
             else
               refresh_data();
-
-            $('#form-id').val(0);
-            $('#form-name').val('');
-            $('#form-note').val('');
+            
+            set_form_empty();
         }.bind(this),
         error: function(xhr, status, err) {
-            console.log(xhr.responseText)
+            var message="<div class='alert alert-danger'>";
+
+            var list_error=xhr.responseJSON.errors;
+            for(var error in list_error){
+                message+=error+": "+list_error[error]+"</br>";
+            }
+            message+= "</div>";
+
+            $('#form-message').html(message);
         }.bind(this)
       });
       return false;
@@ -92,20 +98,21 @@ export var Category = {
     var sidebar = $(o.selector);
 
     //when open sidebar form
-    $('body').on("click",'.toggle-event', function () {
+    $('body').on("click",'.toggle-event', function (e) {
+      e.preventDefault()
+
         if (o.slide) {
           sidebar.addClass('control-sidebar-open');
         } else {
           $('body').addClass('control-sidebar-open');
         }
 
+        set_form_empty();
         toggle_title.html('');
 
         //set value if update, no when add new data
         if($(this).attr('id')=='add'){
           toggle_title.append("Add Category");
-          set_form_empty()
-          vm.selectedId=0;
         }
         else{
           toggle_title.append("Update Category");
@@ -140,6 +147,9 @@ export var Category = {
     });
 
     function set_form_empty(){
+      $('#form-message').html("");
+
+      vm.selectedId=0;
       $('#form-id').val(0);
       $('#form-name').val('');
       $('#form-note').val('');
