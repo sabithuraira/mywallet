@@ -22,6 +22,6 @@ defmodule Mywallet.Budget do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:currency, :month, :year, :category, :amount, :note, :created_by, :updated_by])
-    |> validate_required([:currency, :month, :year, :amount, :created_by, :updated_by])
+    |> validate_required([:currency, :month, :year, :category, :amount, :created_by, :updated_by])
   end
 end
