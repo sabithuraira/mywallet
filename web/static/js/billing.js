@@ -169,10 +169,8 @@ export var Billing = {
                 }
             },
             success: function(data) {
-                vm.trans_note='';
                 vm.trans_date='';
                 vm.trans_amount='';
-                vm.trans_category='';
                 vm.trans_currency='';
                 vm.trans_account='';
             }.bind(this),

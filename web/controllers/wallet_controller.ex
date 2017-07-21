@@ -3,6 +3,7 @@ defmodule Mywallet.WalletController do
 
   alias Mywallet.Wallet
   alias Mywallet.Category
+  alias Mywallet.Budget
 
   # def index(conn, _params) do
   #   wallets = Repo.all(Wallet)
@@ -42,6 +43,22 @@ defmodule Mywallet.WalletController do
                where: u.billing_id == ^id,
                order_by: [desc: :date],
                select: u
+    wallets = Repo.all(query)
+              |> Repo.preload([:category_rel, :account_rel])
+
+    render(conn, "index.json", wallets: wallets)
+  end
+
+  def show_budget(conn, %{"id" => id}) do
+    query = from u in Wallet,
+              join: b in Budget,
+              where: b.id == ^id and 
+                b.category==u.category and 
+                b.month==fragment("date_part('month', ?)",u.date) and
+                b.year==fragment("date_part('year', ?)",u.date),
+              order_by: [desc: :date],
+              select: u
+
     wallets = Repo.all(query)
               |> Repo.preload([:category_rel, :account_rel])
 

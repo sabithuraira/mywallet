@@ -11,6 +11,8 @@ export var Budget = {
         data: [],
         categories: [],
         currencies: [],
+        accounts:[],
+        transactions:[],
         // selectedId: 0,
         isAdd: false,
         isAddTransaction: false,
@@ -26,6 +28,12 @@ export var Budget = {
         form_amount:'',
         form_note:'',
 
+        trans_date:'',
+        trans_amount:'',
+        trans_currency: '',
+        trans_account:'',
+        trans_note:'',
+
         month: ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "Desember"],
         year: [],
@@ -35,7 +43,6 @@ export var Budget = {
           var obj_data = result.data;
           var data_index = this.data.findIndex(x => x.id == this.form_id)
 
-          console.log(obj_data.category);
           this.data[data_index].note = obj_data.note; 
           this.data[data_index].month = obj_data.month;
           this.data[data_index].month_source = obj_data.month_source;
@@ -56,11 +63,7 @@ export var Budget = {
     socket.connect()
 
     let channel = socket.channel("account:2")
-    // channel.on("update", data => {
-    //   refresh_data();
-    // })
 
-    //account channel join
     channel.join()
       .receive("ok", resp => { 
         refresh_data(); 
@@ -71,6 +74,10 @@ export var Budget = {
 
         $.getJSON("http://localhost:4000/api/currencies/", (response) => { 
             vm.currencies = response.data;
+        });
+
+        $.getJSON("http://localhost:4000/api/accounts/"+user_id, (response) => { 
+            vm.accounts = response.data;
         });
 
         for(var i=115;i<=new Date().getYear();++i){
@@ -89,14 +96,6 @@ export var Budget = {
 
     //click button submit
     $('body').on('submit',"#data-form", function () {
-      // var form_id       =$('#form-id').val();
-      // var form_note     =$('#form-note').val();
-      // var form_month    =$('#form-month').val();
-      // var form_year     =$('#form-year').val();
-      // var form_amount   =$('#form-amount').val();
-      // var form_category =$('#form-category').val();
-      // var form_currency =$('#form-currency').val();
-
       var csrf = document.querySelector("meta[name=csrf]").content;
 
       var submit_url="http://localhost:4000/api/budgets";
@@ -153,9 +152,67 @@ export var Budget = {
       return false;
     });
 
+    //submit add paying form
+    $('body').on('submit',"#transaction-form", function () {
+        var csrf = document.querySelector("meta[name=csrf]").content;
+
+        vm.trans_date =$('#trans-date').val();
+        var d=new Date(vm.trans_date);
+        var month=d.getMonth()+1;
+        var date_convert=d.getFullYear()+"-"+(month>9 ? '' : '0') + month+"-"+(d.getDate()>9 ? '' : '0') + d.getDate();
+        
+        var budget_data = vm.data.find(x => x.id == vm.form_id)
+
+        $.ajax({
+            url: "http://localhost:4000/api/wallets",
+            dataType: 'json',
+            type: "POST",
+            headers: {
+                "X-CSRF-TOKEN": csrf 
+            },
+            data: {
+                wallet: {
+                    note: vm.trans_note,
+                    date: date_convert,
+                    amount: vm.trans_amount,
+                    category: budget_data.category,
+                    currency: vm.trans_currency,
+                    account: vm.trans_account,
+                    type: 2, //expense type
+                    inserted_by: user_id,
+                    updated_by: user_id
+                }
+            },
+            success: function(data) {
+                vm.trans_note='';
+                vm.trans_date='';
+                vm.trans_amount='';
+                vm.trans_currency='';
+                vm.trans_account='';
+                vm.form_message="<div class='alert alert-success'>Success add transaction, check it from 'Detail' button!</div>";
+            }.bind(this),
+            error: function(xhr, status, err) {
+              var message="<div class='alert alert-danger'>";
+
+              var list_error=xhr.responseJSON.errors;
+              for(var error in list_error){
+                  message+=error+": "+list_error[error]+"</br>";
+              }
+              message+= "</div>";
+
+              vm.form_message=message;
+            }.bind(this)
+        });
+        return false;
+    });
+
     var toggle_title=$("#toggle-title");
     var o = $($.AdminLTE.options.controlSidebarOptions);
     var sidebar = $(o.selector);
+
+    $('body').on('focus','.datepicker',function(){
+        $(this).datepicker({autoclose:true});
+    });
 
     $('body').on("click",'.toggle-event', function (e) {
         e.preventDefault();
@@ -176,27 +233,13 @@ export var Budget = {
           vm.isDetail=false;
           if($(this).attr('id')=='add'){
             toggle_title.append("Add Budget");
-
-            // $('#form-id').val(0);
-            // $('#form-note').val('');
-            // $('#form-amount').val('');
-            // vm.selectedId=0;
           }
           else{
             var row_id = $(this).attr('id').substr(6);
             var data = vm.data.find(x => x.id == row_id)
-            // vm.selectedId=row_id;
             vm.form_id=row_id;
             toggle_title.append("Update Budget for '"+data.note+"'");
-            // console.log($('#form-id'));
 
-            // $('#form-id').val(data.id);
-            // $('#form-note').val(data.note);
-            // $('#form-month').val(data.month);
-            // $('#form-year').val(data.year);
-            // $('#form-amount').val(data.amount);
-            // $('#form-category').val(data.category);
-            // $('#form-currency').val(data.currency);
             vm.form_note=data.note;
             vm.form_month=data.month_source;
             vm.form_year=data.year;
@@ -206,15 +249,25 @@ export var Budget = {
           }
         }
         else if(dataid=='addtransaction'){
-          toggle_title.append("Add Transaction");
+          var row_id = $(this).attr('id').substr(6);
+          var data = vm.data.find(x => x.id == row_id)
+          vm.form_id=row_id;
+          toggle_title.append("Add Transaction '"+data.category_label+" "+data.month+" "+data.year+"'");
 
           vm.isAdd=false;
           vm.isAddTransaction=true;
           vm.isDetail=false;
         }
         else{ 
-          toggle_title.append("Detail");
+          var row_id = $(this).attr('id').substr(6);
+          var data = vm.data.find(x => x.id == row_id)
+          vm.form_id=row_id;
+          toggle_title.append("Detail '"+data.category_label+" "+data.month+" "+data.year+"'");
 
+
+          $.getJSON("http://localhost:4000/api/wallets/budget/"+data.id, (response) => { 
+              vm.transactions = response.data;
+          });
           vm.isAdd=false;
           vm.isAddTransaction=false;
           vm.isDetail=true;
@@ -231,7 +284,7 @@ export var Budget = {
 
     $('body').on('click','.delete-data', function(e) {
         e.preventDefault();
-        vm.selectedId = $(this).attr('data-id');
+        vm.form_id = $(this).attr('data-id');
         $('#myModal').modal('show');
     });
 
@@ -253,7 +306,7 @@ export var Budget = {
     }
     
     function delete_data(event){
-      var submit_url="http://localhost:4000/api/accounts/"+vm.selectedId;
+      var submit_url="http://localhost:4000/api/accounts/"+vm.form_id;
       var submit_type='DELETE';
       $.ajax({
         url: submit_url,

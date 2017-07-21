@@ -86,12 +86,11 @@
       </div>
     </div>
     <div class="tab-content" id="right-sidebar">
+      <div v-html="form_message"></div>
       <div v-if="isAdd">
         
         <form role='form' id='data-form'>
           <div>
-
-            <div v-html="form_message"></div>
             <div class='form-group'>
               <input type='hidden' v-model='form_id'>
               <select v-model='form_month' class='form-control  input-sm select2'>
@@ -125,7 +124,7 @@
 
             <div class='form-group'>
               <p>Amount</p>
-              <input v-model='form_amount' type='text' class='form-control input-sm' placeholder='Enter amount'>
+              <input v-model='form_amount' type='number' class='form-control input-sm' placeholder='Enter amount'>
             </div>
 
             <div class='form-group'>
@@ -141,75 +140,42 @@
       </div>
 
       <div v-if="isAddTransaction">
-        <form role='form'>
-          <div>
-            <div class='form-group'>
-              <p>Currency</p>
-              <select class='form-control  input-sm select2' style='width: 100%;'>
-                <option selected='selected'>USD</option>
-                <option>EUR</option>
-                <option>JPY</option>
-              </select>
-            </div>
 
-            <div class='form-group'>
-              <p>Amount</p>
-              <input type='text' class='form-control input-sm' id='exampleInputPassword1' placeholder='Enter budget'>
-            </div>
+        <form role='form' id="transaction-form">
+          <div class='form-group'>
+            <p>Currency</p>
+            <select v-model='trans_currency' class='form-control  input-sm select2'>
+                <option value=''>- Select currency -</option>
+              <option v-for="(row, index) in currencies">{{ row.name }}</option>
+            </select>
+          </div>
 
-            <div class='form-group'>
-              <p>Date</p>
-              <div class='input-group'>
-                <div class='input-group-addon'>
-                  <i class='fa fa-calendar'></i>
-                </div>
-                <input type='text' class='form-control input-sm pull-right' id='data-date'>
+          <div class='form-group'>
+            <p>Amount</p>
+            <input v-model='trans_amount' type='number' class='form-control input-sm' placeholder='Enter amount'>
+          </div>
+
+          <div class='form-group'>
+            <p>Account</p>
+            <select v-model='trans_account' class='form-control  input-sm select2'>
+                <option value=''>- Select account -</option>
+              <option v-for="row in accounts" :value="row.id">{{ row.name }}</option>
+            </select>
+          </div>
+
+          <div class='form-group'>
+            <p>Note</p>
+            <input v-model='trans_note' type='text' class='form-control input-sm' placeholder='Enter note'>
+          </div>
+
+
+          <div class='form-group'>
+            <p>Date</p>
+            <div class='input-group date'>
+              <div class='input-group-addon'>
+                <i class='fa fa-calendar'></i>
               </div>
-            </div>
-
-            <div class='form-group'>
-              <p>Account</p>
-
-              <select class='form-control input-sm select2' style='width: 100%;'>
-                <option selected='selected'>Account A</option>
-                <option>Account B</option>
-              </select>
-            </div>
-
-            <div class='form-group'>
-              <p>Note</p>
-              <input type='text' class='form-control input-sm' placeholder='Enter note'>
-            </div>
-
-            <div class='form-group'>
-              <label class='control-sidebar-subheading'>
-                Recurring
-                <input type='checkbox' class='pull-right' checked>
-              </label>
-            </div>
-
-            <div class='form-group'>
-              <p>Cycle</p>
-              <select class='form-control  input-sm select2' style='width: 100%;'>
-                <option selected='selected'>Daily</option>
-                <option>Weekly</option>
-                <option>Every 2 Weeks</option>
-                <option>Monthly</option>
-                <option>Every 2 Months</option>
-                <option>Every 3 Months</option>
-                <option>Every 6 Months</option>
-                <option>Yearly</option>
-              </select>
-            </div>
-
-            <div class='form-group'>
-              <p>End Date</p>
-              <div class='input-group'>
-                <div class='input-group-addon'>
-                  <i class='fa fa-calendar'></i>
-                </div>
-                <input type='text' class='form-control input-sm pull-right' id='recurring-date'>
-              </div>
+              <input type='text' class='form-control input-sm pull-right datepicker' id="trans-date" v-model='trans_date'>
             </div>
           </div>
 
@@ -223,62 +189,16 @@
       <div v-if="isDetail">
 
         <ul class='products-list product-list-in-box'>
-          <li class='item'>
+          <li v-for="row in transactions" class='item'>
             <div>
-              <a href='#' class='product-title'>Buy Some Food
-                <span class='label label-warning pull-right'>$ 10.00</span>
-              </a>
+              <div class='text-center'>
+                <span class='label label-warning'>{{ row.currency }} {{ row.amount }}</span>
+              </div>
+              <div class='product-title  text-center'>{{ row.note }}</div>
+              
               <span class='product-description'>
-                12-25-2017
-                <span class='label label-info pull-right'>Account A</span>
-              </span>
-            </div>
-          </li>
-          
-          <li class='item'>
-            <div>
-              <a href='#' class='product-title'>Buy Some Food
-                <span class='label label-warning pull-right'>$ 10.00</span>
-              </a>
-              <span class='product-description'>
-                12-25-2017
-                <span class='label label-info pull-right'>Account A</span>
-              </span>
-            </div>
-          </li>
-          
-          <li class='item'>
-            <div>
-              <a href='#' class='product-title'>Buy Some Food
-                <span class='label label-warning pull-right'>$ 10.00</span>
-              </a>
-              <span class='product-description'>
-                12-25-2017
-                <span class='label label-info pull-right'>Account A</span>
-              </span>
-            </div>
-          </li>
-          
-          <li class='item'>
-            <div>
-              <a href='#' class='product-title'>Buy Some Food
-                <span class='label label-warning pull-right'>$ 10.00</span>
-              </a>
-              <span class='product-description'>
-                12-25-2017
-                <span class='label label-info pull-right'>Account A</span>
-              </span>
-            </div>
-          </li>
-          
-          <li class='item'>
-            <div>
-              <a href='#' class='product-title'>Buy Some Food
-                <span class='label label-warning pull-right'>$ 10.00</span>
-              </a>
-              <span class='product-description'>
-                12-25-2017
-                <span class='label label-info pull-right'>Account A</span>
+                {{ row.date }}
+                <span class='label label-info pull-right'>{{ row.account_label }}</span>
               </span>
             </div>
           </li>
