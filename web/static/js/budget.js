@@ -129,9 +129,6 @@ export var Budget = {
               vm.updateArray(data);
             else
               refresh_data();
-            // $('#form-id').val(0);
-            // $('#form-note').val('');
-            // $('#form-amount').val('');
 
             set_form_empty();
             vm.form_message="<div class='alert alert-success'>Success updated data</div>";
@@ -189,6 +186,7 @@ export var Budget = {
                 vm.trans_amount='';
                 vm.trans_currency='';
                 vm.trans_account='';
+                vm.form_id=0;
                 vm.form_message="<div class='alert alert-success'>Success add transaction, check it from 'Detail' button!</div>";
             }.bind(this),
             error: function(xhr, status, err) {

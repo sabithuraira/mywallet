@@ -93,9 +93,8 @@
       </div>
     </div>
     <div class="tab-content" id="right-sidebar">
-
+      <div v-html="form_message"></div>
       <div v-if="isAdd">
-        
         <form role='form' id="data-form">
           <div>
             <div class='form-group'>
@@ -112,6 +111,7 @@
             <div class='form-group'>
               <p>Currency</p>
               <select v-model='form_currency' class='form-control  input-sm select2'>
+                <option value=''>- Select currency -</option>
                 <option v-for="row in currencies">{{ row.name }}</option>
               </select>
             </div>
@@ -119,6 +119,7 @@
             <div class='form-group'>
               <p>Category</p>
               <select v-model='form_category' class='form-control  input-sm select2'>
+                <option value=''>- Select category -</option>
                 <option v-for="row in categories"  :value="row.id">{{ row.name }}</option>
               </select>
             </div>
@@ -179,6 +180,7 @@
           <div class='form-group'>
             <p>Currency</p>
             <select v-model='trans_currency' class='form-control  input-sm select2'>
+              <option value=''>- Select currency -</option>
               <option v-for="(row, index) in currencies">{{ row.name }}</option>
             </select>
           </div>
@@ -191,6 +193,7 @@
           <div class='form-group'>
             <p>Account</p>
             <select v-model='trans_account' class='form-control  input-sm select2'>
+              <option value=''>- Select account -</option>
               <option v-for="row in accounts" :value="row.id">{{ row.name }}</option>
             </select>
           </div>

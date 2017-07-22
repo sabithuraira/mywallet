@@ -13,11 +13,13 @@ export var Billing = {
         currencies: [],
         accounts: [],
         details: [],
-        selectedId: 0,
+        // selectedId: 0,
         isAdd: false,
         isAddTransaction: false,
         isDetail: false,
         isRecurring: false,
+
+        form_message:'',
         form_id:0,
         form_note:'',
         form_amount:0,
@@ -27,14 +29,14 @@ export var Billing = {
         
         trans_date:'',
         trans_amount:'',
-        trans_currency: null,
+        trans_currency: '',
         trans_account:'',
     },
       methods: {
         updateArray: function (result) {
 
           var obj_data = result.data;
-          var data_index = this.data.findIndex(x => x.id == this.selectedId)
+          var data_index = this.data.findIndex(x => x.id == this.form_id)
 
           this.data[data_index].note = obj_data.note; 
           this.data[data_index].date = obj_data.date; 
@@ -123,14 +125,20 @@ export var Billing = {
               vm.updateArray(data);
             else
               refresh_data();
-
-            vm.form_id=0;
-            vm.form_note='';
-            vm.form_amount='';
-            vm.form_date='';
+            
+            set_form_empty()
+            vm.form_message="<div class='alert alert-success'>Success updated data</div>";
         }.bind(this),
         error: function(xhr, status, err) {
-            console.log(xhr.responseText)
+          var message="<div class='alert alert-danger'>";
+
+          var list_error=xhr.responseJSON.errors;
+          for(var error in list_error){
+              message+=error+": "+list_error[error]+"</br>";
+          }
+          message+= "</div>";
+
+          vm.form_message=message;
         }.bind(this)
       });
       return false;
@@ -145,7 +153,7 @@ export var Billing = {
         var month=d.getMonth()+1;
         var date_convert=d.getFullYear()+"-"+(month>9 ? '' : '0') + month+"-"+(d.getDate()>9 ? '' : '0') + d.getDate();
         
-        var billing_data = vm.data.find(x => x.id == vm.selectedId)
+        var billing_data = vm.data.find(x => x.id == vm.form_id)
 
         $.ajax({
             url: "http://localhost:4000/api/wallets",
@@ -173,9 +181,20 @@ export var Billing = {
                 vm.trans_amount='';
                 vm.trans_currency='';
                 vm.trans_account='';
+                vm.form_id=0;
+                vm.form_message="<div class='alert alert-success'>Success updated data</div>";
             }.bind(this),
             error: function(xhr, status, err) {
-                console.log(xhr.responseText)
+
+              var message="<div class='alert alert-danger'>";
+
+              var list_error=xhr.responseJSON.errors;
+              for(var error in list_error){
+                  message+=error+": "+list_error[error]+"</br>";
+              }
+              message+= "</div>";
+
+              vm.form_message=message;
             }.bind(this)
         });
         return false;
@@ -193,7 +212,8 @@ export var Billing = {
         $(this).datepicker({autoclose:true});
     });
 
-    $('body').on("click", '.toggle-event', function () {
+    $('body').on("click", '.toggle-event', function (e) {
+        e.preventDefault();
         if (o.slide) {
           sidebar.addClass('control-sidebar-open');
         } else {
@@ -202,6 +222,7 @@ export var Billing = {
 
         toggle_title.html('');
         var dataid = $(this).data('id');
+        set_form_empty();
         
         if(dataid=='adddata'){
           vm.isAdd=true;
@@ -210,21 +231,13 @@ export var Billing = {
 
           if($(this).attr('id')=='add'){
             toggle_title.append("Add Billing");
-
-            vm.form_id=0;
-            vm.form_note='';
-            vm.form_amount='';
-            vm.form_date='';
-            vm.selectedId=0;
           }
           else{
             toggle_title.append("Update Billing");
             var row_id = $(this).attr('id').substr(6);
             var data = vm.data.find(x => x.id == row_id)
             
-            vm.selectedId=row_id;
-
-            vm.form_id=data.id;
+            vm.form_id=row_id;
             vm.form_note=data.note;
             vm.form_amount=data.amount;
             vm.form_category=data.category;
@@ -234,7 +247,7 @@ export var Billing = {
         }
         else if(dataid=='addtransaction'){
             var row_id = $(this).attr('id').substr(6);
-            vm.selectedId=row_id;
+            vm.form_id=row_id;
             var data = vm.data.find(x => x.id == row_id)
 
             toggle_title.append("Add Transaction for '"+data.note+"'");
@@ -246,7 +259,7 @@ export var Billing = {
         }
         else{ 
             var row_id = $(this).attr('id').substr(6);
-            vm.selectedId=row_id;
+            vm.form_id=row_id;
             var data = vm.data.find(x => x.id == row_id)
 
             toggle_title.append("Detail Transaction for '"+data.note+"'");
@@ -271,7 +284,7 @@ export var Billing = {
 
     $('body').on('click','.delete-data', function(e) {
         e.preventDefault();
-        vm.selectedId = $(this).attr('data-id');
+        vm.form_id = $(this).attr('data-id');
         $('#myModal').modal('show');
     });
 
@@ -280,9 +293,19 @@ export var Billing = {
         delete_data(e)
         $('#myModal').modal('hide');
     });
+
+    function set_form_empty(){
+      vm.form_message='';
+      vm.form_id=0;
+      vm.form_note='';
+      vm.form_amount='';
+      vm.form_date='';
+      vm.form_category='';
+      vm.form_currency='';
+    }
     
     function delete_data(event){
-      var submit_url="http://localhost:4000/api/billings/"+vm.selectedId;
+      var submit_url="http://localhost:4000/api/billings/"+vm.form_id;
       var submit_type='DELETE';
       $.ajax({
         url: submit_url,
@@ -292,8 +315,8 @@ export var Billing = {
             "X-CSRF-TOKEN": document.querySelector("meta[name=csrf]").content
         },
         success: function(data) { 
-          vm.selectedId=0;
           refresh_data();
+          set_form_empty();
         }.bind(this),
         error: function(xhr, status, err) {
             console.log(xhr.responseText)

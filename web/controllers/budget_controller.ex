@@ -1,5 +1,6 @@
 defmodule Mywallet.BudgetController do
   use Mywallet.Web, :controller
+  require Logger
 
   alias Mywallet.Budget
   alias Mywallet.Category
@@ -27,12 +28,17 @@ defmodule Mywallet.BudgetController do
   end
 
   def show(conn, %{"id" => id}) do
-    query = from u in Budget,
-               where: u.created_by == ^id,
-               order_by: [desc: :id],
-               select: u
-    budgets = Repo.all(query)
-              |> Repo.preload(:category_rel)
+    # query = from u in Budget,
+    #            where: u.created_by == ^id,
+    #            order_by: [desc: :id],
+    #            select: u
+    # budgets = Repo.all(query)
+    #           |> Repo.preload(:category_rel)
+
+    budgets = Budget.list_budget
+
+    # Logger.info "test"
+    # Logger.info inspect(budgets)
 
     render(conn, "index.json", budgets: budgets)
   end
