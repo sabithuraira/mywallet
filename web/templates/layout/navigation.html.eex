@@ -37,7 +37,7 @@
         </li>
 
         <li>
-          <a href="pages/widgets.html">
+          <a href="<%= page_path(@conn, :budget) %>">
             <i class="fa fa-money"></i> <span>Budget</span>
             <span class="pull-right-container">
               <small class="label pull-right bg-red">$ 2.352</small>
@@ -46,7 +46,7 @@
         </li>
 
         <li>
-          <a href="pages/widgets.html">
+          <a href="<%= page_path(@conn, :wallet) %>">
             <i class="fa fa-credit-card"></i> <span>Wallet</span>
             <span class="pull-right-container">
               <small class="label pull-right bg-green">$ 1.211</small>
@@ -55,7 +55,7 @@
         </li>
 
         <li>
-          <a href="pages/widgets.html">
+          <a href="<%= page_path(@conn, :billing) %>">
             <i class="fa fa-credit-card"></i> <span>Billing</span>
             <span class="pull-right-container">
               <small class="label pull-right bg-red">$ 500</small>

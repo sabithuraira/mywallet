@@ -26,12 +26,16 @@ defmodule Mywallet.BillingController do
   end
 
   def show(conn, %{"id" => id}) do
-    query = from u in Billing,
-               where: u.inserted_by == ^id,
-               order_by: [desc: :id],
-               select: u
-    billings = Repo.all(query)
-              |> Repo.preload(:category_rel)
+    # query = from u in Billing,
+    #            where: u.inserted_by == ^id,
+    #            order_by: [desc: :id],
+    #            select: u
+    # billings = Repo.all(query)
+    #           |> Repo.preload(:category_rel)
+
+    # render(conn, "index.json", billings: billings)
+
+    billings = Billing.list_billing(id)
 
     render(conn, "index.json", billings: billings)
   end

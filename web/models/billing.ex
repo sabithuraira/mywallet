@@ -1,5 +1,8 @@
 defmodule Mywallet.Billing do
   use Mywallet.Web, :model
+  alias Ecto.Adapters.SQL
+  alias Mywallet.Repo
+  require Logger
 
   schema "billings" do
     field :note, :string
@@ -22,4 +25,41 @@ defmodule Mywallet.Billing do
     |> cast(params, [:note, :category, :amount, :currency, :date, :inserted_by, :updated_by])
     |> validate_required([:note, :category, :amount, :currency, :date, :inserted_by, :updated_by])
   end
+
+  def list_billing(id) do
+    sql_str ="SELECT b.*, COALESCE(SUM(w.amount),0) as paying, (b.amount - COALESCE(SUM(w.amount),0)) as residual, c.name   
+                FROM billings b 
+                JOIN categories c ON c.id=b.category
+                LEFT JOIN wallets w ON w.billing_id=b.id 
+                WHERE b.inserted_by="<>id<>" 
+                GROUP BY b.id, c.id
+                ORDER BY b.date DESC";
+
+    result = SQL.query(Repo, sql_str,[])
+    Logger.info inspect(result)
+    list = []
+    
+    case result do
+      {:ok, columns} ->
+        list = for item <- columns.rows do
+            %{
+              id: Enum.at(item,0),
+              note: Enum.at(item,1),
+              category: Enum.at(item,2),
+              amount: Enum.at(item,3),
+              currency: Enum.at(item,4),
+              date: Enum.at(item,5),
+              inserted_by: Enum.at(item,6),
+              updated_by: Enum.at(item,7),
+              inserted_at: Enum.at(item,8),
+              updated_at: Enum.at(item,9),
+              paying: Enum.at(item,10),
+              residual: Enum.at(item,11),
+              category_label: Enum.at(item,12)
+            }
+        end
+      _ -> IO.puts("error")
+    end
+  end
+
 end

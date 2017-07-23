@@ -35,7 +35,7 @@ defmodule Mywallet.BudgetController do
     # budgets = Repo.all(query)
     #           |> Repo.preload(:category_rel)
 
-    budgets = Budget.list_budget
+    budgets = Budget.list_budget(id)
 
     # Logger.info "test"
     # Logger.info inspect(budgets)

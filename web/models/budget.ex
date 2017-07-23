@@ -4,8 +4,6 @@ defmodule Mywallet.Budget do
   alias Ecto.Adapters.SQL
   alias Mywallet.Repo
 
-  # require Logger
-
   schema "budgets" do
     field :currency, :string
     field :month, :integer
@@ -30,13 +28,14 @@ defmodule Mywallet.Budget do
     |> validate_required([:currency, :month, :year, :category, :amount, :created_by, :updated_by])
   end
 
-  def list_budget() do
+  def list_budget(id) do
     sql_str = "SELECT b.*, COALESCE(SUM(w.amount),0) as detail_total, (b.amount - COALESCE(SUM(w.amount),0)) as detail_diff, c.name   
                 FROM budgets b 
                 JOIN categories c ON c.id=b.category
                 LEFT JOIN wallets w ON w.category=b.category 
                 AND b.month=Extract(month from w.date)
                 AND b.year=Extract(year from w.date) 
+                WHERE b.created_by="<>id<>" 
                 GROUP BY b.id, c.id
                 ORDER BY b.year DESC, b.month DESC";
     
@@ -46,28 +45,25 @@ defmodule Mywallet.Budget do
     
     case result do
       {:ok, columns} ->
-                list = for item <- columns.rows do
-                    # List.first(item)
-                    # item
-                    # Logger.info inspect(item)
-                    %{
-                      id: Enum.at(item,0),
-                      currency: Enum.at(item,1),
-                      month: Enum.at(item,2),
-                      year: Enum.at(item,3),
-                      amount: Enum.at(item,4),
-                      account: Enum.at(item,5),
-                      note: Enum.at(item,6),
-                      created_by: Enum.at(item,7),
-                      updated_by: Enum.at(item,8),
-                      inserted_at: Enum.at(item,9),
-                      updated_at: Enum.at(item,10),
-                      category: Enum.at(item,11),
-                      detail_total: Enum.at(item,12),
-                      detail_diff: Enum.at(item,13),
-                      category_label: Enum.at(item,14)
-                    }
-                end
+        list = for item <- columns.rows do
+            %{
+              id: Enum.at(item,0),
+              currency: Enum.at(item,1),
+              month: Enum.at(item,2),
+              year: Enum.at(item,3),
+              amount: Enum.at(item,4),
+              account: Enum.at(item,5),
+              note: Enum.at(item,6),
+              created_by: Enum.at(item,7),
+              updated_by: Enum.at(item,8),
+              inserted_at: Enum.at(item,9),
+              updated_at: Enum.at(item,10),
+              category: Enum.at(item,11),
+              detail_total: Enum.at(item,12),
+              detail_diff: Enum.at(item,13),
+              category_label: Enum.at(item,14)
+            }
+        end
       _ -> IO.puts("error")
     end
   end
