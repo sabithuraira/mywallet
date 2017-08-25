@@ -4,15 +4,24 @@
       <!-- Info boxes -->
       <div class="row">
         <div class="col-md-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+
+          <div class="info-box bg-aqua">
+            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">CPU Traffic</span>
-              <span class="info-box-number">90<small>%</small></span>
+              <span class="info-box-text">Budget on January</span>
+              <span class="info-box-number">Total budget IDR 2.000.000</span>
+
+              <div class="progress">
+                <div class="progress-bar" style="width: 70%"></div>
+              </div>
+                  <span class="progress-description">
+                    Budget available IDR 500.000 used IDR 1.500.000 this month
+                  </span>
             </div>
+            
+            <!-- /.info-box-content -->
           </div>
-          <!-- /.info-box -->
         </div>
       </div>
       <!-- /.row -->
