@@ -27,6 +27,14 @@ defmodule Mywallet.BudgetView do
     }
   end
 
+
+  def render("resume_total.json", %{budget: budget}) do
+    case budget do
+      [] -> %{total_budget: 0, total_pay: 0}
+      _ -> budget
+    end
+  end
+
   def render("budget.json", %{budget: budget}) do
     %{
         id:         budget.id,

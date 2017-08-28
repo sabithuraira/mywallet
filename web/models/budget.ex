@@ -1,6 +1,8 @@
 defmodule Mywallet.Budget do
   use Mywallet.Web, :model
 
+  require Logger
+
   alias Ecto.Adapters.SQL
   alias Mywallet.Repo
 
@@ -33,6 +35,7 @@ defmodule Mywallet.Budget do
                 FROM budgets b 
                 JOIN categories c ON c.id=b.category
                 LEFT JOIN wallets w ON w.category=b.category 
+                AND b.created_by=w.inserted_by 
                 AND b.month=Extract(month from w.date)
                 AND b.year=Extract(year from w.date) 
                 WHERE b.created_by="<>id<>" 
@@ -40,7 +43,6 @@ defmodule Mywallet.Budget do
                 ORDER BY b.year DESC, b.month DESC";
     
     result = SQL.query(Repo, sql_str,[])
-    # Logger.info inspect(result)
     list = []
     
     case result do
@@ -67,4 +69,32 @@ defmodule Mywallet.Budget do
       _ -> IO.puts("error")
     end
   end
+
+  def resume(%{"id"=>id, "month"=>month,"year"=>year}) do
+    sql_str = "SELECT COALESCE(SUM(b.amount),0) as budget_total, 
+				        (
+                    SELECT COALESCE(SUM(w.amount),0) FROM wallets AS w WHERE 
+                	    b.created_by=w.inserted_by 
+                      AND b.month=Extract(month from w.date)
+                      AND b.year=Extract(year from w.date)
+                ) as trans_total 
+                FROM budgets AS b 
+                WHERE b.month="<>month<>" AND b.year="<>year<>" AND b.created_by="<>id<>" 
+                GROUP BY b.created_by, b.month, b.year";
+    
+    result = SQL.query(Repo, sql_str,[])
+    
+    case result do
+      {:ok, columns} ->
+        item = Enum.at(columns.rows,0)
+
+        %{
+            total_budget: Enum.at(item,0),
+            total_pay: Enum.at(item,1)
+        }
+      _ -> IO.puts("error")
+    end
+  end
+
+
 end

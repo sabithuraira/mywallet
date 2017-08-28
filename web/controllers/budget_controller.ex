@@ -28,19 +28,13 @@ defmodule Mywallet.BudgetController do
   end
 
   def show(conn, %{"id" => id}) do
-    # query = from u in Budget,
-    #            where: u.created_by == ^id,
-    #            order_by: [desc: :id],
-    #            select: u
-    # budgets = Repo.all(query)
-    #           |> Repo.preload(:category_rel)
-
     budgets = Budget.list_budget(id)
-
-    # Logger.info "test"
-    # Logger.info inspect(budgets)
-
     render(conn, "index.json", budgets: budgets)
+  end
+
+  def resume(conn, %{"id" => id, "month" => month, "year" => year} = params) do
+    budget = Budget.resume(params)
+    render(conn, "resume_total.json", budget: budget)
   end
 
   def update(conn, %{"id" => id, "budget" => budget_params}) do

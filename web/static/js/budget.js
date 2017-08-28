@@ -5,9 +5,19 @@ export var Budget = {
     var user_token = document.querySelector("meta[name=channel_token]").content;
     var user_id = document.querySelector("meta[name=channel_id]").content;
 
+    var monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
     var vm = new Vue({  
       el: "#budget_list",
       data: {
+        current_month: (new Date().getMonth()) + 1,
+        current_year: (new Date().getYear()) + 1900,
+        resume:{
+            total_budget:"",
+            total_pay:""
+        },
         data: [],
         categories: [],
         currencies: [],
@@ -34,8 +44,8 @@ export var Budget = {
         trans_account:'',
         trans_note:'',
 
-        month: ["January", "February", "March", "April", "May", "June",
-          "July", "August", "September", "October", "November", "Desember"],
+        // month: ["January", "February", "March", "April", "May", "June",
+        //   "July", "August", "September", "October", "November", "Desember"],
         year: [],
       },
       methods: {
@@ -52,6 +62,11 @@ export var Budget = {
           this.data[data_index].category_label = obj_data.category_label; 
           this.data[data_index].currency = obj_data.currency;
         },
+      },
+      computed: {
+        currentLabelMonth: function () {
+          return monthNames[this.current_month]
+        }
       }
     });
     
@@ -91,6 +106,11 @@ export var Budget = {
     function refresh_data(){
       $.getJSON("http://localhost:4000/api/budgets/"+user_id, (response) => { 
           vm.data = response.data;
+      });
+
+      $.getJSON("http://localhost:4000/api/budgets/resume/"+user_id+"/"+vm.current_month+"/"+vm.current_year, (response) => {
+          console.log(vm.current_month);
+          vm.resume = response;
       });
     }
 
