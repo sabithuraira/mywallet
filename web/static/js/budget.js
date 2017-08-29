@@ -109,7 +109,6 @@ export var Budget = {
       });
 
       $.getJSON("http://localhost:4000/api/budgets/resume/"+user_id+"/"+vm.current_month+"/"+vm.current_year, (response) => {
-          console.log(vm.current_month);
           vm.resume = response;
       });
     }

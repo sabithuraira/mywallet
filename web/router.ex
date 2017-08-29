@@ -58,6 +58,7 @@ defmodule Mywallet.Router do
     get "/wallets/billing/:id", WalletController, :show_billing
     get "/wallets/budget/:id", WalletController, :show_budget
     get "/budgets/resume/:id/:month/:year", BudgetController, :resume
+    get "/wallets/resume/:id/:month/:year", WalletController, :resume
 
     resources "/billings", BillingController, except: [:new, :edit]
   end

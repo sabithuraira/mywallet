@@ -9,14 +9,14 @@
             <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Budget on January</span>
-              <span class="info-box-number">Total budget IDR 2.000.000</span>
+              <span class="info-box-text">Transaction on January</span>
+              <span class="info-box-number">Total Transaction IDR {{ resume.total }}</span>
 
               <div class="progress">
                 <div class="progress-bar" style="width: 70%"></div>
               </div>
                   <span class="progress-description">
-                    Budget available IDR 500.000 used IDR 1.500.000 this month
+                    Total Income IDR {{ resume.total_income }}, total expense IDR {{ resume.total_expense}} this month
                   </span>
             </div>
             

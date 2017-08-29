@@ -12,6 +12,13 @@ defmodule Mywallet.WalletView do
     %{data: render_one(wallet, Mywallet.WalletView, "wallet.json")}
   end
 
+  def render("resume_total.json", %{wallet: wallet}) do
+    case wallet do
+      [] -> %{total: 0, total_expense: 0, total_income: 0}
+      _ -> wallet
+    end
+  end
+
   def render("wallet.json", %{wallet: wallet}) do
     %{
       id: wallet.id,

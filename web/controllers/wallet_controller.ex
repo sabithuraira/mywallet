@@ -65,6 +65,11 @@ defmodule Mywallet.WalletController do
     render(conn, "index.json", wallets: wallets)
   end
 
+  def resume(conn, %{"id" => id, "month" => month, "year" => year} = params) do
+    wallet = Wallet.resume(params)
+    render(conn, "resume_total.json", wallet: wallet)
+  end
+
   def update(conn, %{"id" => id, "wallet" => wallet_params}) do
     wallet = Repo.get!(Wallet, id)
     changeset = Wallet.changeset(wallet, wallet_params)

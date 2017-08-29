@@ -5,9 +5,20 @@ export var Wallet = {
     var user_token = document.querySelector("meta[name=channel_token]").content;
     var user_id = document.querySelector("meta[name=channel_id]").content;
 
+    var monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
     var vm = new Vue({  
       el: "#wallet_list",
       data: {
+        current_month: (new Date().getMonth()) + 1,
+        current_year: (new Date().getYear()) + 1900,
+        resume:{
+            total:"",
+            total_expense:"",
+            total_income:"",
+        },
         data: [],
         categories: [],
         currencies: [],
@@ -19,8 +30,8 @@ export var Wallet = {
         ],
         isRecurring: false,
         selectedId: 0,
-        month: ["January", "February", "March", "April", "May", "June",
-          "July", "August", "September", "October", "November", "Desember"],
+        // month: ["January", "February", "March", "April", "May", "June",
+        //   "July", "August", "September", "October", "November", "Desember"],
         year: [],
       },
       methods: {
@@ -81,6 +92,10 @@ export var Wallet = {
     function refresh_data(){
       $.getJSON("http://localhost:4000/api/wallets/"+user_id, (response) => { 
           vm.data = response.data;
+      });
+
+      $.getJSON("http://localhost:4000/api/wallets/resume/"+user_id+"/"+vm.current_month+"/"+vm.current_year, (response) => {
+          vm.resume = response;
       });
     }
 
