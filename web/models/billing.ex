@@ -62,4 +62,32 @@ defmodule Mywallet.Billing do
     end
   end
 
+def resume(%{"id"=>id, "month"=>month,"year"=>year}) do
+    sql_str = "SELECT COALESCE(SUM(billing_total),0) as bil_total, COALESCE(SUM(trans_total),0) as trans_total
+                FROM(
+                  SELECT COALESCE(SUM(b.amount),0) as billing_total, 
+                          (
+                              SELECT COALESCE(SUM(w.amount),0) FROM wallets AS w WHERE b.id=w.billing_id 
+                          ) as trans_total 
+                          FROM billings AS b 
+                          WHERE Extract(month from b.date)="<>month<>" AND 
+                          Extract(year from b.date)="<>year<>" AND b.inserted_by="<>id<>" 
+                          GROUP BY b.inserted_by, b.id
+                      ) as per_row";
+    
+    result = SQL.query(Repo, sql_str,[])
+    
+    case result do
+      {:ok, columns} ->
+        item = Enum.at(columns.rows,0)
+
+        %{
+            total_billing: Enum.at(item,0),
+            total_pay: Enum.at(item,1)
+        }
+      _ -> IO.puts("error")
+    end
+  end
+
+
 end

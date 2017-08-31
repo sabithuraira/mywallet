@@ -53,13 +53,14 @@ defmodule Mywallet.Router do
     resources "/accounts", AccountController, except: [:new, :edit]
     resources "/currencies", CurrencyController, except: [:new, :edit]
     resources "/categories", CategoryController, except: [:new, :edit]
-    resources "/budgets", CategoryController, except: [:new, :edit]
+    # resources "/budgets", CategoryController, except: [:new, :edit]
     resources "/wallets", WalletController, except: [:new, :edit]
+    resources "/billings", BillingController, except: [:new, :edit]
     get "/wallets/billing/:id", WalletController, :show_billing
     get "/wallets/budget/:id", WalletController, :show_budget
     get "/budgets/resume/:id/:month/:year", BudgetController, :resume
     get "/wallets/resume/:id/:month/:year", WalletController, :resume
+    get "/billings/resume/:id/:month/:year", BillingController, :resume
 
-    resources "/billings", BillingController, except: [:new, :edit]
   end
 end

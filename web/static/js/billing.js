@@ -5,9 +5,19 @@ export var Billing = {
     var user_token = document.querySelector("meta[name=channel_token]").content;
     var user_id = document.querySelector("meta[name=channel_id]").content;
 
+    var monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
     var vm = new Vue({  
       el: "#billing_list",
       data: {
+        current_month: (new Date().getMonth()) + 1,
+        current_year: (new Date().getYear()) + 1900,
+        resume:{
+            total_billing:"",
+            total_pay:""
+        },
         data: [],
         categories: [],
         currencies: [],
@@ -44,6 +54,11 @@ export var Billing = {
           this.data[data_index].category = obj_data.category; 
           this.data[data_index].currency = obj_data.currency;
         },
+      },
+      computed: {
+        currentLabelMonth: function () {
+          return monthNames[this.current_month]
+        }
       }
     });
     
@@ -82,6 +97,12 @@ export var Billing = {
     function refresh_data(){
       $.getJSON("http://localhost:4000/api/billings/"+user_id, (response) => { 
           vm.data = response.data;
+      });
+
+      vm.current_month=7;
+
+      $.getJSON("http://localhost:4000/api/billings/resume/"+user_id+"/"+vm.current_month+"/"+vm.current_year, (response) => {
+          vm.resume = response;
       });
     }
 

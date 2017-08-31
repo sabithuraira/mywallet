@@ -26,6 +26,14 @@ defmodule Mywallet.BillingView do
     }
   end
 
+
+  def render("resume_total.json", %{billing: billing}) do
+    case billing do
+      [] -> %{total_billing: 0, total_pay: 0}
+      _ -> billing
+    end
+  end
+
   def render("billing.json", %{billing: billing}) do
     %{
       id: billing.id,

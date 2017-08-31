@@ -40,6 +40,11 @@ defmodule Mywallet.BillingController do
     render(conn, "index.json", billings: billings)
   end
 
+  def resume(conn, %{"id" => id, "month" => month, "year" => year} = params) do
+    billing = Billing.resume(params)
+    render(conn, "resume_total.json", billing: billing)
+  end
+
   def update(conn, %{"id" => id, "billing" => billing_params}) do
     billing = Repo.get!(Billing, id)
     changeset = Billing.changeset(billing, billing_params)
