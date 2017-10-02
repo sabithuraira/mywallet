@@ -46,7 +46,7 @@ defmodule Mywallet.Mixfile do
      {:ueberauth_facebook, github: "ueberauth/ueberauth_facebook"},
      {:timex, "~> 3.0"},
      {:httpoison, "~> 0.12"},
-     {:comeonin, "~> 0.11.3"}
+     {:comeonin, "~> 2.6"}
     ]
   end
 
