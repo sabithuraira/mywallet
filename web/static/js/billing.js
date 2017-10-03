@@ -64,19 +64,22 @@ export var Billing = {
     
 
     let container = document.getElementById("billing_list")
-    let socket = new Socket("/socket", {
-      params: { token: user_token }
-    })
-    socket.connect()
+    // let socket = new Socket("/socket", {
+    //   params: { token: user_token }
+    // })
+    // socket.connect()
 
-    let channel = socket.channel("account:2")
+    // let channel = socket.channel("account:2")
     // channel.on("update", data => {
     //   refresh_data();
     // })
 
     //account channel join
-    channel.join()
-      .receive("ok", resp => { 
+    // channel.join()
+    //   .receive("ok", resp => { 
+
+
+      $(document).ready(function() {
         refresh_data(); 
 
         $.getJSON("http://localhost:4000/api/categories/"+user_id, (response) => { 
@@ -90,8 +93,9 @@ export var Billing = {
         $.getJSON("http://localhost:4000/api/accounts/"+user_id, (response) => { 
             vm.accounts = response.data;
         });
-      })
-      .receive("error", reason => console.log("failed to join ha", reason))
+      });
+      // })
+      // .receive("error", reason => console.log("failed to join ha", reason))
 
 
     function refresh_data(){

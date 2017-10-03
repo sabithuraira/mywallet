@@ -55,39 +55,42 @@ export var Wallet = {
     });
 
     let container = document.getElementById("wallet_list")
-    let socket = new Socket("/socket", {
-      params: { token: user_token }
-    })
-    socket.connect()
+    // let socket = new Socket("/socket", {
+    //   params: { token: user_token }
+    // })
+    // socket.connect()
 
-    let channel = socket.channel("account:2")
+    // let channel = socket.channel("account:2")
     // channel.on("update", data => {
     //   refresh_data();
     // })
 
     //account channel join
-    channel.join()
-      .receive("ok", resp => { 
-        refresh_data(); 
+    // channel.join()
+    //   .receive("ok", resp => { 
+    $( document ).ready(function() {
 
-        $.getJSON("http://localhost:4000/api/categories/"+user_id, (response) => { 
-            vm.categories = response.data;
-        });
+      refresh_data(); 
+      
+      $.getJSON("http://localhost:4000/api/categories/"+user_id, (response) => { 
+          vm.categories = response.data;
+      });
 
-        $.getJSON("http://localhost:4000/api/currencies/", (response) => { 
-            vm.currencies = response.data;
-        });
+      $.getJSON("http://localhost:4000/api/currencies/", (response) => { 
+          vm.currencies = response.data;
+      });
 
-        $.getJSON("http://localhost:4000/api/accounts/"+user_id, (response) => { 
-            vm.accounts = response.data;
-        });
+      $.getJSON("http://localhost:4000/api/accounts/"+user_id, (response) => { 
+          vm.accounts = response.data;
+      });
 
-        for(var i=115;i<=new Date().getYear();++i){
-          vm.year.push(i+1900);
-        }
+      for(var i=115;i<=new Date().getYear();++i){
+        vm.year.push(i+1900);
+      }
+    });
         
-      })
-      .receive("error", reason => console.log("failed to join ha", reason))
+      // })
+      // .receive("error", reason => console.log("failed to join ha", reason))
 
     function refresh_data(){
       $.getJSON("http://localhost:4000/api/wallets/"+user_id, (response) => { 

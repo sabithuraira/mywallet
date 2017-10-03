@@ -22,21 +22,24 @@ export var Account = {
     
 
     let container = document.getElementById("account_list")
-    let socket = new Socket("/socket", {
-      params: { token: user_token }
-    })
-    socket.connect()
+    // let socket = new Socket("/socket", {
+    //   params: { token: user_token }
+    // })
+    // socket.connect()
 
-    let channel = socket.channel("account:2")
+    // let channel = socket.channel("account:2")
     // channel.on("update", data => {
     //   refresh_data();
     // })
 
     //account channel join
-    channel.join()
-      .receive("ok", resp => { refresh_data(); })
-      .receive("error", reason => console.log("failed to join ha", reason))
+    // channel.join()
+    //   .receive("ok", resp => { refresh_data(); })
+    //   .receive("error", reason => console.log("failed to join ha", reason))
 
+    $( document ).ready(function() {
+      refresh_data();
+    });
 
     function refresh_data(){
       $.getJSON("http://localhost:4000/api/accounts/"+user_id, (response) => { 

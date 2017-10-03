@@ -72,15 +72,17 @@ export var Budget = {
     
 
     let container = document.getElementById("budget_list")
-    let socket = new Socket("/socket", {
-      params: { token: user_token }
-    })
-    socket.connect()
+    // let socket = new Socket("/socket", {
+    //   params: { token: user_token }
+    // })
+    // socket.connect()
 
-    let channel = socket.channel("account:2")
+    // let channel = socket.channel("account:2")
 
-    channel.join()
-      .receive("ok", resp => { 
+    // channel.join()
+    //   .receive("ok", resp => { 
+
+      $(document).ready(function() {
         refresh_data(); 
 
         $.getJSON("http://localhost:4000/api/categories/"+user_id, (response) => { 
@@ -98,9 +100,9 @@ export var Budget = {
         for(var i=115;i<=new Date().getYear();++i){
           vm.year.push(i+1900);
         }
-        
-      })
-      .receive("error", reason => console.log("failed to join ha", reason))
+      });
+      // })
+      // .receive("error", reason => console.log("failed to join ha", reason))
 
 
     function refresh_data(){

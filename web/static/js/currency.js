@@ -22,20 +22,24 @@ export var Currency = {
     
 
     let container = document.getElementById("currency_list")
-    let socket = new Socket("/socket", {
-      params: { token: user_token }
-    })
-    socket.connect()
-
-    let channel = socket.channel("account:2")
-    // channel.on("update", data => {
-    //   refresh_data();
+    // let socket = new Socket("/socket", {
+    //   params: { token: user_token }
     // })
+    // socket.connect()
 
-    //account channel join
-    channel.join()
-      .receive("ok", resp => { refresh_data(); })
-      .receive("error", reason => console.log("failed to join ha", reason))
+    // let channel = socket.channel("account:2")
+    // // channel.on("update", data => {
+    // //   refresh_data();
+    // // })
+
+    // //account channel join
+    // channel.join()
+    //   .receive("ok", resp => { refresh_data(); })
+    //   .receive("error", reason => console.log("failed to join ha", reason))
+
+    $(document).ready(function() {
+      refresh_data();
+    });
 
 
     function refresh_data(){

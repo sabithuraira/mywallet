@@ -20,17 +20,22 @@ export var Category = {
       }
     });
     
-    let container = document.getElementById("category_list")
-    let socket = new Socket("/socket", {
-      params: { token: user_token }
-    })
-    socket.connect()
+    // let container = document.getElementById("category_list")
+    // let socket = new Socket("/socket", {
+    //   params: { token: user_token }
+    // })
+    // socket.connect()
 
-    let channel = socket.channel("account:2")
+    // let channel = socket.channel("account:2")
     //account channel join
-    channel.join()
-      .receive("ok", resp => { refresh_data(); })
-      .receive("error", reason => console.log("failed to join ha", reason))
+    // channel.join()
+    //   .receive("ok", resp => { refresh_data(); })
+    //   .receive("error", reason => console.log("failed to join ha", reason))
+
+    $(document).ready(function() {
+      refresh_data();
+    });
+    
     function refresh_data(){
       $.getJSON("http://localhost:4000/api/categories/"+user_id, (response) => { 
           vm.data = response.data;
