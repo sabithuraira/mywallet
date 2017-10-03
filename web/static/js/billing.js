@@ -82,15 +82,15 @@ export var Billing = {
       $(document).ready(function() {
         refresh_data(); 
 
-        $.getJSON("http://localhost:4000/api/categories/"+user_id, (response) => { 
+        $.getJSON("/api/categories/"+user_id, (response) => { 
             vm.categories = response.data;
         });
 
-        $.getJSON("http://localhost:4000/api/currencies/", (response) => { 
+        $.getJSON("/api/currencies/", (response) => { 
             vm.currencies = response.data;
         });
 
-        $.getJSON("http://localhost:4000/api/accounts/"+user_id, (response) => { 
+        $.getJSON("/api/accounts/"+user_id, (response) => { 
             vm.accounts = response.data;
         });
       });
@@ -99,13 +99,13 @@ export var Billing = {
 
 
     function refresh_data(){
-      $.getJSON("http://localhost:4000/api/billings/"+user_id, (response) => { 
+      $.getJSON("/api/billings/"+user_id, (response) => { 
           vm.data = response.data;
       });
 
       vm.current_month=7;
 
-      $.getJSON("http://localhost:4000/api/billings/resume/"+user_id+"/"+vm.current_month+"/"+vm.current_year, (response) => {
+      $.getJSON("/api/billings/resume/"+user_id+"/"+vm.current_month+"/"+vm.current_year, (response) => {
           vm.resume = response;
       });
     }
@@ -120,10 +120,10 @@ export var Billing = {
 
       var csrf = document.querySelector("meta[name=csrf]").content;
 
-      var submit_url="http://localhost:4000/api/billings";
+      var submit_url="/api/billings";
       var submit_type='POST';
       if(vm.form_id!=0){
-        submit_url="http://localhost:4000/api/billings/"+vm.form_id;
+        submit_url="/api/billings/"+vm.form_id;
         submit_type='PUT';
       }
 
@@ -181,7 +181,7 @@ export var Billing = {
         var billing_data = vm.data.find(x => x.id == vm.form_id)
 
         $.ajax({
-            url: "http://localhost:4000/api/wallets",
+            url: "/api/wallets",
             dataType: 'json',
             type: "POST",
             headers: {
@@ -289,7 +289,7 @@ export var Billing = {
 
             toggle_title.append("Detail Transaction for '"+data.note+"'");
 
-            $.getJSON("http://localhost:4000/api/wallets/billing/"+data.id, (response) => { 
+            $.getJSON("/api/wallets/billing/"+data.id, (response) => { 
                 vm.details = response.data;
             });
 
@@ -330,7 +330,7 @@ export var Billing = {
     }
     
     function delete_data(event){
-      var submit_url="http://localhost:4000/api/billings/"+vm.form_id;
+      var submit_url="/api/billings/"+vm.form_id;
       var submit_type='DELETE';
       $.ajax({
         url: submit_url,

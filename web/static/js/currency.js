@@ -43,7 +43,7 @@ export var Currency = {
 
 
     function refresh_data(){
-      $.getJSON("http://localhost:4000/api/currencies/", (response) => { 
+      $.getJSON("/api/currencies/", (response) => { 
           vm.data = response.data;
       });
     }
@@ -56,10 +56,10 @@ export var Currency = {
 
       var csrf = document.querySelector("meta[name=csrf]").content;
 
-      var submit_url="http://localhost:4000/api/currencies";
+      var submit_url="/api/currencies";
       var submit_type='POST';
       if(form_id!=0){
-        submit_url="http://localhost:4000/api/currencies/"+form_id;
+        submit_url="/api/currencies/"+form_id;
         submit_type='PUT';
       }
 
@@ -166,7 +166,7 @@ export var Currency = {
     }
     
     function delete_data(event){
-      var submit_url="http://localhost:4000/api/currencies/"+vm.selectedId;
+      var submit_url="/api/currencies/"+vm.selectedId;
       var submit_type='DELETE';
       $.ajax({
         url: submit_url,

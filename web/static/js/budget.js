@@ -85,15 +85,15 @@ export var Budget = {
       $(document).ready(function() {
         refresh_data(); 
 
-        $.getJSON("http://localhost:4000/api/categories/"+user_id, (response) => { 
+        $.getJSON("/api/categories/"+user_id, (response) => { 
             vm.categories = response.data;
         });
 
-        $.getJSON("http://localhost:4000/api/currencies/", (response) => { 
+        $.getJSON("/api/currencies/", (response) => { 
             vm.currencies = response.data;
         });
 
-        $.getJSON("http://localhost:4000/api/accounts/"+user_id, (response) => { 
+        $.getJSON("/api/accounts/"+user_id, (response) => { 
             vm.accounts = response.data;
         });
 
@@ -106,11 +106,11 @@ export var Budget = {
 
 
     function refresh_data(){
-      $.getJSON("http://localhost:4000/api/budgets/"+user_id, (response) => { 
+      $.getJSON("/api/budgets/"+user_id, (response) => { 
           vm.data = response.data;
       });
 
-      $.getJSON("http://localhost:4000/api/budgets/resume/"+user_id+"/"+vm.current_month+"/"+vm.current_year, (response) => {
+      $.getJSON("/api/budgets/resume/"+user_id+"/"+vm.current_month+"/"+vm.current_year, (response) => {
           vm.resume = response;
       });
     }
@@ -119,10 +119,10 @@ export var Budget = {
     $('body').on('submit',"#data-form", function () {
       var csrf = document.querySelector("meta[name=csrf]").content;
 
-      var submit_url="http://localhost:4000/api/budgets";
+      var submit_url="/api/budgets";
       var submit_type='POST';
       if(vm.form_id!=0){
-        submit_url="http://localhost:4000/api/budgets/"+vm.form_id;
+        submit_url="/api/budgets/"+vm.form_id;
         submit_type='PUT';
       }
 
@@ -182,7 +182,7 @@ export var Budget = {
         var budget_data = vm.data.find(x => x.id == vm.form_id)
 
         $.ajax({
-            url: "http://localhost:4000/api/wallets",
+            url: "/api/wallets",
             dataType: 'json',
             type: "POST",
             headers: {
@@ -284,7 +284,7 @@ export var Budget = {
           toggle_title.append("Detail '"+data.category_label+" "+data.month+" "+data.year+"'");
 
 
-          $.getJSON("http://localhost:4000/api/wallets/budget/"+data.id, (response) => { 
+          $.getJSON("/api/wallets/budget/"+data.id, (response) => { 
               vm.transactions = response.data;
           });
           vm.isAdd=false;
@@ -325,7 +325,7 @@ export var Budget = {
     }
     
     function delete_data(event){
-      var submit_url="http://localhost:4000/api/accounts/"+vm.form_id;
+      var submit_url="/api/accounts/"+vm.form_id;
       var submit_type='DELETE';
       $.ajax({
         url: submit_url,

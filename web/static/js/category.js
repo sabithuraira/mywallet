@@ -37,7 +37,7 @@ export var Category = {
     });
     
     function refresh_data(){
-      $.getJSON("http://localhost:4000/api/categories/"+user_id, (response) => { 
+      $.getJSON("/api/categories/"+user_id, (response) => { 
           vm.data = response.data;
       });
     }
@@ -50,10 +50,10 @@ export var Category = {
 
       var csrf = document.querySelector("meta[name=csrf]").content;
 
-      var submit_url="http://localhost:4000/api/categories";
+      var submit_url="/api/categories";
       var submit_type='POST';
       if(form_id!=0){
-        submit_url="http://localhost:4000/api/categories/"+form_id;
+        submit_url="/api/categories/"+form_id;
         submit_type='PUT';
       }
 
@@ -160,7 +160,7 @@ export var Category = {
     }
     
     function delete_data(event){
-      var submit_url="http://localhost:4000/api/categories/"+vm.selectedId;
+      var submit_url="/api/categories/"+vm.selectedId;
       var submit_type='DELETE';
       $.ajax({
         url: submit_url,

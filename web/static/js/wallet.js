@@ -72,15 +72,16 @@ export var Wallet = {
 
       refresh_data(); 
       
-      $.getJSON("http://localhost:4000/api/categories/"+user_id, (response) => { 
+      // $.getJSON("/api/categories/"+user_id, (response) => { 
+      $.getJSON("/api/categories/"+user_id, (response) => { 
           vm.categories = response.data;
       });
 
-      $.getJSON("http://localhost:4000/api/currencies/", (response) => { 
+      $.getJSON("api/currencies/", (response) => { 
           vm.currencies = response.data;
       });
 
-      $.getJSON("http://localhost:4000/api/accounts/"+user_id, (response) => { 
+      $.getJSON("/api/accounts/"+user_id, (response) => { 
           vm.accounts = response.data;
       });
 
@@ -93,11 +94,11 @@ export var Wallet = {
       // .receive("error", reason => console.log("failed to join ha", reason))
 
     function refresh_data(){
-      $.getJSON("http://localhost:4000/api/wallets/"+user_id, (response) => { 
+      $.getJSON("/api/wallets/"+user_id, (response) => { 
           vm.data = response.data;
       });
 
-      $.getJSON("http://localhost:4000/api/wallets/resume/"+user_id+"/"+vm.current_month+"/"+vm.current_year, (response) => {
+      $.getJSON("/api/wallets/resume/"+user_id+"/"+vm.current_month+"/"+vm.current_year, (response) => {
           vm.resume = response;
       });
     }
@@ -115,10 +116,10 @@ export var Wallet = {
 
       var csrf = document.querySelector("meta[name=csrf]").content;
 
-      var submit_url="http://localhost:4000/api/wallets";
+      var submit_url="/api/wallets";
       var submit_type='POST';
       if(form_id!=0){
-        submit_url="http://localhost:4000/api/wallets/"+form_id;
+        submit_url="/api/wallets/"+form_id;
         submit_type='PUT';
       }
 
@@ -245,7 +246,7 @@ export var Wallet = {
     });
     
     function delete_data(event){
-      var submit_url="http://localhost:4000/api/accounts/"+vm.selectedId;
+      var submit_url="/api/accounts/"+vm.selectedId;
       var submit_type='DELETE';
       $.ajax({
         url: submit_url,

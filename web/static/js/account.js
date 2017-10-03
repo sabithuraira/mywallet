@@ -42,7 +42,7 @@ export var Account = {
     });
 
     function refresh_data(){
-      $.getJSON("http://localhost:4000/api/accounts/"+user_id, (response) => { 
+      $.getJSON("/api/accounts/"+user_id, (response) => { 
           vm.data = response.data;
       });
     }
@@ -55,10 +55,10 @@ export var Account = {
 
       var csrf = document.querySelector("meta[name=csrf]").content;
 
-      var submit_url="http://localhost:4000/api/accounts";
+      var submit_url="/api/accounts";
       var submit_type='POST';
       if(form_id!=0){
-        submit_url="http://localhost:4000/api/accounts/"+form_id;
+        submit_url="/api/accounts/"+form_id;
         submit_type='PUT';
       }
 
@@ -163,7 +163,7 @@ export var Account = {
     }
     
     function delete_data(event){
-      var submit_url="http://localhost:4000/api/accounts/"+vm.selectedId;
+      var submit_url="/api/accounts/"+vm.selectedId;
       var submit_type='DELETE';
       $.ajax({
         url: submit_url,
