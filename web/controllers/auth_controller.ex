@@ -17,17 +17,19 @@ defmodule Mywallet.AuthController do
         changeset = User.changeset(%User{}, user_params)
 
         if changeset.valid? do
-        new_user = User.generate_password_and_store_user(changeset)
+            new_user = User.generate_password_and_store_user(changeset)
 
-        user = Repo.get_by(User, email: String.downcase(changeset.params["email"]))
-        conn
-            |> Guardian.Plug.sign_in(user)
-            # |> put_session(:current_user, user.id)
-            |> redirect(to: page_path(conn, :index))
+            user = Repo.get_by(User, email: String.downcase(changeset.params["email"]))
+            Mywallet.Account.create_account_if_empty(user.id)
+
+            conn
+                |> Guardian.Plug.sign_in(user)
+                # |> put_session(:current_user, user.id)
+                |> redirect(to: page_path(conn, :index))
         else
-        render conn, "register.html", 
-            layout: {Mywallet.LayoutView, "login.html"},
-            changeset: changeset
+            render conn, "register.html", 
+                layout: {Mywallet.LayoutView, "login.html"},
+                changeset: changeset
         end
     end
 
@@ -41,7 +43,7 @@ defmodule Mywallet.AuthController do
         {:ok, user} ->
             conn
             |> Guardian.Plug.sign_in(user)
-            |> put_flash(:info, "Berhasil Login. Bagikan momen menarik pekerjaan anda! Masukkan foto anda pada FotoKerja")
+            |> put_flash(:info, "Successfully authenticated.")
             |> redirect(to: "/")
         :error ->
             conn
@@ -65,6 +67,8 @@ defmodule Mywallet.AuthController do
     def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
         case Mywallet.Auth.find_or_create(auth) do
         {:ok, user} ->
+            Mywallet.Account.create_account_if_empty(user.id)
+            
             conn
             |> Guardian.Plug.sign_in(user)
             |> put_flash(:info, "Successfully authenticated.")
