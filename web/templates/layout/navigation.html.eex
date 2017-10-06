@@ -27,6 +27,21 @@
             <li><a href="#"><input type="checkbox"> Bank Account B</a></li>
           </ul>
         </li>
+
+
+        <li>
+          <a href="<%= page_path(@conn, :category) %>">
+            <i class="fa fa-money"></i> <span>Category</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="<%= page_path(@conn, :account) %>">
+            <i class="fa fa-money"></i> <span>Manage Account</span>
+          </a>
+        </li>
+
+
         <li>
           <a href="pages/widgets.html">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
