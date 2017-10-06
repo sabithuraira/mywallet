@@ -208,6 +208,8 @@ export var Billing = {
                 vm.trans_account='';
                 vm.form_id=0;
                 vm.form_message="<div class='alert alert-success'>Success updated data</div>";
+
+                refresh_data();
             }.bind(this),
             error: function(xhr, status, err) {
 
