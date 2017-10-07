@@ -1,105 +1,107 @@
 <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-      <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-          <span class="input-group-btn">
-            <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-            </button>
+<aside id="navigation-bar" class="main-sidebar">
+  <!-- sidebar: style can be found in sidebar.less -->
+  <section class="sidebar">
+    <!-- search form -->
+    <form action="#" method="get" class="sidebar-form">
+      <div class="input-group">
+        <input type="text" name="q" class="form-control" placeholder="Search...">
+        <span class="input-group-btn">
+          <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+          </button>
+        </span>
+      </div>
+    </form>
+    <!-- /.search form -->
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <ul class="sidebar-menu">
+      <li class="active treeview">
+        <a href="#">
+          <i class="fa fa-user"></i> <span>Account</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
           </span>
-        </div>
-      </form>
-      <!-- /.search form -->
-      <!-- sidebar menu: : style can be found in sidebar.less -->
-      <ul class="sidebar-menu">
-        <li class="active treeview">
-          <a href="#">
-            <i class="fa fa-user"></i> <span>Account</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="#"><input type="checkbox" checked="checked"> Bank Account A</a></li>
-            <li><a href="#"><input type="checkbox"> Bank Account B</a></li>
-          </ul>
-        </li>
+        </a>
+        <ul class="treeview-menu">
+          <li v-for="row in data">
+            <a href="#"><input type="checkbox">  {{ row.name }}</a>
+          </li>
+        </ul>
+      </li>
 
 
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-clone"></i> <span>Master</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="<%= page_path(@conn, :account) %>"><i class="fa fa-paw"></i> <span>Manage Account</span></a></li>
-            <li><a href="<%= page_path(@conn, :category) %>"><i class="fa fa-list"></i> <span>Category</span></a></li>
-          </ul>
-        </li>
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-clone"></i> <span>Master</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a href="<%= page_path(@conn, :account) %>"><i class="fa fa-paw"></i> <span>Manage Account</span></a></li>
+          <li><a href="<%= page_path(@conn, :category) %>"><i class="fa fa-list"></i> <span>Category</span></a></li>
+        </ul>
+      </li>
 
-        <li>
-          <a href="pages/widgets.html">
-            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-green">new</small>
-            </span>
-          </a>
-        </li>
+      <li>
+        <a href="pages/widgets.html">
+          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+          <span class="pull-right-container">
+            <small class="label pull-right bg-green">new</small>
+          </span>
+        </a>
+      </li>
 
-        <li>
-          <a href="<%= page_path(@conn, :budget) %>">
-            <i class="fa fa-money"></i> <span>Budget</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-red">$ 2.352</small>
-            </span>
-          </a>
-        </li>
+      <li>
+        <a href="<%= page_path(@conn, :budget) %>">
+          <i class="fa fa-money"></i> <span>Budget</span>
+          <span class="pull-right-container">
+            <small class="label pull-right bg-red">$ 2.352</small>
+          </span>
+        </a>
+      </li>
 
-        <li>
-          <a href="<%= page_path(@conn, :wallet) %>">
-            <i class="fa fa-credit-card"></i> <span>Wallet</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-green">$ 1.211</small>
-            </span>
-          </a>
-        </li>
+      <li>
+        <a href="<%= page_path(@conn, :wallet) %>">
+          <i class="fa fa-credit-card"></i> <span>Wallet</span>
+          <span class="pull-right-container">
+            <small class="label pull-right bg-green">$ 1.211</small>
+          </span>
+        </a>
+      </li>
 
-        <li>
-          <a href="<%= page_path(@conn, :billing) %>">
-            <i class="fa fa-credit-card"></i> <span>Billing</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-red">$ 500</small>
-            </span>
-          </a>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-area-chart"></i>
-            <span>Report</span>
-            <span class="pull-right-container">
-              <span class="label label-primary pull-right"></span>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
-            <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Boxed</a></li>
-            <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
-            <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
-          </ul>
-        </li>
+      <li>
+        <a href="<%= page_path(@conn, :billing) %>">
+          <i class="fa fa-credit-card"></i> <span>Billing</span>
+          <span class="pull-right-container">
+            <small class="label pull-right bg-red">$ 500</small>
+          </span>
+        </a>
+      </li>
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-area-chart"></i>
+          <span>Report</span>
+          <span class="pull-right-container">
+            <span class="label label-primary pull-right"></span>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
+          <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Boxed</a></li>
+          <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
+          <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
+        </ul>
+      </li>
 
 
-        <li>
-          <a href="<%= auth_path(@conn, :logout) %>">
-            <i class='fa fa-credit-card'></i> <span>Sign Out</span>
-          </a>
-        </li>
-      </ul>
-    </section>
-    <!-- /.sidebar -->
-  </aside>
+      <li>
+        <a href="<%= auth_path(@conn, :logout) %>">
+          <i class='fa fa-credit-card'></i> <span>Sign Out</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+  <!-- /.sidebar -->
+</aside>
+<script>require("web/static/js/app").App.c_navigation()</script>

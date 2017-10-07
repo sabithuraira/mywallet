@@ -37,12 +37,14 @@ import { Currency } from "./currency";
 import { Category } from "./category";
 import { Wallet } from "./wallet";
 import { Billing } from "./billing";
+import { Navigation } from "./navigation";
 
 Vue.component('my-component', {
   template: '<div>A custom component!</div>'
 })
 
 var App = {
+  c_navigation: function(){ Navigation.run();},
   c_budget: function(){ Budget.run();},
   c_account: function(){ Account.run();},
   c_currency: function(){ Currency.run();},
