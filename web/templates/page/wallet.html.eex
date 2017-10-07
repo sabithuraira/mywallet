@@ -39,7 +39,7 @@
                   <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
                 </div>
                 <!-- /.btn-group -->
-                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+                <button id="btn-refresh" type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
                 <a class="btn btn-default btn-sm toggle-event" href="#" data-id="add"><i class="fa fa-plus"></i> Add Transaction</a>
                
                 <div class="pull-right">
@@ -61,6 +61,7 @@
                         <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
                         </button>
                       </th>
+                      <td></td>
                       <td>Title</td>
                       <td>Category</td>
                       <td>Type</td>
@@ -71,6 +72,7 @@
                   <tbody v-for="row in data">
                     <tr :data-target="'#'+row.id" class="toggle-detail">
                       <td><input type="checkbox"></td>
+                      <td>{{ row.date }}</td>
                       <td>{{ row.note }}</td>
                       <td>{{ row.category_label }}</td>
                       <td>
@@ -85,7 +87,7 @@
                       
                     </tr>
                     <tr>
-                      <td colspan="6" class="hiddentablerow">
+                      <td colspan="7" class="hiddentablerow">
                         <div class="accordian-body collapse" :id="row.id">
                           <div class="row">
                             <div class="col-sm-1 col-xs-6">
@@ -212,7 +214,7 @@
           </div>
 
 
-          <div class='form-group'>
+          <div v-if="isUpdate" class='form-group'>
             <label class='control-sidebar-subheading'>
                 Is Recurring
                 <input id="form-recurring" type='checkbox' class='pull-right' />

@@ -29,6 +29,7 @@ export var Wallet = {
           {id:3, name: "Transfer" },
         ],
         isRecurring: false,
+        isUpdate: true,
         selectedId: 0,
         // month: ["January", "February", "March", "April", "May", "June",
         //   "July", "August", "September", "October", "November", "Desember"],
@@ -55,21 +56,8 @@ export var Wallet = {
     });
 
     let container = document.getElementById("wallet_list")
-    // let socket = new Socket("/socket", {
-    //   params: { token: user_token }
-    // })
-    // socket.connect()
 
-    // let channel = socket.channel("account:2")
-    // channel.on("update", data => {
-    //   refresh_data();
-    // })
-
-    //account channel join
-    // channel.join()
-    //   .receive("ok", resp => { 
     $( document ).ready(function() {
-
       refresh_data(); 
       
       // $.getJSON("/api/categories/"+user_id, (response) => { 
@@ -89,9 +77,6 @@ export var Wallet = {
         vm.year.push(i+1900);
       }
     });
-        
-      // })
-      // .receive("error", reason => console.log("failed to join ha", reason))
 
     function refresh_data(){
       $.getJSON("/api/wallets/"+user_id, (response) => { 
@@ -199,6 +184,7 @@ export var Wallet = {
 
         toggle_title.html("");
         if(dataid=='add'){
+          vm.isUpdate=true;
           toggle_title.append("Add Transaction");
 
           $('#form-id').val(0);
@@ -208,6 +194,7 @@ export var Wallet = {
           vm.selectedId=0;
         }
         else{
+          vm.isUpdate=false;
           toggle_title.append("Update Transaction");
           var row_id = $(this).attr('id').substring(4);
           var data = vm.data.find(x => x.id == row_id)
@@ -224,6 +211,10 @@ export var Wallet = {
         }
       
     });
+
+    // $('body').on("click",'#btn-refresh', function (e) {
+    //   refresh_data();
+    // });
 
     $('.toggle-hide').on("click", function () {
       if (o.slide) {

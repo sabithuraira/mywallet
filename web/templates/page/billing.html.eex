@@ -58,6 +58,7 @@
                         <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
                         </button>
                       </th>
+                      <td></td>
                       <td>Title</td>
                       <td>Category</td>
                       <td>Billing</td>
@@ -69,6 +70,7 @@
                    <tbody v-for="row in data">
                     <tr>
                       <td><input type="checkbox"></td>
+                      <td>{{ row.date }}</td>
                       <td>{{ row.note }}</td>
                       <td>{{ row.category_label }}</td>
                       <td>{{ row.currency }} {{ row.amount }}</td>
@@ -143,7 +145,7 @@
               </div>
             </div>
 
-            <div class='form-group'>
+            <div v-if="isUpdate"  class='form-group'>
               <label class='control-sidebar-subheading'>
                 Recurring
                 <input id="form-recurring" type='checkbox' class='pull-right'>

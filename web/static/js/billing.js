@@ -28,6 +28,7 @@ export var Billing = {
         isAddTransaction: false,
         isDetail: false,
         isRecurring: false,
+        isUpdate: true,
 
         form_message:'',
         form_id:0,
@@ -64,20 +65,6 @@ export var Billing = {
     
 
     let container = document.getElementById("billing_list")
-    // let socket = new Socket("/socket", {
-    //   params: { token: user_token }
-    // })
-    // socket.connect()
-
-    // let channel = socket.channel("account:2")
-    // channel.on("update", data => {
-    //   refresh_data();
-    // })
-
-    //account channel join
-    // channel.join()
-    //   .receive("ok", resp => { 
-
 
       $(document).ready(function() {
         refresh_data(); 
@@ -257,9 +244,11 @@ export var Billing = {
           vm.isDetail=false;
 
           if($(this).attr('id')=='add'){
+            vm.isUpdate=true;
             toggle_title.append("Add Billing");
           }
           else{
+            vm.isUpdate=false;
             toggle_title.append("Update Billing");
             var row_id = $(this).attr('id').substr(6);
             var data = vm.data.find(x => x.id == row_id)
