@@ -1,4 +1,5 @@
 import {Socket} from "phoenix"
+import {GlobalData} from "./globaldata"
 
 export var Wallet = {
   run: function(){
@@ -190,7 +191,7 @@ export var Wallet = {
           $('#form-id').val(0);
           $('#form-note').val('');
           $('#form-amount').val('');
-          $('#form-date').val('');
+          $('#form-date').val(GlobalData.currentDate());
           vm.selectedId=0;
         }
         else{

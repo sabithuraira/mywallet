@@ -1,4 +1,5 @@
 import {Socket} from "phoenix"
+import {GlobalData} from "./globaldata"
 
 export var Billing = {
   run: function(){
@@ -245,6 +246,7 @@ export var Billing = {
 
           if($(this).attr('id')=='add'){
             vm.isUpdate=true;
+            vm.form_date=GlobalData.currentDate();
             toggle_title.append("Add Billing");
           }
           else{
