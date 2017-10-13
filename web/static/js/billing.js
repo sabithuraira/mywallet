@@ -38,6 +38,8 @@ export var Billing = {
         form_category:'',
         form_currency:'',
         form_date:'',
+        recurring_cycle:'',
+        recurring_enddate:'',
         
         trans_date:'',
         trans_amount:'',

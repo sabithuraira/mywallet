@@ -83,6 +83,7 @@
                       <td class="mailbox-attachment">{{ row.currency }} {{ row.amount }}</td>
                       <td>
                         <a :id="'data'+row.id" class="btn btn-default btn-sm toggle-event" href="#" data-id="update"><i class="fa fa-plus-square-o"></i> Update</a>
+                        <a :data-id="row.id" class="btn btn-danger btn-sm delete-data" href="#"><i class="fa fa-remove"></i> Delete</a>
                       </td>
                       
                     </tr>
@@ -149,6 +150,7 @@
 
 
       </div>
+      <delete-form></delete-form>
     </section>
 
   <aside class="control-sidebar control-sidebar-light">

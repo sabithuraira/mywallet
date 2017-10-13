@@ -226,7 +226,8 @@ export var Wallet = {
     });
 
     $('body').on('click','.delete-data', function(e) {
-        e.preventDefault();
+        e.stopPropagation();
+        console.log("enter");
         vm.selectedId = $(this).attr('data-id');
         $('#myModal').modal('show');
     });
@@ -238,7 +239,7 @@ export var Wallet = {
     });
     
     function delete_data(event){
-      var submit_url="/api/accounts/"+vm.selectedId;
+      var submit_url="/api/wallets/"+vm.selectedId;
       var submit_type='DELETE';
       $.ajax({
         url: submit_url,
