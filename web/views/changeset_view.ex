@@ -16,4 +16,12 @@ defmodule Mywallet.ChangesetView do
     # as a JSON object. So we just pass it forward.
     %{errors: translate_errors(changeset)}
   end
+
+
+  def render("message.json", %{status: status, msg: msg}) do
+    %{
+        status: status, 
+        message: msg
+    }
+  end
 end

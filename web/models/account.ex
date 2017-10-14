@@ -23,9 +23,10 @@ defmodule Mywallet.Account do
   end
 
   def create_account_if_empty(id) do
+    # get all account data from current user
     result = Repo.all(from a in Account, select: count(a.id), where: a.created_by == ^id)
-    # IO.puts "oii"
-    # IO.puts inspect(result)
+
+    # check if data exist
     case Enum.at(result,0) do
       0 -> 
         Repo.insert!(%Account{

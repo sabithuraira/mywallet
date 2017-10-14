@@ -2,6 +2,7 @@ defmodule Mywallet.BillingController do
   use Mywallet.Web, :controller
 
   alias Mywallet.Billing
+  alias Mywallet.Wallet
 
   # def index(conn, _params) do
   #   billings = Repo.all(Billing)
@@ -26,15 +27,6 @@ defmodule Mywallet.BillingController do
   end
 
   def show(conn, %{"id" => id}) do
-    # query = from u in Billing,
-    #            where: u.inserted_by == ^id,
-    #            order_by: [desc: :id],
-    #            select: u
-    # billings = Repo.all(query)
-    #           |> Repo.preload(:category_rel)
-
-    # render(conn, "index.json", billings: billings)
-
     billings = Billing.list_billing(id)
 
     render(conn, "index.json", billings: billings)
@@ -63,10 +55,22 @@ defmodule Mywallet.BillingController do
   def delete(conn, %{"id" => id}) do
     billing = Repo.get!(Billing, id)
 
-    # Here we use delete! (with a bang) because we expect
-    # it to always work (and if it does not, it will raise).
-    Repo.delete!(billing)
-
-    send_resp(conn, :no_content, "")
+    # query paid off data from wallet
+    paid_off_data = Repo.all(from a in Wallet, select: count(a.id), where: a.billing_id == ^id)
+    
+    case Enum.at(paid_off_data,0) do
+      0 ->
+        # if have no data for paid off, just delete it
+        Repo.delete!(billing)
+        # send_resp(conn, :no_content, "")
+        conn
+          |> put_status(:ok)
+          |> render(Mywallet.ChangesetView, "message.json", %{ status: :ok, msg: "Success"})
+      _ ->
+        conn
+          |> put_status(:ok)
+          |> render(Mywallet.ChangesetView, "message.json", %{ status: :ok, msg: "Cant completed this action. There's paid off data for this bill"})
+    end
   end
+
 end

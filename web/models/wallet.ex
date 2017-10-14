@@ -16,6 +16,7 @@ defmodule Mywallet.Wallet do
 
     timestamps()
 
+    belongs_to :billing_rel, Mywallet.Billing
     belongs_to :category_rel, Mywallet.Category, foreign_key: :category
     belongs_to :account_rel, Mywallet.Account, foreign_key: :account
   end

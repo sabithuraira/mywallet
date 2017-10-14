@@ -41,7 +41,6 @@ defmodule Mywallet.BillingView do
       category: billing.category,
       amount: billing.amount,
       currency: billing.currency,
-      # date: billing.date,
       source_date: Timex.format!(billing.date, "{0M}/{0D}/{YYYY}"),
       date: Timex.format!(billing.date, "{D} {Mfull} {YYYY}"),
       inserted_by: billing.inserted_by,

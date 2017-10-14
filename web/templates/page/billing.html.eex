@@ -25,9 +25,10 @@
       <!-- /.row -->
 
       <div class="row">
-
-
         <div class="col-md-12">
+
+          <div id="flash-message"></div>
+
           <div class="box box-info">
               <div class="mailbox-controls">
                 <!-- Check all button -->
@@ -81,7 +82,7 @@
                       <td>
                         <a :id="'update'+row.id" class="btn btn-default btn-sm toggle-event" href="#" data-id="adddata"><i class="fa fa-plus-square-o"></i> Update</a>
                         <a :id="'paying'+row.id" class="btn btn-default btn-sm toggle-event" href="#" data-id="addtransaction"><i class="fa fa-plus-square-o"></i> Add Paying</a>
-                        <a :id="'delete'+row.id" class="btn btn-default btn-sm toggle-event" href="#" data-id="detail"><i class="fa fa-search"></i> Detail</a>
+                        <a :id="'detail'+row.id" class="btn btn-default btn-sm toggle-event" href="#" data-id="detail"><i class="fa fa-search"></i> Detail</a>
                       </td>
                       
                     </tr>
@@ -92,6 +93,7 @@
           </div>
         </div>
       </div>
+      <delete-form></delete-form>
     </section>
     <!-- /.content -->
 
@@ -181,6 +183,7 @@
 
           <div class='box-footer'>
             <button type='submit' class='btn btn-primary'>Submit</button>
+            <a class="btn btn-danger delete-data" href="#"><i class="fa fa-remove"></i> Delete</a>
           </div>
         </form>
       </div>

@@ -304,7 +304,6 @@ export var Billing = {
 
     $('body').on('click','.delete-data', function(e) {
         e.preventDefault();
-        vm.form_id = $(this).attr('data-id');
         $('#myModal').modal('show');
     });
 
@@ -323,8 +322,10 @@ export var Billing = {
       vm.form_category='';
       vm.form_currency='';
     }
-    
+
+    var flash_message=$("#flash-message");
     function delete_data(event){
+      flash_message.html("");
       var submit_url="/api/billings/"+vm.form_id;
       var submit_type='DELETE';
       $.ajax({
@@ -337,6 +338,12 @@ export var Billing = {
         success: function(data) { 
           refresh_data();
           set_form_empty();
+          if(data.message=='Success'){
+            flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success</b></p></div>');
+          }
+          else{
+            flash_message.html('<div class="box box-widget"><p class="text-red" style="text-align:center !important;padding: 5px;"><b>'+ data.message +'</b></p></div>');
+          }
         }.bind(this),
         error: function(xhr, status, err) {
             console.log(xhr.responseText)
