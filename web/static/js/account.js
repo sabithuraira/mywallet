@@ -39,6 +39,7 @@ export var Account = {
       var form_note=$('#form-note').val();
 
       var csrf = document.querySelector("meta[name=csrf]").content;
+      loader.css("display", "block");
 
       var submit_url="/api/accounts";
       var submit_type='POST';
@@ -69,7 +70,8 @@ export var Account = {
               refresh_data();
      
             set_form_empty();
-            $('#form-message').html("<div class='alert alert-success'>Success updated data</div>");
+            loader.css("display", "none");
+            flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success updated data</b></p></div>');
         }.bind(this),
         error: function(xhr, status, err) {
           var message="<div class='alert alert-danger'>";
@@ -80,6 +82,7 @@ export var Account = {
           }
           message+= "</div>";
 
+          loader.css("display", "none");
           $('#form-message').html(message);
         }.bind(this)
       });
@@ -100,6 +103,7 @@ export var Account = {
         }
 
         set_form_empty();
+        flash_message.html("");
         toggle_title.html('');
 
         //set value if update, no when add new data
@@ -128,6 +132,7 @@ export var Account = {
 
     $('body').on('click','.delete-data', function(e) {
         e.preventDefault();
+        flash_message.html("");
         vm.selectedId = $(this).attr('data-id');
         $('#myModal').modal('show');
     });
@@ -146,10 +151,15 @@ export var Account = {
       $('#form-name').val('');
       $('#form-note').val('');
     }
+
+    var flash_message=$("#flash-message");
+    var loader=$(".loader");
     
     function delete_data(event){
       var submit_url="/api/accounts/"+vm.selectedId;
       var submit_type='DELETE';
+      loader.css("display", "block");
+
       $.ajax({
         url: submit_url,
         dataType: 'json',
@@ -161,8 +171,11 @@ export var Account = {
           vm.selectedId=0;
           refresh_data();
           set_form_empty();
+          loader.css("display", "none");
+          flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success deleted data</b></p></div>');
         }.bind(this),
         error: function(xhr, status, err) {
+            flash_message.html('<div class="box box-widget"><p class="text-red" style="text-align:center !important;padding: 5px;"><b>Failed delete data</b></p></div>');
             console.log(xhr.responseText)
         }.bind(this)
       });
