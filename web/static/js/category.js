@@ -19,18 +19,6 @@ export var Category = {
         }
       }
     });
-    
-    // let container = document.getElementById("category_list")
-    // let socket = new Socket("/socket", {
-    //   params: { token: user_token }
-    // })
-    // socket.connect()
-
-    // let channel = socket.channel("account:2")
-    //account channel join
-    // channel.join()
-    //   .receive("ok", resp => { refresh_data(); })
-    //   .receive("error", reason => console.log("failed to join ha", reason))
 
     $(document).ready(function() {
       refresh_data();
@@ -49,6 +37,7 @@ export var Category = {
       var form_note=$('#form-note').val();
 
       var csrf = document.querySelector("meta[name=csrf]").content;
+      loader.css("display", "block");
 
       var submit_url="/api/categories";
       var submit_type='POST';
@@ -80,7 +69,9 @@ export var Category = {
               refresh_data();
             
             set_form_empty();
-            $('#form-message').html("<div class='alert alert-success'>Success updated data</div>");
+
+            loader.css("display", "none");
+            flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success updated data</b></p></div>');
         }.bind(this),
         error: function(xhr, status, err) {
             var message="<div class='alert alert-danger'>";
@@ -91,6 +82,7 @@ export var Category = {
             }
             message+= "</div>";
 
+            loader.css("display", "none");
             $('#form-message').html(message);
         }.bind(this)
       });
@@ -104,6 +96,7 @@ export var Category = {
     //when open sidebar form
     $('body').on("click",'.toggle-event', function (e) {
       e.preventDefault()
+      flash_message.html("");
 
         if (o.slide) {
           sidebar.addClass('control-sidebar-open');
@@ -140,6 +133,7 @@ export var Category = {
 
     $('body').on('click','.delete-data', function(e) {
         e.preventDefault();
+        flash_message.html("");
         vm.selectedId = $(this).attr('data-id');
         $('#myModal').modal('show');
     });
@@ -158,8 +152,12 @@ export var Category = {
       $('#form-name').val('');
       $('#form-note').val('');
     }
+
+    var flash_message=$("#flash-message");
+    var loader=$(".loader");
     
     function delete_data(event){
+      loader.css("display", "block");
       var submit_url="/api/categories/"+vm.selectedId;
       var submit_type='DELETE';
       $.ajax({
@@ -173,8 +171,13 @@ export var Category = {
           vm.selectedId=0;
           refresh_data();
           set_form_empty();
+
+          loader.css("display", "none");
+          flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success deleted data</b></p></div>');
         }.bind(this),
         error: function(xhr, status, err) {
+          loader.css("display", "none");
+          flash_message.html('<div class="box box-widget"><p class="text-red" style="text-align:center !important;padding: 5px;"><b>Failed deleted data</b></p></div>');
             console.log(xhr.responseText)
         }.bind(this)
       });

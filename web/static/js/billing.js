@@ -142,7 +142,7 @@ export var Billing = {
             else
               refresh_data();
             
-            set_form_empty()
+            set_form_empty();
             loader.css("display", "none");
             flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success updated data</b></p></div>');
         }.bind(this),
