@@ -183,7 +183,7 @@
 
           <div class='box-footer'>
             <button type='submit' class='btn btn-primary'>Submit</button>
-            <a class="btn btn-danger delete-data" href="#"><i class="fa fa-remove"></i> Delete</a>
+            <a v-if="!isUpdate" class="btn btn-danger delete-data" href="#"><i class="fa fa-remove"></i> Delete</a>
           </div>
         </form>
       </div>

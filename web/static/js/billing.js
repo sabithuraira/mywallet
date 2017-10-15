@@ -142,7 +142,7 @@ export var Billing = {
               refresh_data();
             
             set_form_empty()
-            vm.form_message="<div class='alert alert-success'>Success updated data</div>";
+            flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success updated data</b></p></div>');
         }.bind(this),
         error: function(xhr, status, err) {
           var message="<div class='alert alert-danger'>";
@@ -197,8 +197,8 @@ export var Billing = {
                 vm.trans_currency='';
                 vm.trans_account='';
                 vm.form_id=0;
-                vm.form_message="<div class='alert alert-success'>Success updated data</div>";
-
+                flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success updated data</b></p></div>');
+                
                 refresh_data();
             }.bind(this),
             error: function(xhr, status, err) {
@@ -231,6 +231,7 @@ export var Billing = {
 
     $('body').on("click", '.toggle-event', function (e) {
         e.preventDefault();
+        flash_message.html("");
         if (o.slide) {
           sidebar.addClass('control-sidebar-open');
         } else {
@@ -295,6 +296,7 @@ export var Billing = {
     });
 
     $('.toggle-hide').on("click", function () {
+      flash_message.html("");
       if (o.slide) {
         sidebar.removeClass('control-sidebar-open');
       } else {
@@ -304,11 +306,13 @@ export var Billing = {
 
     $('body').on('click','.delete-data', function(e) {
         e.preventDefault();
+        flash_message.html("");
         $('#myModal').modal('show');
     });
 
     $('body').on('click','#btn-yes', function(e) {
         e.preventDefault();
+        flash_message.html("");
         delete_data(e)
         $('#myModal').modal('hide');
     });
@@ -325,7 +329,6 @@ export var Billing = {
 
     var flash_message=$("#flash-message");
     function delete_data(event){
-      flash_message.html("");
       var submit_url="/api/billings/"+vm.form_id;
       var submit_type='DELETE';
       $.ajax({
