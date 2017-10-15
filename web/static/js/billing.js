@@ -104,6 +104,7 @@ export var Billing = {
     $('body').on('submit',"#data-form", function () {
       vm.form_date     =$('#form-date').val();
 
+      loader.css("display", "block");
       var d=new Date(vm.form_date);
       var month=d.getMonth()+1;
       var date_convert=d.getFullYear()+"-"+(month>9 ? '' : '0') + month+"-"+(d.getDate()>9 ? '' : '0') + d.getDate();
@@ -142,6 +143,7 @@ export var Billing = {
               refresh_data();
             
             set_form_empty()
+            loader.css("display", "none");
             flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success updated data</b></p></div>');
         }.bind(this),
         error: function(xhr, status, err) {
@@ -153,6 +155,7 @@ export var Billing = {
           }
           message+= "</div>";
 
+          loader.css("display", "none");
           vm.form_message=message;
         }.bind(this)
       });
@@ -162,6 +165,8 @@ export var Billing = {
     //submit add paying form
     $('body').on('submit',"#transaction-form", function () {
         var csrf = document.querySelector("meta[name=csrf]").content;
+        
+        loader.css("display", "block");
 
         vm.trans_date =$('#trans-date').val();
         var d=new Date(vm.trans_date);
@@ -197,6 +202,7 @@ export var Billing = {
                 vm.trans_currency='';
                 vm.trans_account='';
                 vm.form_id=0;
+                loader.css("display", "none");
                 flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success updated data</b></p></div>');
                 
                 refresh_data();
@@ -211,6 +217,7 @@ export var Billing = {
               }
               message+= "</div>";
 
+              loader.css("display", "none");
               vm.form_message=message;
             }.bind(this)
         });
@@ -328,9 +335,12 @@ export var Billing = {
     }
 
     var flash_message=$("#flash-message");
+    var loader=$(".loader");
+
     function delete_data(event){
       var submit_url="/api/billings/"+vm.form_id;
       var submit_type='DELETE';
+      loader.css("display", "block");
       $.ajax({
         url: submit_url,
         dataType: 'json',
@@ -341,6 +351,7 @@ export var Billing = {
         success: function(data) { 
           refresh_data();
           set_form_empty();
+          loader.css("display", "none");
           if(data.message=='Success'){
             flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success</b></p></div>');
           }
@@ -349,6 +360,7 @@ export var Billing = {
           }
         }.bind(this),
         error: function(xhr, status, err) {
+          loader.css("display", "none");
             console.log(xhr.responseText)
         }.bind(this)
       });
