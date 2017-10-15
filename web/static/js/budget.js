@@ -5,9 +5,9 @@ export var Budget = {
     var user_token = document.querySelector("meta[name=channel_token]").content;
     var user_id = document.querySelector("meta[name=channel_id]").content;
 
-    var monthNames = ["January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
+    // var monthNames = ["January", "February", "March", "April", "May", "June",
+    //   "July", "August", "September", "October", "November", "December"
+    // ];
 
     var vm = new Vue({  
       el: "#budget_list",
@@ -23,7 +23,6 @@ export var Budget = {
         currencies: [],
         accounts:[],
         transactions:[],
-        // selectedId: 0,
         isAdd: false,
         isAddTransaction: false,
         isDetail: false,
@@ -42,10 +41,9 @@ export var Budget = {
         trans_amount:'',
         trans_currency: '',
         trans_account:'',
-        trans_note:'',
-
-        // month: ["January", "February", "March", "April", "May", "June",
-        //   "July", "August", "September", "October", "November", "Desember"],
+        trans_note:'',        
+        month: ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "Desember"],
         year: [],
       },
       methods: {
@@ -61,26 +59,25 @@ export var Budget = {
           this.data[data_index].category = obj_data.category; 
           this.data[data_index].category_label = obj_data.category_label; 
           this.data[data_index].currency = obj_data.currency;
+
+          // when you update a budget data, it should be set
+          // new information about expense and diff value
+          // but it not ready for now
+          // FIX IT LATER!!
+          
+          // this.data[data_index].detail_total = obj_data.detail_total;
+          // this.data[data_index].detail_diff = obj_data.detail_diff;
         },
       },
       computed: {
         currentLabelMonth: function () {
-          return monthNames[this.current_month]
+          return this.month[this.current_month]
         }
       }
     });
     
 
     let container = document.getElementById("budget_list")
-    // let socket = new Socket("/socket", {
-    //   params: { token: user_token }
-    // })
-    // socket.connect()
-
-    // let channel = socket.channel("account:2")
-
-    // channel.join()
-    //   .receive("ok", resp => { 
 
       $(document).ready(function() {
         refresh_data(); 
@@ -101,9 +98,6 @@ export var Budget = {
           vm.year.push(i+1900);
         }
       });
-      // })
-      // .receive("error", reason => console.log("failed to join ha", reason))
-
 
     function refresh_data(){
       $.getJSON("/api/budgets/"+user_id, (response) => { 
@@ -118,6 +112,7 @@ export var Budget = {
     //click button submit
     $('body').on('submit',"#data-form", function () {
       var csrf = document.querySelector("meta[name=csrf]").content;
+      loader.css("display", "block");
 
       var submit_url="/api/budgets";
       var submit_type='POST';
@@ -152,7 +147,9 @@ export var Budget = {
               refresh_data();
 
             set_form_empty();
-            vm.form_message="<div class='alert alert-success'>Success updated data</div>";
+
+            loader.css("display", "none");
+            flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success updated data</b></p></div>');
         }.bind(this),
         error: function(xhr, status, err) {
             // console.log(xhr.responseText)
@@ -164,6 +161,7 @@ export var Budget = {
             }
             message+= "</div>";
 
+            loader.css("display", "none");
             vm.form_message=message;
         }.bind(this)
       });
@@ -174,6 +172,7 @@ export var Budget = {
     $('body').on('submit',"#transaction-form", function () {
         var csrf = document.querySelector("meta[name=csrf]").content;
 
+        loader.css("display", "block");
         vm.trans_date =$('#trans-date').val();
         var d=new Date(vm.trans_date);
         var month=d.getMonth()+1;
@@ -208,7 +207,11 @@ export var Budget = {
                 vm.trans_currency='';
                 vm.trans_account='';
                 vm.form_id=0;
-                vm.form_message="<div class='alert alert-success'>Success add transaction, check it from 'Detail' button!</div>";
+
+                refresh_data();
+
+                loader.css("display", "none");
+                flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success add transaction, check it from \'Detail\' button!</b></p></div>');
             }.bind(this),
             error: function(xhr, status, err) {
               var message="<div class='alert alert-danger'>";
@@ -219,6 +222,7 @@ export var Budget = {
               }
               message+= "</div>";
 
+              loader.css("display", "none");
               vm.form_message=message;
             }.bind(this)
         });
@@ -235,6 +239,7 @@ export var Budget = {
 
     $('body').on("click",'.toggle-event', function (e) {
         e.preventDefault();
+        flash_message.html("");
         if (o.slide) {
           sidebar.addClass('control-sidebar-open');
         } else {
@@ -294,6 +299,7 @@ export var Budget = {
     });
 
     $('.toggle-hide').on("click", function () {
+      flash_message.html("");
       if (o.slide) {
         sidebar.removeClass('control-sidebar-open');
       } else {
@@ -303,12 +309,14 @@ export var Budget = {
 
     $('body').on('click','.delete-data', function(e) {
         e.preventDefault();
+        flash_message.html("");
         vm.form_id = $(this).attr('data-id');
         $('#myModal').modal('show');
     });
 
     $('body').on('click','#btn-yes', function(e) {
         e.preventDefault();
+        loader.css("display", "block");
         delete_data(e)
         $('#myModal').modal('hide');
     });
@@ -323,10 +331,14 @@ export var Budget = {
       vm.form_amount='';
       vm.form_note='';
     }
+
+    var flash_message=$("#flash-message");
+    var loader=$(".loader");
     
     function delete_data(event){
       var submit_url="/api/accounts/"+vm.form_id;
       var submit_type='DELETE';
+      loader.css("display", "block");
       $.ajax({
         url: submit_url,
         dataType: 'json',
@@ -334,13 +346,17 @@ export var Budget = {
         headers: {
             "X-CSRF-TOKEN": document.querySelector("meta[name=csrf]").content
         },
-        success: function(data) { 
-          // vm.selectedId=0;
+        success: function(data) {
           refresh_data();
           set_form_empty();
+          
+          loader.css("display", "none");
+          flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success deleted data</b></p></div>');
         }.bind(this),
         error: function(xhr, status, err) {
-            console.log(xhr.responseText)
+          loader.css("display", "none");
+          flash_message.html('<div class="box box-widget"><p class="text-red" style="text-align:center !important;padding: 5px;"><b>Fail deleted data</b></p></div>');
+          console.log(xhr.responseText)
         }.bind(this)
       });
     }

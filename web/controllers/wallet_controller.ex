@@ -33,7 +33,7 @@ defmodule Mywallet.WalletController do
                order_by: [desc: :date],
                select: u
     wallets = Repo.all(query)
-              |> Repo.preload([:category_rel, :account_rel])
+              |> Repo.preload([:category_rel, :account_rel, :billing_rel])
 
     render(conn, "index.json", wallets: wallets)
   end

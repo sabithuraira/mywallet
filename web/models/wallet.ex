@@ -12,11 +12,11 @@ defmodule Mywallet.Wallet do
     field :type, :integer
     field :inserted_by, :integer
     field :updated_by, :integer
-    field :billing_id, :integer
+    # field :billing_id, :integer
 
     timestamps()
 
-    belongs_to :billing_rel, Mywallet.Billing
+    belongs_to :billing_rel, Mywallet.Billing, foreign_key: :billing_id
     belongs_to :category_rel, Mywallet.Category, foreign_key: :category
     belongs_to :account_rel, Mywallet.Account, foreign_key: :account
   end

@@ -47,7 +47,7 @@ defmodule Mywallet.BudgetView do
         note:       budget.note,
         created_by: budget.created_by,
         updated_by: budget.updated_by,
-        category_label: budget.category_rel.name,
+        category_label: budget.category_rel.name
     }
   end
 end
