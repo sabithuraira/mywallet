@@ -22,21 +22,7 @@ export var Currency = {
     
 
     let container = document.getElementById("currency_list")
-    // let socket = new Socket("/socket", {
-    //   params: { token: user_token }
-    // })
-    // socket.connect()
-
-    // let channel = socket.channel("account:2")
-    // // channel.on("update", data => {
-    // //   refresh_data();
-    // // })
-
-    // //account channel join
-    // channel.join()
-    //   .receive("ok", resp => { refresh_data(); })
-    //   .receive("error", reason => console.log("failed to join ha", reason))
-
+    
     $(document).ready(function() {
       refresh_data();
     });
@@ -55,6 +41,7 @@ export var Currency = {
       var form_note=$('#form-note').val();
 
       var csrf = document.querySelector("meta[name=csrf]").content;
+      loader.css("display", "block");
 
       var submit_url="/api/currencies";
       var submit_type='POST';
@@ -85,7 +72,8 @@ export var Currency = {
               refresh_data();
 
             set_form_empty();
-            $('#form-message').html("<div class='alert alert-success'>Success updated data</div>");
+            loader.css("display", "none");
+            flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success updated data</b></p></div>');
         }.bind(this),
         error: function(xhr, status, err) {
             var message="<div class='alert alert-danger'>";
@@ -96,6 +84,7 @@ export var Currency = {
             }
             message+= "</div>";
 
+            loader.css("display", "none");
             $('#form-message').html(message);
         }.bind(this)
       });
@@ -110,6 +99,7 @@ export var Currency = {
     //when open sidebar form
     $('body').on("click",'.toggle-event', function (e) {
       e.preventDefault();
+      flash_message.html("");
       if (o.slide) {
         sidebar.addClass('control-sidebar-open');
       } else {
@@ -146,6 +136,7 @@ export var Currency = {
 
     $('body').on('click','.delete-data', function(e) {
         e.preventDefault();
+        flash_message.html("");
         vm.selectedId = $(this).attr('data-id');
         $('#myModal').modal('show');
     });
@@ -165,7 +156,11 @@ export var Currency = {
       $('#form-note').val('');
     }
     
+    var flash_message=$("#flash-message");
+    var loader=$(".loader");
+
     function delete_data(event){
+      loader.css("display", "block");
       var submit_url="/api/currencies/"+vm.selectedId;
       var submit_type='DELETE';
       $.ajax({
@@ -179,8 +174,13 @@ export var Currency = {
           vm.selectedId=0;
           refresh_data();
           set_form_empty();
+          loader.css("display", "none");
+          flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success deleted data</b></p></div>');
+          
         }.bind(this),
         error: function(xhr, status, err) {
+          loader.css("display", "none");
+          flash_message.html('<div class="box box-widget"><p class="text-red" style="text-align:center !important;padding: 5px;"><b>Fail delete data</b></p></div>');
             console.log(xhr.responseText)
         }.bind(this)
       });

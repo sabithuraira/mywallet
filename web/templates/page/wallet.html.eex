@@ -164,6 +164,7 @@
     </div>
     <div class="tab-content" id="right-sidebar">
 
+      <div v-html="form_message"></div>
       <form role='form' id='data-form'>
         <div>
 

@@ -32,6 +32,7 @@ export var Wallet = {
         isRecurring: false,
         isUpdate: true,
         selectedId: 0,
+        form_message:'',
         // month: ["January", "February", "March", "April", "May", "June",
         //   "July", "August", "September", "October", "November", "Desember"],
         year: [],
@@ -101,6 +102,7 @@ export var Wallet = {
       var form_type     =$('#form-type').val();
 
       var csrf = document.querySelector("meta[name=csrf]").content;
+      loader.css("display", "block");
 
       var submit_url="/api/wallets";
       var submit_type='POST';
@@ -143,8 +145,21 @@ export var Wallet = {
             $('#form-note').val('');
             $('#form-amount').val('');
             $('#form-date').val('');
+
+            loader.css("display", "none");
+            flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success updated data</b></p></div>');
         }.bind(this),
         error: function(xhr, status, err) {
+          var message="<div class='alert alert-danger'>";
+
+          var list_error=xhr.responseJSON.errors;
+          for(var error in list_error){
+              message+=error+": "+list_error[error]+"</br>";
+          }
+          message+= "</div>";
+
+          loader.css("display", "none");
+          vm.form_message=message;
             console.log(xhr.responseText)
         }.bind(this)
       });
@@ -167,6 +182,7 @@ export var Wallet = {
     
     //colapse detail transaction
     $('body').on("click",'.toggle-detail', function (e) {
+      flash_message.html("");
       var target = $(this).data('target');
       $(target).collapse('toggle')
     });
@@ -174,6 +190,7 @@ export var Wallet = {
     $('body').on("click",'.toggle-event', function (e) {
       //prevent run this code by parent-DOM (collapse detail function)
       e.stopPropagation();
+      flash_message.html("");
 
         if (o.slide) {
           sidebar.addClass('control-sidebar-open');
@@ -227,7 +244,7 @@ export var Wallet = {
 
     $('body').on('click','.delete-data', function(e) {
         e.stopPropagation();
-        console.log("enter");
+        flash_message.html("");
         vm.selectedId = $(this).attr('data-id');
         $('#myModal').modal('show');
     });
@@ -238,9 +255,13 @@ export var Wallet = {
         $('#myModal').modal('hide');
     });
     
+    var flash_message=$("#flash-message");
+    var loader=$(".loader");
+
     function delete_data(event){
       var submit_url="/api/wallets/"+vm.selectedId;
       var submit_type='DELETE';
+      loader.css("display", "block");
       $.ajax({
         url: submit_url,
         dataType: 'json',
@@ -251,8 +272,12 @@ export var Wallet = {
         success: function(data) { 
           vm.selectedId=0;
           refresh_data();
+          loader.css("display", "none");
+          flash_message.html('<div class="box box-widget"><p class="text-green" style="text-align:center !important;padding: 5px;"><b>Success deleted data</b></p></div>');
         }.bind(this),
         error: function(xhr, status, err) {
+          loader.css("display", "none");
+          flash_message.html('<div class="box box-widget"><p class="text-red" style="text-align:center !important;padding: 5px;"><b>Fail deleted data</b></p></div>');
             console.log(xhr.responseText)
         }.bind(this)
       });

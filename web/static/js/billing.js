@@ -319,7 +319,6 @@ export var Billing = {
 
     $('body').on('click','#btn-yes', function(e) {
         e.preventDefault();
-        flash_message.html("");
         delete_data(e)
         $('#myModal').modal('hide');
     });
