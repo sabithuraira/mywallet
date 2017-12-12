@@ -38,6 +38,18 @@ defmodule Mywallet.WalletController do
     render(conn, "index.json", wallets: wallets)
   end
 
+  def toxml(conn, %{"id" => id}) do
+    query = from u in Wallet,
+               where: u.inserted_by == ^id,
+               order_by: [desc: :date],
+               select: u
+    wallets = Repo.all(query)
+              |> Repo.preload([:category_rel, :account_rel, :billing_rel])
+
+    # wallets |> XmlBuilder.generate
+    {:person, %{id: 12345}, "Josh"} |> XmlBuilder.generate
+  end
+
   def show_billing(conn, %{"id" => id}) do
     query = from u in Wallet,
                where: u.billing_id == ^id,

@@ -234,6 +234,12 @@ export var Wallet = {
     //   refresh_data();
     // });
 
+    $('#btn-toxml').on("click", function () {
+      $.getJSON("/api/wallets/toxml/"+user_id, (response) => { 
+          vm.data = response.data;
+      });
+    });
+
     $('.toggle-hide').on("click", function () {
       if (o.slide) {
         sidebar.removeClass('control-sidebar-open');
