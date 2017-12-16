@@ -78,6 +78,7 @@ defmodule Mywallet.WalletController do
 
     conn
       |> put_resp_content_type("text/xml")
+      |> put_resp_header("content-disposition", "attachment; filename=\"datas.xml\"")
       |> send_resp(200, xml_file)
   end
 
