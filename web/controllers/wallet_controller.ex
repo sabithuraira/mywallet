@@ -4,6 +4,8 @@ defmodule Mywallet.WalletController do
   alias Mywallet.Wallet
   alias Mywallet.Category
   alias Mywallet.Budget
+  
+  import XmlBuilder
 
   # def index(conn, _params) do
   #   wallets = Repo.all(Wallet)
@@ -46,8 +48,37 @@ defmodule Mywallet.WalletController do
     wallets = Repo.all(query)
               |> Repo.preload([:category_rel, :account_rel, :billing_rel])
 
-    # wallets |> XmlBuilder.generate
-    {:person, %{id: 12345}, "Josh"} |> XmlBuilder.generate
+    # xml_file = {:person, %{id: 12345}, "Josh"} |> XmlBuilder.generate
+
+    datas_custom = Enum.map(wallets, fn(wallet) -> 
+      # IO.inspect xml_wallet(wallet)
+        # xml_wallet(wallet)
+      {
+        :transaction, 
+        %{ id: wallet.id }, 
+        [
+          { :id, nil,  wallet.id },
+          { :note, nil,  wallet.note },
+          { :currency, nil,  wallet.currency },
+          { :amount, nil,  wallet.amount },
+          { :source_date, nil,  Timex.format!(wallet.date, "{0M}/{0D}/{YYYY}") },
+          { :date, nil,  Timex.format!(wallet.date, "{D} {Mfull} {YYYY}") },
+          { :account, nil,  wallet.account },
+          { :category, nil,  wallet.category },
+          { :type, nil,  wallet.type },
+          { :billing_id, nil,  wallet.billing_id },
+          { :category_label, nil,  wallet.category_rel.name },
+          { :account_label, nil,  wallet.account_rel.name }
+        ]
+      }
+
+     end)
+
+    xml_file = {:datas, nil ,datas_custom} |> generate
+
+    conn
+      |> put_resp_content_type("text/xml")
+      |> send_resp(200, xml_file)
   end
 
   def show_billing(conn, %{"id" => id}) do
@@ -105,5 +136,24 @@ defmodule Mywallet.WalletController do
     Repo.delete!(wallet)
 
     send_resp(conn, :no_content, "")
+  end
+
+
+
+  def xml_wallet(wallet) do
+    element(:transaction, %{id: wallet.id}, [
+      element(:id, wallet.id),
+      element(:note, wallet.note),
+      # element(:currency, wallet.currency),
+      # # element(:amount, wallet.amount),
+      # element(:source_date, Timex.format!(wallet.date, "{0M}/{0D}/{YYYY}")),
+      # element(:date, Timex.format!(wallet.date, "{D} {Mfull} {YYYY}")),
+      # element(:account, wallet.account),
+      # element(:category, wallet.category),
+      # element(:type, wallet.type),
+      # element(:billing_id, wallet.billing_id),
+      # element(:category_label, wallet.category_rel.name),
+      # element(:account_label, wallet.account_rel.name)
+    ])
   end
 end
