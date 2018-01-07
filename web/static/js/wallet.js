@@ -33,8 +33,11 @@ export var Wallet = {
         isUpdate: true,
         selectedId: 0,
         form_message:'',
-        // month: ["January", "February", "March", "April", "May", "June",
-        //   "July", "August", "September", "October", "November", "Desember"],
+
+        form_month:'',
+        form_year:'',
+        month: ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "Desember"],
         year: [],
       },
       methods: {

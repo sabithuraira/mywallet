@@ -5,23 +5,6 @@
       <div class="row">
         <div class="col-md-12">
 
-          <div class="info-box bg-aqua">
-            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Transaction on January</span>
-              <span class="info-box-number">Total Transaction IDR {{ resume.total }}</span>
-
-              <div class="progress">
-                <div class="progress-bar" style="width: 70%"></div>
-              </div>
-                  <span class="progress-description">
-                    Total Income IDR {{ resume.total_income }}, total expense IDR {{ resume.total_expense}} this month
-                  </span>
-            </div>
-            
-            <!-- /.info-box-content -->
-          </div>
         </div>
       </div>
       <!-- /.row -->
@@ -32,14 +15,18 @@
           <div id="flash-message"></div>
           <div class="loader"></div>
 
+
           <div class="box box-info">
               <div class="mailbox-controls">
-                <!-- Check all button -->
-                <div class="btn-group">
-                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
-                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
-                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
-                </div>
+                <select v-model='form_month' class='input-sm select2'>
+                  <option value=''>- Select month -</option>
+                  <option v-for="(row, index) in month" :value="index + 1">{{ row }}</option>
+                </select>
+
+                <select v-model='form_year' class='input-sm select2'>
+                  <option value=''>- Select year -</option>
+                  <option v-for="(row, index) in year" >{{ row }}</option>
+                </select>
                 <!-- /.btn-group -->
                 <button id="btn-refresh" type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
                 
@@ -72,14 +59,36 @@
                 <!-- /.pull-right -->
               </div>
 
+<%# 
+          <div class="info-box bg-aqua">
+            <div class="info-box-content">
+
+              <div class='form-group'>
+                <span class="info-box-text">Transaction on </span>
+                <select v-model='form_month' class='form-control  input-sm select2'>
+                  <option value=''>- Select month -</option>
+                  <option v-for="(row, index) in month" :value="index + 1">{{ row }}</option>
+                </select>
+              </div>
+              <span class="info-box-number">Total Transaction IDR {{ resume.total }}</span>
+
+              <div class="progress">
+                <div class="progress-bar" style="width: 70%"></div>
+              </div>
+                  <span class="progress-description">
+                    Total Income IDR {{ resume.total_income }}, total expense IDR {{ resume.total_expense}} this month
+                  </span>
+            </div>
+          </div> %>
+
               <div class="table-responsive mailbox-messages">
                 <table class="table table-hover table-striped">
                   <thead>
                     <tr>
-                      <th>
+                      <%# <th>
                         <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
                         </button>
-                      </th>
+                      </th> %>
                       <td></td>
                       <td>Title</td>
                       <td>Category</td>
@@ -90,7 +99,7 @@
                   </thead>
                   <tbody v-for="row in data">
                     <tr :data-target="'#'+row.id" class="toggle-detail">
-                      <td><input type="checkbox"></td>
+                      <%# <td><input type="checkbox"></td> %>
                       <td>{{ row.date }}</td>
                       <td>{{ row.note }}</td>
                       <td>{{ row.category_label }}</td>
