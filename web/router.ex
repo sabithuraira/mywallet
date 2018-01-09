@@ -21,7 +21,7 @@ defmodule Mywallet.Router do
   scope "/", Mywallet do
     pipe_through [:browser, :browser_session] # Use the default browser stack
 
-    get "/", PageController, :index
+    get "/", PageController, :wallet
     get "/budget", PageController, :budget
     get "/wallet", PageController, :wallet
     get "/billing", PageController, :billing
@@ -54,12 +54,13 @@ defmodule Mywallet.Router do
     resources "/currencies", CurrencyController, except: [:new, :edit]
     resources "/categories", CategoryController, except: [:new, :edit]
     # resources "/budgets", CategoryController, except: [:new, :edit]
-    resources "/wallets", WalletController, except: [:new, :edit]
+    resources "/wallets", WalletController, except: [:new, :edit, :show]
     resources "/billings", BillingController, except: [:new, :edit]
     get "/wallets/billing/:id", WalletController, :show_billing
     get "/wallets/budget/:id", WalletController, :show_budget
     get "/wallets/toxml/:id", WalletController, :toxml
     get "/budgets/resume/:id/:month/:year", BudgetController, :resume
+    get "/wallets/show/:id/:month/:year", WalletController, :show
     get "/wallets/resume/:id/:month/:year", WalletController, :resume
     get "/billings/resume/:id/:month/:year", BillingController, :resume
 

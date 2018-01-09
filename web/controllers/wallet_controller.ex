@@ -29,9 +29,19 @@ defmodule Mywallet.WalletController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  # def resume(conn, %{"id" => id, "month" => month, "year" => year} = params) do
+  #   wallet = Wallet.resume(params)
+  #   render(conn, "resume_total.json", wallet: wallet)
+  # end
+
+  def show(conn, %{"id" => id, "month" => month, "year" => year}) do
+    float_month = String.to_integer(month)
+    float_year = String.to_integer(year)
+
     query = from u in Wallet,
-               where: u.inserted_by == ^id,
+               where: u.inserted_by == ^id and 
+                fragment("Extract(month from ?)", u.date) == ^float_month and 
+                fragment("Extract(year from ?)", u.date) == ^float_year,
                order_by: [desc: :date],
                select: u
     wallets = Repo.all(query)

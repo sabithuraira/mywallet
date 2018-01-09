@@ -34,8 +34,8 @@ export var Wallet = {
         selectedId: 0,
         form_message:'',
 
-        form_month:'',
-        form_year:'',
+        form_month: (new Date().getMonth()) + 1,
+        form_year: (new Date().getYear()) + 1900,
         month: ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "Desember"],
         year: [],
@@ -84,14 +84,20 @@ export var Wallet = {
     });
 
     function refresh_data(){
-      $.getJSON("/api/wallets/"+user_id, (response) => { 
+      $.getJSON("/api/wallets/show/"+user_id+"/"+vm.form_month+"/"+vm.form_year, (response) => { 
           vm.data = response.data;
       });
 
-      $.getJSON("/api/wallets/resume/"+user_id+"/"+vm.current_month+"/"+vm.current_year, (response) => {
+      $.getJSON("/api/wallets/resume/"+user_id+"/"+vm.form_month+"/"+vm.form_year, (response) => {
           vm.resume = response;
       });
     }
+
+
+    $('#el_month').on('change', function () {
+      refresh_data();
+    });
+
 
     //click button submit
     $('body').on('submit',"#data-form", function () {

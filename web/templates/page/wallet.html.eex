@@ -12,24 +12,63 @@
       <div class="row">
         <div class="col-md-12">
 
+
+          <!-- Widget: user widget style 1 -->
+          <div class="box box-widget widget-user">
+            
+          <div class="box-header bg-aqua-active">
+              <h5 class="widget-user-desc">{{ month[form_month - 1] }} {{ form_year }} ( IDR )</h5>
+            </div>
+
+            <div class="box-footer">
+              <div class="row">
+                <div class="col-sm-4 border-right">
+                  <div class="description-block">
+                    <h5 class="description-header">{{ resume.total_income }}</h5>
+                    <span class="description-text">INCOME</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-4 border-right">
+                  <div class="description-block">
+                    <h5 class="description-header">{{ resume.total_expense }}</h5>
+                    <span class="description-text">EXPENSE</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-4">
+                  <div class="description-block">
+                    <h5 class="description-header">{{ resume.total }}</h5>
+                    <span class="description-text">BALANCE</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+            </div>
+          </div>
+
           <div id="flash-message"></div>
           <div class="loader"></div>
 
 
           <div class="box box-info">
               <div class="mailbox-controls">
-                <select v-model='form_month' class='input-sm select2'>
+                <select id="el_month" v-model='form_month' class='input-sm select2'>
                   <option value=''>- Select month -</option>
                   <option v-for="(row, index) in month" :value="index + 1">{{ row }}</option>
                 </select>
 
-                <select v-model='form_year' class='input-sm select2'>
+                <select id="el_year" v-model='form_year' class='input-sm select2'>
                   <option value=''>- Select year -</option>
                   <option v-for="(row, index) in year" >{{ row }}</option>
                 </select>
                 <!-- /.btn-group -->
                 <button id="btn-refresh" type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
-                
+<%#                 
                 <div class="btn-group">
                   <button type="button" class="btn btn-default btn-sm">Download</button>
                   <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
@@ -43,9 +82,9 @@
                     <li class="divider"></li>
                     <li><a href="#">Separated link</a></li>
                   </ul>
-                </div>
+                </div> %>
 
-                <a class="btn btn-default btn-sm" href="#" id="btn-toxml"> JSON</a>
+                <%# <a class="btn btn-default btn-sm" href="#" id="btn-toxml"> JSON</a> %>
                 <a class="btn btn-default btn-sm toggle-event" href="#" data-id="add"><i class="fa fa-plus"></i> Add Transaction</a>
                
                 <div class="pull-right">
