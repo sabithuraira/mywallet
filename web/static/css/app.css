@@ -1,4 +1,6 @@
 /* This file is for your main application css. */
+@import "./font-awesome/css/font-awesome.min.css";
+@import "./ionicons/css/ionicons.min.css";
 @import "node_modules/admin-lte/plugins/jvectormap/jquery-jvectormap-1.2.2.css";
 @import "node_modules/admin-lte/plugins/datepicker/datepicker3.css";
 @import "AdminLTE.min.css";
